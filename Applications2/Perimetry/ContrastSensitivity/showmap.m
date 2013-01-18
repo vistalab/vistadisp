@@ -1,0 +1,1 @@
+% To show the map with colorbar requestedfunction showmap(map)figure;colormap('hot');cmp1=colormap;cmp2=flipud(cmp1);cmp3=cmp2(5:55,:);colormap(cmp3);imagesc(map);hold;imagesc(1);colorbar;title('Perimetry Results Minimum Perception Contrast ')end

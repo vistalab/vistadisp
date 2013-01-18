@@ -1,0 +1,1 @@
+function x = inverseNormal(p)% x = inverseNormal(p)%% Returns the inverse of a normal cumulative% probability distributionif isnan(p)   x = p;elseif p<0   x = NaN;elseif p==0   x = -Inf;elseif p>0.5   x = -inverseNormal(1-p);else   t = sqrt(-2*log(p));   x =(2.515517+(0.802853+0.010328*t)*t) / ...      (1+(1.432788+(0.189269+0.001308*t)*t)*t) - t;end

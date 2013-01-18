@@ -1,0 +1,1 @@
+% Contents of exptTools dataAnalysis folder:% % Old (dir containing the old routines)% contents.m% addErrorBars.m% analyzeStaircase.m% binomialLowerBound.m% binomialUpperBound.m% fitFunc.m% inverseNormal.m% sigmoid.m% sigmoidLikelihood.m% weib.m% WeibullLikelihood.m

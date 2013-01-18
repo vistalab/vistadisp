@@ -1,0 +1,55 @@
+2011/03/14, Kendrick
+
+General:
+- The native resolution of the monitor is 2560 x 1600.
+- The model of the monitor is DELL 3007WFP (we think).
+- There are no controls for the monitor.
+
+Visual quality:
+- Generally quite good
+- There is some darkening near the bottom edge of the display
+- If you look closely, there is a fine mesh that sits in front of the pixels
+
+Calibration measurements:
+- Calibrated using the routines in Psychtoolbox in conjunction with a non-unibody MacBook Pro (with a dual-link DVI output port).
+- The settings of the Optical/DVI box was Emulation mode and DUAL.
+- I ran the calibration tests with the monitor resolution set to 1280 x 800.
+- The monitor was allowed sufficient time to warm up.
+- The monitor was placed in the scanner room with a direct line of sight towards the magnet door.  All lights were off in the scanner room and the control room (except for the one mandatory light in the control room). The PR650 spectrophotometer was placed at the threshold of the magnet door, and was placed on a tripod.  The spectrophotometer was pointed at the center of the display and at a perpendicular angle to the display.  The distance from the monitor to the spectrophotometer was 450 cm.  The magnet door was closed almost all the way and a blanket was put up; this caused most of the ambient light from the control room to be blocked.
+- We manually checked that the display was 10-bit by taking spectrophotometer measurements at two different luminance levels that differed by 1/1023 of the full voltage range.  The tests confirmed that the display is in fact 10-bit.  (See "10-bit test" below.)
+- We took 7 measurements of each of 85 different values (3, 6, 9, ..., 255) (this took about 10 hours!). The resulting calibration file is named “CNI_LCD_2011_03_13.mat”.
+- The script used to perform the calibration was CalibrateMonSpd.m, using cal.describe.nAverage set to 7 and cal.describe.nMeas set to 85.
+- There was one anomaly in the calibration measurements --- the darkest two values for the blue gun were identical at 0.  This is probably okay.
+
+Field-of-view:
+- I measured the monitor to be 64.3 cm wide and 40.2 cm high.
+- On 2011/03/14, we ran an actual fMRI session using the 32-ch Nova coil and the LCD monitor.  The distance from the eyes to the mirror was 6 cm and the distance from the mirror to the monitor was 234 cm, resulting in a total of 240 cm viewing distance.  The total number of degrees in the vertical direction for a stimulus filling the entire display is atan(40.2/2 / 240)/pi*180 * 2 = 9.575 degrees.
+
+%%%%% 10-bit test
+
+rec = [];
+for rep=1:40
+  t = ones(256,3) * (1000/1023);
+  screen('LoadNormalizedGammaTable',1,t);
+  rec(:,rep,1) = PR650measxyz;
+  t = ones(256,3) * (1001/1023);
+  screen('LoadNormalizedGammaTable',1,t);
+  rec(:,rep,2) = PR650measxyz;
+end
+
+save('CNI_LCD_10bittest_data.mat','rec');
+
+load('CNI_LCD_10bittest_data.mat');
+
+mn = mean(rec,2);
+se = std(rec,[],2)/sqrt(size(rec,2));
+figure;
+titles = {'X' 'Y' 'Z'};
+for p=1:3
+  subplot(1,3,p); hold on;
+  plot(squeeze(mn(p,:,:)),'r-');
+  errorbar2(1:2,squeeze(mn(p,:,:)),squeeze(se(p,:,:)),'v','r-');
+  ax = axis; axis([0 3 ax(3:4)]);
+  xlabel('voltage'); ylabel(titles{p});
+  set(gca,'XTick',1:2,'XTickLabel',{'1000' '1001'});
+end

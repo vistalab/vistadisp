@@ -1,0 +1,1 @@
+function [name,group,session,filename] = perimetrydlg;%%   [name,group,session,filename] = perimetrydlg;%% Dialog Box Interface for perimetry%box_title = 'Perimetry';entries = { 'Name', 'Group','Session','Log filename'};z = inputdlg(entries, box_title);name = (z{1});group = (z{2});session = str2num(z{3});filename = z{4};return;

@@ -1,0 +1,1 @@
+box_title = 'Perimetry';entries = { 'Name', 'Group','Session', 'Log filename'};z = inputdlg(entries, box_title);temp = str2num(z{1});press = str2num(z{2});file = z{3};

@@ -1,0 +1,16 @@
+One of the data points at low luminance levels was artifactual and lead to non-monotonic gamma tables...
+
+So, what we did was to hack the raw measurements and then re-compute certain things that get automatically
+computed in the calibration routine (CalibrateMonSpd).
+
+Here's what we did:
+
+% first, load original calibration file.
+% then do the following:
+cal = cals{1};
+cal.rawdata.mon(1:101,1) = cal.rawdata.mon(101+(1:101),1);
+cal = CalibrateFitLinMod(cal);
+cal = CalibrateFitGamma(cal, 2^cal.describe.dacsize);
+SaveCalFile(cal,'3T1_projector_2010_09_01');
+
+- Kendrick

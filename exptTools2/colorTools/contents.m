@@ -1,0 +1,1 @@
+% Contents of exptTools color folder:% % cone2RGB.m% D65.mat% daycie.mat% ExampleIsolating.m% findMaxConeScale.m% ncones.mat% RGB2ConeContrast.m% rods.mat% SmithPokornyCones.mat% stockman.mat% xyz.mat

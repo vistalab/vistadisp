@@ -1,0 +1,1 @@
+				results.hrmatrix=hrmatrix(2:size(hrmatrix,1),:);				results.answercatch=answercatch;				results.keycounter=keycounter;				results.answer1=answer1;				results.positiontask1=positiontask1;				results.contrast2=contrast2;				results.positiontask2=positiontask2;				results.contrast3=contrast3;				results.positiontask3=positiontask3;   				return

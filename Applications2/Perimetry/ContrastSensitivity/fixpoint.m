@@ -1,0 +1,1 @@
+% Fixation Pointfunction imgfix=fixpoint(l1,l2);for x=1:l1for y=1:l1imgfix(x,y)=2;endendfor x=round(l1/2-l2/2):1:l1-round(l1/2-l2/2)+1for y=round(l1/2-l2/2):1:l1-round(l1/2-l2/2)+1imgfix(round(x),round(y))=1;endend
