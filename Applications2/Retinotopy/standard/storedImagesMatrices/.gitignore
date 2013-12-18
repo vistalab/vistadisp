@@ -1,0 +1,5 @@
+# Gitignore
+#  This is a directory to store the image files associated with a ret experiment.
+#  We do not want to add these files to the github repository.
+
+*.mat
