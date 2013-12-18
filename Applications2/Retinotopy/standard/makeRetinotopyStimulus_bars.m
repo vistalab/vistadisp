@@ -349,6 +349,8 @@ if params.seqDirection~=0
 end
 
 %% insert blanks (always off for 12 seconds)
+blankImage = uint8(ones(size(images,1),size(images,2)).*bk);
+
 if params.insertBlanks.do,
     seq2      = zeros(size(sequence));
     oneCycle  = length(seq2)/params.insertBlanks.freq;
@@ -359,10 +361,10 @@ if params.insertBlanks.do,
     end
     onPeriod  = oneCycle-offPeriod;
     seq2      = repmat([zeros(onPeriod,1); ones(offPeriod,1)],params.insertBlanks.freq,1);
-    add       = size(images,3)+1;
+    blankInd  = size(images,3)+1;
     if isempty(params.loadMatrix),
-        sequence(seq2==1) = add;
-        images(:,:,add)   = uint8(ones(size(images,1),size(images,2)).*bk);
+        sequence(seq2==1) = blankInd;
+        images(:,:,blankInd)   = blankImage;
     end;
     clear seq2;
     fprintf('[%s]:Stimulus on for %.1f and off for %.1f seconds.',...
@@ -372,7 +374,18 @@ end;
 %% Add prescsan
 % Insert the preappend images by copying some images from the
 % end of the seq and tacking them on at the beginning
-sequence = [sequence(length(sequence)+1-duration.prescan.stimframes:end); sequence];
+numPrescanFrames = duration.prescan.stimframes;
+preScanSequence = zeros(numPrescanFrames, 1);
+
+if params.numCycles == 1
+    % make prescan all blanks
+    preScanSequence = preScanSequence + blankInd;
+else
+    % make prescan a copy of the end of the scan
+    preScanSequence = sequence(length(sequence)+1-numPrescanFrames:end);
+end
+
+sequence = [preScanSequence; sequence];
 timing   = (0:length(sequence)-1)'.*duration.stimframe;
 cmap     = params.display.gammaTable;
 fixSeq   = [fixSeq(length(fixSeq)+1-duration.prescan.stimframes:end); fixSeq];
