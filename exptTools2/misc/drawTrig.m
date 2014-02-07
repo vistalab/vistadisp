@@ -10,8 +10,16 @@ if nargin < 2, colIndex = 1; end;
 x = d.numPixels(1);
 y = d.numPixels(2);
 
-trigRect = round([.93*x .91*y x y]);
-Screen('FillRect', d.windowPtr, 120 * colIndex, trigRect);
+% lower right
+%trigRect = round([.93*x .91*y x y]);
+
+% upper right
+%trigRect = round([.93*x 0*y x .09*y]);
+
+% upper left
+trigRect = round([0*x 0*y .07*x .09*y]); 
+
+Screen('FillRect', d.windowPtr, 200 * (colIndex-1)+30, trigRect);
     
 
 return

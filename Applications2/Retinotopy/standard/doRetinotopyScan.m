@@ -22,12 +22,13 @@ stimulus = retLoadStimulus(params);
 % the ones we are using are loaded.
 KbCheck;GetSecs;WaitSecs(0.001);
 
-try
+% try
     % check for OpenGL
     AssertOpenGL;
     
     % to skip annoying warning message on display (but not terminal)
-    Screen('Preference','SkipSyncTests', 1);
+    % Screen('Preference','SkipSyncTests', 1);
+    Screen('Preference','SkipSyncTests', 0);
     
     % Open the screen
     params.display                = openScreen(params.display);
@@ -72,7 +73,8 @@ try
         
         
         % go
-        if isfield(params, 'modality') && strcmpi(params.modality, 'ecog')
+        if isfield(params, 'modality') && ...
+                (strcmpi(params.modality, 'ecog') || strcmpi(params.modality, 'MEG'))
             timeFromT0 = false;
         else timeFromT0 = true;
         end
@@ -100,11 +102,13 @@ try
     % Close the one on-screen and many off-screen windows
     closeScreen(params.display);
 
-catch ME
-    % clean up if error occurred
-    Screen('CloseAll'); setGamma(0); Priority(0); ShowCursor;
-    warning(ME.identifier, ME.message);
-end;
+% catch ME
+%     % clean up if error occurred
+%     %Screen('CloseAll'); 
+%     Screen('Close'); 
+%     setGamma(0); Priority(0); ShowCursor;
+%     warning(ME.identifier, ME.message);
+% end;
 
 
 return;
