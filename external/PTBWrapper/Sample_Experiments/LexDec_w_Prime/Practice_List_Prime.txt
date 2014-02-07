@@ -1,0 +1,9 @@
+1	word	1	PRACTICE	practice	 1	16	8
+2	word	2	IS	is	1	16	8
+3	word	3	VERY	very	1	16	8
+4	word	4	IMPORTANT	important	1	16	8
+5	nonword	5	BTU	btu	2	32	9
+6	nonword	6	THSEE	thsee	2	32	9
+7	nonword	7	ANRE	anre	2	32	9
+8	nonword	8	NTO	nto	2	32	9
+9	nonword	9	SDROW	sdrow	2	32	9
