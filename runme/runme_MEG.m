@@ -16,12 +16,13 @@ try PTBInitStimTracker; end
 global PTBTriggerLength 
 PTBTriggerLength = 0.001;
 % debug mode
-PsychDebugWindowConfiguration
+%   PsychDebugWindowConfiguration
 
 
 %% Calibration
 % cal = 'CBI_NYU_projector';
 cal = 'meg_lcd';
+% cal = '3T2_projector_2010_09_01';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*60;
@@ -43,8 +44,12 @@ params.tempFreq         = 6/tr;
 params.repetitions      = 1;
 params.experiment       = 'full-field, on-off';
 params.period           = 12*params.tr;
-params.numCycles        = 6;
+params.numCycles        = 1;
+params.loadMatrix       = 'MEG_OnOFF_balanced.mat';
 
+% 
+% params.loadMatrix       = 'MEG_Expt_From_File.mat';
+% params.experiment       = 'Experiment From File';
 
 
 %% ********************
@@ -64,7 +69,7 @@ plot(diff(stimulus.seqtiming));
 % measured inter-stimulus duration
 hold on; plot(diff(response.flip), 'r-'); 
 
-ylim(median(diff(response.flip)) + [-.02 .02])
+ylim(median(diff(response.flip)) + [-.001 .001])
 % frames between stimuli
 frames = round(diff(response.flip) / (1/60)); 
 

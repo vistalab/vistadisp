@@ -61,13 +61,6 @@ for stimNum = 1:length(stimulus)
     
 	% make textures
 	for imgNum = 1:nImages,
-        %jw: flip for back bore inverted display
-%         if (isfield(display, 'flipLR') && display.flipLR),
-%             stimulus(stimNum).images(:,:,imgNum) = fliplr(stimulus(stimNum).images(:,:,imgNum));
-%         end
-%         if (isfield(display, 'flipUD') &&display.flipUD),
-%             stimulus(stimNum).images(:,:,imgNum) = flipud(stimulus(stimNum).images(:,:,imgNum));
-%         end
         
         stimulus(stimNum).textures(imgNum) = ...
 			Screen('MakeTexture',display.windowPtr, ...

@@ -24,10 +24,12 @@ switch params.experiment
         
     case '8 bars (letters)',
         stimulus = makeApertureStimulus(params);
+    
     case 'experiment from file'
         tmp = load(params.loadMatrix, 'stimulus');
         if isfield(tmp, 'stimulus'), stimulus = tmp.stimulus;
         else                         stimulus = tmp; end
+        
     otherwise,
         stimulus = makeRetinotopyStimulus(params);
 end

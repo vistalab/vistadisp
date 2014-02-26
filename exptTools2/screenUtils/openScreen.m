@@ -68,7 +68,7 @@ if(~isfield(displayID,'backColorRgb'))
 end
 
 % Skip the annoying blue flickering warning
-Screen('Preference','SkipSyncTests',1);
+% Screen('Preference','SkipSyncTests',1);
 
 displayID.oldGamma = Screen('ReadNormalizedGammaTable', displayID.screenNumber);
 try
