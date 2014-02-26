@@ -44,12 +44,31 @@ params.tempFreq         = 6/tr;
 params.repetitions      = 1;
 params.experiment       = 'full-field, on-off';
 params.period           = 12*params.tr;
-params.numCycles        = 1;
+params.numCycles        = 6;
 params.loadMatrix       = 'MEG_OnOFF_balanced.mat';
 
-% 
-% params.loadMatrix       = 'MEG_Expt_From_File.mat';
-% params.experiment       = 'Experiment From File';
+%% Hemifield and ONOFF mixture
+params.modality         = 'MEG'; 
+params.prescanDuration  = 0;
+params.interleaves      = NaN;
+params.tr               = 1/hz*60;
+params.calibration      = cal;
+params.framePeriod      = tr;
+params.startScan        = 0;
+params.motionSteps      = 2;
+params.tempFreq         = 6/tr;
+params.repetitions      = 6;
+params.experiment       = 'Experiment From File';
+params.period           = 12*params.tr;
+params.numCycles        = 1;
+params.loadMatrix       = 'MEG_OnOff_LeftRight1.mat';
+
+
+
+
+%% mixture of full-field and half field
+
+
 
 
 %% ********************
