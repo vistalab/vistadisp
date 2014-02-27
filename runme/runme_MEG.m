@@ -9,10 +9,10 @@
 %% Clear
 % clear all; close all;
 
-addpath(genpath('~/matlab/MEG/PTBWrapper/'))
+
 
 % initialize stim tracker for MEG
-try PTBInitStimTracker; end
+PTBInitStimTracker;
 global PTBTriggerLength 
 PTBTriggerLength = 0.001;
 % debug mode
@@ -27,25 +27,27 @@ d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*60;
 
+
+
 % Default parameters
 params = retCreateDefaultGUIParams;
 
 
 %% Full field ONOFF
-params.modality         = 'MEG'; 
-params.prescanDuration  = 0;
-params.interleaves      = NaN;
-params.tr               = 1/hz*60;
-params.calibration      = cal;
-params.framePeriod      = tr;
-params.startScan        = 0;
-params.motionSteps      = 2;
-params.tempFreq         = 6/tr;
-params.repetitions      = 1;
-params.experiment       = 'full-field, on-off';
-params.period           = 12*params.tr;
-params.numCycles        = 6;
-params.loadMatrix       = 'MEG_OnOFF_balanced.mat';
+% params.modality         = 'MEG'; 
+% params.prescanDuration  = 0;
+% params.interleaves      = NaN;
+% params.tr               = 1/hz*60;
+% params.calibration      = cal;
+% params.framePeriod      = tr;
+% params.startScan        = 0;
+% params.motionSteps      = 2;
+% params.tempFreq         = 6/tr;
+% params.repetitions      = 1;
+% params.experiment       = 'full-field, on-off';
+% params.period           = 12*params.tr;
+% params.numCycles        = 6;
+% params.loadMatrix       = 'MEG_OnOFF_balanced.mat';
 
 %% Hemifield and ONOFF mixture
 params.modality         = 'MEG'; 
@@ -57,16 +59,10 @@ params.framePeriod      = tr;
 params.startScan        = 0;
 params.motionSteps      = 2;
 params.tempFreq         = 6/tr;
-params.repetitions      = 6;
+params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
 params.period           = 12*params.tr;
 params.numCycles        = 1;
-params.loadMatrix       = 'MEG_OnOff_LeftRight1.mat';
-
-
-
-
-%% mixture of full-field and half field
 
 
 
@@ -74,7 +70,13 @@ params.loadMatrix       = 'MEG_OnOff_LeftRight1.mat';
 %% ********************
 %  ***** GO ***********
 %  *********************
+params.loadMatrix = 'onOffLeftRight_params1.mat';
+P = ret(params);
 
+params.loadMatrix = 'onOffLeftRight_params2.mat';
+P = ret(params);
+
+params.loadMatrix = 'onOffLeftRight_params3.mat';
 P = ret(params);
 
 %% Check timing results
