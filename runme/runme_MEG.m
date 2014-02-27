@@ -60,7 +60,7 @@ params.tempFreq         = 6/tr;
 params.repetitions      = 6;
 params.experiment       = 'Experiment From File';
 params.period           = 12*params.tr;
-params.numCycles        = 1;
+params.numCycles        = 6;
 params.loadMatrix       = 'MEG_OnOff_LeftRight1.mat';
 
 
