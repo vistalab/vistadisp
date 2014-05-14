@@ -24,8 +24,7 @@ try
 	c = display.backColorIndex;
 catch
 	c = display.backColorRgb;
-end;
-
+end
 for stimNum = 1:length(stimulus)
 
 	% if stored as cell?!
