@@ -45,6 +45,7 @@ fixString  = {...
                 'right'...
                 'upper'...
                 'lower'...
+                'rsvp letters'
                 };
 
 if ~exist('params', 'var'), params = fixString; return; end
@@ -166,6 +167,13 @@ switch(lower(params.display.fixType))
     case 'lower'
         params.display.fixX = round(dim.x./2);
         params.display.fixY = dim.y - round(max(.5*(dim.y - dim.x),sz));
+
+    case {'rsvp letters' 'letters' 'rsvp'}
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 12;
+        params.display.text = 'ABCDEFGHJKLMNOP';
+        params.display.fixColorRgb   = [255 255 255 255; 0 0 0 255]; %W/B
 
     otherwise,
         error('Unknown fixationType!');

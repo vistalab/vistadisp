@@ -93,6 +93,15 @@ switch(lower(d.fixType))
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY-(d.gapSize/2),d.dotSize);
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY+(d.gapSize/2),d.dotSize);
 
+    case {'rsvp letters' 'letters' 'rsvp'}
+        this_text  = d.text(colIndex);
+        this_color = d.fixColorRgb(1+mod(colIndex,2),:);
+        this_color = d.fixColorRgb(1,:);
+        oldTextSize =Screen('TextSize', d.windowPtr);
+        Screen('TextSize', d.windowPtr, 20);
+        Screen('DrawText', d.windowPtr, this_text, d.fixX, d.fixY, this_color);
+        Screen('TextSize', d.windowPtr, oldTextSize);
+        
     otherwise,
         error('Unknown fixationType!');
 end
