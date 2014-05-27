@@ -1,6 +1,11 @@
-% runme_vTPJ_attention_2014_05_26_wl_004
+function fname_stim = runme_vTPJ_attention(run_num, subj)
+% function to make structure for vTPJ detection experiment, run it, and
+% plot it
+%
 
-% Script to make structure for vTPJ detection experiment
+% key presses for main task (vowel detection) and secondary task (gabor)
+key_rsvp = 4;
+key_gabor = 3;
 
 % Create a structure for 'Experiment from file'. Populating this structure
 %   is the main purpose of the script
@@ -15,7 +20,7 @@ stimulus = struct('images', [], 'cmap', [], 'seq', [], ...
 sz = 768;
 
 % refresh rate (seconds)
-dt = 1/60 * 6; 
+dt = 1/60 * 6;
 
 % scanner tr, also duration of trial
 tr = 2;
@@ -41,7 +46,6 @@ gabor.angles     = (0:num_positions-1)/num_positions * 2*pi - pi/2;
 % **** Derived parameters *******
 % *******************************
 T                = num_trs * tr; % experiment length (seconds)
-num_images       = T / dt;      % for whole experiment
 images_per_trial = tr / dt;      % for one trial
 
 %   grid for Gabors
@@ -53,14 +57,15 @@ gabor.rows = r + sz/2;
 gabor.cols = c + sz/2;
 % figure; plot(gabor.cols([1:end 1]),gabor.rows([1:end 1]), 'o-', [sz/2 sz/2], [0 sz], 'k-', [0 sz],[sz/2 sz/2],  'k-'); axis([0 sz 0 sz])
 
+
 % *******************************
 % **** Make images *******
 % *******************************
 
-% to conserve space, limit the number of noise images. 
+% to conserve space, limit the number of noise images.
 num_noise_images = 100;
 
-% Background images 
+% Background images
 noise_images = uint8(randn(sz, sz, num_noise_images)*128*noise_amp+128);
 
 % For bookkeeping, make iniital stimulus sequence a matrix of images x
@@ -98,12 +103,9 @@ trial.amplitudes = rand_assign(gabor.amplitudes, num_trials);
 
 % Make the images for each trial
 %   temporal envelope - this is the same for every trial
-%   envelope = hann(images_per_trial);
-envelope = hann(round(images_per_trial/2));
-envelope = padarray(envelope, round(images_per_trial/4), 'pre');
-envelope = padarray(envelope, images_per_trial-length(envelope), 'post');
 envelope = hann(round(images_per_trial));
 envelope_onset = find(envelope,1);
+
 images = noise_images;
 for ii = 1:num_trials
     % make the gabor for this trial
@@ -120,9 +122,7 @@ for ii = 1:num_trials
     these_images = uint8(these_images);
     seq(:,trial.tr(ii)) = (1:images_per_trial) + size(images,3);
     images = cat(3, images, these_images);
-        
-%     figure(1); for jj = 1:images_per_trial; imshow(images(:,:,jj)); title(sprintf('Trial %d\tImage %d', ii, jj)); pause(.01); end
-%     waitforbuttonpress
+    
 end
 
 
@@ -144,7 +144,7 @@ for ii = 2:fix_dur
 end
 % save
 pth = '~/matlab/git/vistadisp/Applications2/Retinotopy/standard/storedImagesMatrices/';
-fname_stim = 'tpj_attention_params10.mat';
+fname_stim = sprintf('tpjAtt_params_wl_subj%02d_run_%02d.mat', subj, run_num);
 
 save(fullfile(pth, fname_stim), 'stimulus');
 
@@ -162,74 +162,75 @@ params.triggerKey      = '`';
 params.prescanDuration = 0;
 params.fixation        = 'rsvp letters';
 
-%PsychDebugWindowConfiguration
-p = ret(params);
+ret(params);
 
-%% check accuracy
-num_runs = 10;
-accuracy = NaN(length(contrasts), 100, num_runs);
+%% check accuracy and plot psychometric function
 
-for this_run = 1:num_runs
-    
-    d = dir('~/Desktop/*.mat');
-    S = [d(:).datenum];
-    [~,S] = sort(S);
-    results = load(fullfile('~/Desktop', d(S(end-num_runs+this_run)).name));
-    tmp = load(fullfile(pth, sprintf('tpj_attention_params%02d.mat',this_run)));
-    trial_data = tmp.stimulus.trial_info; clear tmp;
-    % get the unique response keys
-    inds     = find(results.response.keyCode);
-    keycodes = unique(results.response.keyCode(inds));
-    chars    = KbName(keycodes);
-    numeric  = cellfun(@(x) sscanf(x, '%d'), chars, 'UniformOutput', false);
-    resp(1)  = keycodes(cellfind(numeric, 4));
-    resp(2)  = keycodes(cellfind(numeric, 3));
-    
-    
-    
-    responses(1,:) = results.response.keyCode == resp(1);
-    responses(2,:) = results.response.keyCode == resp(2);
-    
-    %
-    figure(100+this_run); clf
-    set(gca, 'Color', 'k'); hold on
-    %plot(responses(1,:), 'r-'); hold on
-    
-    
-    gabor_onsets = (trial_data.tr-1) * images_per_trial+1;
-    set(gca, 'XTick', gabor_onsets, 'XGrid', 'on')
-    
-    contrasts = unique(trial_data.amplitudes);
-    colors = jet(length(contrasts));
-    
-    gabor_detections = find(responses(2,:));
-    
-    for ii = 1:length(contrasts)
-        indices = find(trial_data.amplitudes == contrasts(ii));
-        for jj = 1:length(indices)
-            x = (trial_data.tr(indices(jj))-1) * images_per_trial+envelope_onset;
-            plot([x x], [0 1], '-', 'Color', colors(ii,:), 'LineWidth', ii);
-            
-            accuracy(ii,jj, this_run) = any(gabor_detections - x > 0 & gabor_detections - x < 1.5/dt);
-        end
+
+
+d = dir('~/Desktop/*.mat');
+S = [d(:).datenum];
+[~,S] = sort(S);
+results = load(fullfile('~/Desktop', d(S(end)).name));
+tmp = load(fullfile(pth, fname_stim));
+trial_data = tmp.stimulus.trial_info; clear tmp;
+
+% get the unique response keys
+inds     = find(results.response.keyCode);
+keycodes = unique(results.response.keyCode(inds));
+chars    = KbName(keycodes);
+numeric  = cellfun(@(x) sscanf(x, '%d'), chars, 'UniformOutput', false);
+resp(1)  = keycodes(cellfind(numeric, key_rsvp));
+resp(2)  = keycodes(cellfind(numeric, key_gabor));
+
+responses(1,:) = results.response.keyCode == resp(1);
+responses(2,:) = results.response.keyCode == resp(2);
+
+%
+f(1) = figure(787);
+set(gca, 'Color', 'k'); hold on
+
+gabor_onsets = (trial_data.tr-1) * images_per_trial+1;
+set(gca, 'XTick', gabor_onsets, 'XGrid', 'on')
+
+contrasts = unique(trial_data.amplitudes);
+colors    = jet(length(contrasts));
+
+gabor_detections = find(responses(2,:));
+accuracy = NaN(length(contrasts), 100);
+
+for ii = 1:length(contrasts)
+    indices = find(trial_data.amplitudes == contrasts(ii));
+    for jj = 1:length(indices)
+        x = (trial_data.tr(indices(jj))-1) * images_per_trial+envelope_onset;
+        plot([x x], [0 1], '-', 'Color', colors(ii,:), 'LineWidth', ii);
         
+        accuracy(ii,jj) = any(gabor_detections - x > 0 & gabor_detections - x < 1.5/dt);
     end
     
-    
-    
-    plot(responses(2,:), 'g--');
-    
-    
 end
-accuracy = reshape(accuracy, length(contrasts), []);
+
+
+
+plot(responses(2,:), 'g--');
+
 psychometric_function = nanmean(accuracy,2);
 psychometric_sem      = sqrt(psychometric_function .* (1-psychometric_function) ./ sum(isfinite(accuracy),2));
 
+
 %%
 
-figure(2); clf; set(gcf, 'Color', 'w')
+f(2) = figure(234); clf; set(gcf, 'Color', 'w')
 set(gca, 'FontSize', 20)
 errorbar(contrasts, psychometric_function, psychometric_sem, 'r-o', 'LineWidth', 2, 'MarkerSize', 12)
 axis tight
 xlabel('Contrast')
 ylabel('Accuracy')
+
+im_pth = fullfile('~', 'Desktop', 'tpj_images', sprintf('wl_subj%03d', subj));
+
+if ~exist(im_pth, 'dir'), mkdir(im_pth); end
+hgexport(f(1), fullfile(im_pth, sprintf('responses_%02d.eps', run_num)));
+hgexport(f(2), fullfile(im_pth, sprintf('psychometric_%02d.eps', run_num)));
+
+end
