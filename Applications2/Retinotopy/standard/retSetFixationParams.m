@@ -172,8 +172,8 @@ switch(lower(params.display.fixType))
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
         params.display.fixSizePixels = 12;
-        params.display.text = 'ABCDEFGHJKLMNOP';
-        params.display.fixColorRgb   = [255 255 255 255; 0 0 0 255]; %W/B
+        params.display.text = 'AEIOUBCDFGHJKLMNPQRSTVWXYZBCDFGHJKLMNPQRSTVWXYZBCDFGHJKLMNPQRSTVWXYZ';
+        params.display.fixColorRgb   = [200 200 200 255; 0 0 0 255]; %gray / black
 
     otherwise,
         error('Unknown fixationType!');

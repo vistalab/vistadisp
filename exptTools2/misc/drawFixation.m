@@ -95,7 +95,7 @@ switch(lower(d.fixType))
 
     case {'rsvp letters' 'letters' 'rsvp'}
         this_text  = d.text(colIndex);
-        this_color = d.fixColorRgb(1+mod(colIndex,2),:);
+        % this_color = d.fixColorRgb(1+mod(colIndex,2),:);
         this_color = d.fixColorRgb(1,:);
         oldTextSize =Screen('TextSize', d.windowPtr);
         Screen('TextSize', d.windowPtr, 20);
