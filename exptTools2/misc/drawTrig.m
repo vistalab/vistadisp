@@ -19,6 +19,10 @@ y = d.numPixels(2);
 % upper left
 trigRect = round([0*x 0*y .07*x .09*y]); 
 
+if colIndex > 0
+    colIndex = mod(colIndex, 2)+1;
+end
+
 Screen('FillRect', d.windowPtr, 200 * (colIndex-1)+30, trigRect);
     
 
