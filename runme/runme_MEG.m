@@ -62,7 +62,17 @@ params.tempFreq         = 6/tr;
 params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
 params.period           = 12*params.tr;
+<<<<<<< HEAD
 params.numCycles        = 1;
+=======
+params.numCycles        = 6;
+params.loadMatrix       = 'MEG_OnOff_LeftRight1.mat';
+
+
+
+
+%% mixture of full-field and half field
+>>>>>>> 5df7966cc733d6bf844f4474bcda500ebc2b1d1d
 
 
 
