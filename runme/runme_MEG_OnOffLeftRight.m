@@ -55,7 +55,7 @@ params.numCycles        = 6;
 %% ********************
 %  ***** GO ***********
 %  *********************
-params.loadMatrix = sprintf('onOffLeftRight_params%d.mat', n);
+params.loadMatrix = sprintf('attention_onOffLeftRight_params%d.mat', n);
 ret(params);
 
 %% Check timing results
