@@ -1,5 +1,5 @@
-function stimulus = createTextures(display, stimulus, removeImages);
-%stimulus = createTextures(display, stimulus, [removeImages=1]);
+function stimulus = createTextures(display, stimulus, removeImages)
+%stimulus = createTextures(display, stimulus, [removeImages=1])
 %
 %Replace images within stimulus (stimulus.image) with textures
 %(stimulus.textures).
@@ -64,7 +64,7 @@ for stimNum = 1:length(stimulus)
         
         stimulus(stimNum).textures(imgNum) = ...
 			Screen('MakeTexture',display.windowPtr, ...
-			double(stimulus(stimNum).images(:,:,imgNum)));  % fwc:	changed display.screenNumber into display.windowPtr
+			double(stimulus(stimNum).images(:,:,imgNum))); 
 	end;
 
 	% clean up
