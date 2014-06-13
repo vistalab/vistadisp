@@ -1,5 +1,5 @@
-function runme_MEG_OnOffLeftRight(n)
-%RUNME MEG2_OnOffLeftRight
+function runme_MEG_OnOffLeftRight(n, stimfile)
+%RUNME MEG2_OnOffLeftRight(n, stimfile)
 %
 % MEG Full-field on-off, left/right flicker experiment (steady state)
 % ------
@@ -7,10 +7,22 @@ function runme_MEG_OnOffLeftRight(n)
 %   6 cycles at 12 s each
 %   6 cycles are randomly orderd full-full-left-left-right-right, with
 %       blanks between each
-
-%% go
-% cd /Users/megadmin/Desktop/Experiments/Winawer/
-% addpath(genpath('vistadisp'))
+%
+% INPUTS
+%   n is the runnumber [1 15]
+%   stimfile is the prefix for the stimulus fils containing images, and can
+%            be either
+%               - attention_onOffLeftRight_params 
+%               - onOffLeftRight_params
+% The actual stim files have names like
+%   attention_onOffLeftRight_params1.mat
+%   onOffLeftRight_params9.mat
+%   etc
+%
+%
+% Example
+%   runme_MEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
+%   runme_MEG_OnOffLeftRight(1, 'onOffLeftRight_params');
 
 %% 
 % initialize stim tracker for MEG
