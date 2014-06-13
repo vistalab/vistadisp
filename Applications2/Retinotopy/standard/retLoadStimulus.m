@@ -30,6 +30,13 @@ switch lower(params.experiment)
         if isfield(tmp, 'stimulus'), stimulus = tmp.stimulus;
         else                         stimulus = tmp; end
         
+        % there should be no textures in the stored image file. if there
+        % are, this will cause a problem later on. let's remove the texture
+        % field in case it got stuck in here by accident.
+        if isfield(stimulus, 'textures'), 
+            stimulus = rmfield(stimulus, 'textures'); 
+        end
+
     otherwise,
         stimulus = makeRetinotopyStimulus(params);
 end
