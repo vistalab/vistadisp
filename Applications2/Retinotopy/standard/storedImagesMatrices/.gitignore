@@ -1,5 +1,5 @@
 # Gitignore
 #  This is a directory to store the image files associated with a ret experiment.
-#  We do not want to add these files to the github repository.
+#  Normally, we do not want to add these files to the github repository. However, on the particular branch, meg_compatible, we do include these .mat files so that we can easily share the files across computers within the lab (winawer lab)
 
-*.mat
+# *.mat
