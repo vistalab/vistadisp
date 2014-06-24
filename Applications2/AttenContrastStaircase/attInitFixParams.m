@@ -4,7 +4,7 @@ function display = attInitFixParams(display, stimParams)
 %  display = attInitFixParams(display)
 
 display.fixType        = 'largecross';
-display.fixSizePixels  = [2 2];
+display.fixSizePixels  = 2;
 
 display.fixColorRgb    = [127 0 0 255;... % red
                           0 0 0 0; ...    % white
@@ -20,31 +20,27 @@ display.fixY           = round(display.numPixels(2)/2);
 
 % Define number of points you want to draw for the vertical/horizontal
 % lines
-nr_points = -15:1:15;
+fix_radius = 15;
+nr_points = -fix_radius:1:fix_radius;
 
 % Define white stick for attention manipulation
-if stimParams.LeftOrRight == 1; % 1 = left, 
    
-    white_stick = -15:1:-1;
-                              
-elseif stimParams.LeftOrRight == 2; % 2 = right
-    white_stick = 1:1:15;
+white_stick.left  = -fix_radius:1:-1;
+white_stick.right =   1:1: fix_radius;
                           
-end
-
-
-% For now, predefine location
-give_left = true;
-
-if give_left
-    white_stick = -15:1:-2;
-end
 
 % Define [X;Y] coordinates 
-display.fixCoords      = {[  display.fixX*ones(31,1)' display.fixX+nr_points; 
-                              display.fixY+nr_points display.fixY*ones(31,1)']
+display.fixCoords{1,1} = [  display.fixX*ones(2*fix_radius+1,1)' display.fixX+nr_points; 
+                              display.fixY+nr_points display.fixY*ones(2*fix_radius+1,1)'];
+display.fixCoords{1,2} = [  display.fixX+white_stick.left; display.fixY*ones(fix_radius,1)' ] ;
+                          
+display.fixCoords{2,1} = [  display.fixX*ones(2*fix_radius+1,1)' display.fixX+nr_points; 
+                              display.fixY+nr_points display.fixY*ones(2*fix_radius+1,1)'];
+display.fixCoords{2,2} = [  display.fixX+white_stick.right; display.fixY*ones(fix_radius,1)' ] ;
                               
-                          [  display.fixX+white_stick; display.fixY*ones(14,1)' ]  
+display.fixCoords{3,1} = display.fixCoords{1,1};
+display.fixCoords{3,2} = display.fixCoords{1,1};
+                          
                               
-                              }; 
+
 

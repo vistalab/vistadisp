@@ -9,7 +9,9 @@ function [trial, data] = attTrial(display, stimParams, data)
 imagesPerTrial      = stimParams.duration * stimParams.frequency;
 timing              = (1:imagesPerTrial)' /  stimParams.frequency;
 cmap                = display.gammaTable;
-fixSeq              = ones(size(timing));
+probe_side          = stimParams.probe_side;
+
+fixSeq              = ones(size(timing))*probe_side;
 
 % specify the sequence of images as a vector of image indices
 sequence            = attMakeStimSeq(stimParams);
@@ -18,16 +20,14 @@ sequence            = attMakeStimSeq(stimParams);
 attIm               = attMakeStimulus(stimParams, display);
 attStimStruct       = createStimulusStruct(attIm,cmap,sequence,[],timing, fixSeq);
 attStim             = createTextures(display, attStimStruct);
-% attStim            = createStimulusStruct(attIm,cmap,sequence,[],timing, fixSeq);
 
 
 
 %% make blank stim
 blankIm     = ones(size(attIm(:,:,1))) * display.backColorIndex; 
-col         = fixSeq(1) +1; %fixSeq(1) keeps the pos the same as for the edge stimuli and +3 changes the color
+col         = probe_side; %fixSeq(1) * ; 
 blankStim   = createStimulusStruct(blankIm,cmap,1,[], [], col);
 blankStim   = createTextures(display, blankStim);
-isi.sound   = soundFreqSweep(500, 1000, .01);
 
 %% Build the trial events 
 

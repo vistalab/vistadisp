@@ -10,9 +10,7 @@ function drawFixation(d, colIndex)
 %                 added largeCrosses options
 % 2008.05.11 JW:  added 'dot and 'none' options 
 %                 added 'lateraldots'
-if nargin < 2,
-    colIndex = 1;
-end;
+if nargin < 2, colIndex = 1; no_color_flag = true; end;
 
 % draw a grid if specified
 if isfield(d, 'fixGrid') && d.fixGrid==1
@@ -66,13 +64,12 @@ switch(lower(d.fixType))
             
     % no task (colIndex) for large crosses
     case {'large cross' , 'largecross','large cross x+','largecrossx+'},
-		if numel(d.fixCoords) > 1, colIndex2=colIndex; else, colIndex2 = 1; end;
-        if iscell(d.fixCoords)
-            Screen('DrawDots', d.windowPtr, d.fixCoords{1}, d.fixSizePixels(colIndex2), d.fixColorRgb(1,:));
-            Screen('DrawDots', d.windowPtr, d.fixCoords{2}, d.fixSizePixels(colIndex2), d.fixColorRgb(2,:));
-        else
-            Screen('DrawDots', d.windowPtr, d.fixCoords, d.fixSizePixels(colIndex2), d.fixColorRgb(colIndex,:));
-        end
+        % Hack: use colIndex to control both color and fixation location
+        if exist('no_color_flag', 'var'), which_side = 3; 
+        else which_side = colIndex; end % 1 = left, 2 = right
+        
+        Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 1}, d.fixSizePixels, d.fixColorRgb(1,:));
+        Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 2}, d.fixSizePixels, d.fixColorRgb(2,:));
         
     case {'double large cross' , 'doublelargecross'},
         Screen('DrawDots', d.windowPtr, d.fixCoords, d.fixSizePixels, d.fixColorRgb(1,:));
