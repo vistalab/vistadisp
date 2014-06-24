@@ -35,10 +35,10 @@ stairParams.maxNumReversals         = 200;
 
 % increment size for correct answers for each successive reversal (normally
 % these numbers should go down as num reversals incr)
-stairParams.correctStepSize         = -4 * [1 1 1 1 1 1 1 1 1 1]; %[-4 -3 -3 -2 -1];
-stairParams.incorrectStepSize       =  4 * [1 1 1 1 1 1 1 1 1 1]; % [4 3 3 2 1];
-stairParams.numIncorrectForStep     = 2;
-stairParams.numCorrectForStep       = 1;
+stairParams.correctStepSize         = -1 * [1 1 1 1 1 1 1 1 1 1]; %[-4 -3 -3 -2 -1];
+stairParams.incorrectStepSize       =  1 * [1 1 1 1 1 1 1 1 1 1]; % [4 3 3 2 1];
+stairParams.numIncorrectForStep     = 1;
+stairParams.numCorrectForStep       = 2;
 
 % auditory feedback?
 stairParams.feedback                = 'none'; %{'auditory')
@@ -53,7 +53,7 @@ stairParams.iti = 0.5;
 % This specifies the intitial value of the staircase, as an index into
 % stairParams.alternativeVarValues. If there are multiple interleaved
 % staircases, then we separately set the intial value for each staircase.
-initIndex = round(length(stairParams.adjustableVarValues)/1.5);
+initIndex = round(length(stairParams.adjustableVarValues)/1.2);
 if ~isempty(stairParams.curStairVars)
     stairParams.adjustableVarStart = repmat(initIndex, size(stairParams.curStairVars{2}));
 else

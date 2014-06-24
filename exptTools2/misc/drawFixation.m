@@ -68,7 +68,8 @@ switch(lower(d.fixType))
     case {'large cross' , 'largecross','large cross x+','largecrossx+'},
 		if numel(d.fixCoords) > 1, colIndex2=colIndex; else, colIndex2 = 1; end;
         if iscell(d.fixCoords)
-            Screen('DrawDots', d.windowPtr, d.fixCoords{colIndex2}, d.fixSizePixels(colIndex2), d.fixColorRgb(colIndex,:));
+            Screen('DrawDots', d.windowPtr, d.fixCoords{1}, d.fixSizePixels(colIndex2), d.fixColorRgb(1,:));
+            Screen('DrawDots', d.windowPtr, d.fixCoords{2}, d.fixSizePixels(colIndex2), d.fixColorRgb(2,:));
         else
             Screen('DrawDots', d.windowPtr, d.fixCoords, d.fixSizePixels(colIndex2), d.fixColorRgb(colIndex,:));
         end

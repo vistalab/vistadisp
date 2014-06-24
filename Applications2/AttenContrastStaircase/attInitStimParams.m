@@ -46,7 +46,7 @@ latest_onset   = stimParams.numFrames - earliest_onset - stimParams.nTimePoints;
 stimParams.StartFrames = earliest_onset:latest_onset;
 
 % **** DERIVED FROM RANDOM VARIABLES ***
-stimParams.ColCoords  = [0.35, 0.65]; % LEFT OR RIGHT
+stimParams.ColCoords     = [0.35, 0.65]; % LEFT OR RIGHT
 
 % **** DERIVED FROM STAIRCASE ALTERNATIVE VARIABLE ***
 stimParams.RowCoords  = [0.57 0.43];  % UPPER OR LOWER

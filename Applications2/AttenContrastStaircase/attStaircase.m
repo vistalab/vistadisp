@@ -17,19 +17,19 @@
 %     6.                 => [show each frame; no external calls]
 %     7.                 => drawFixation(display, colindex)     
 
-% PsychDebugWindowConfiguration(0, .7); 
+PsychDebugWindowConfiguration(0, .7); 
 AssertOpenGL;
 
 %% initialize parameters for display, staircase, stimulus, and subject
 display_name     = 'CBI_NYU_projector';
 display          = attInitDisplay(display_name);
 stimParams       = attInitStimParams(display);
-display          = attInitFixParams(display);
 stairParams      = attInitStaircaseParams(stimParams);
+display          = attInitFixParams(display, stimParams);
 dataDir          = attInitDataDir;
 subjectParams    = getSubjectParams(dataDir);
 priorityLevel    = 0;  %whats's this about??
-trialGenFuncName = 'attTrial'; %function called by doStaircase to make stimuli
+trialGenFuncName = 'attTrial'; %function called by doStaircase to make stimuliaq
 
 %% Subject data and log file
 
@@ -61,6 +61,5 @@ catch
     for ii = 1:100; ShowCursor; end
 end
 fclose(logFID(1));
-
 
 
