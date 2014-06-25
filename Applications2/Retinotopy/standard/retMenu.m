@@ -33,7 +33,7 @@ function varargout = retMenu(varargin)
 % Edit the above text to modify the response to help retMenu
 
 
-% Last Modified by GUIDE v2.5 23-Aug-2011 10:54:48
+% Last Modified by GUIDE v2.5 24-Jun-2014 11:04:07
 % Last Modified by GUIDE v2.5 04-Feb-2009 10:05:20
 
 
@@ -164,6 +164,7 @@ set(handles.startScan,          'String',   num2str(data.startScan));
 set(handles.motionSteps,        'String',   num2str(data.motionSteps));
 set(handles.tempFreq,           'String',   num2str(data.tempFreq));
 set(handles.contrast,           'String',   num2str(data.contrast));
+set(handles.skipSyncTestCheckbox, 'Value',    data.skipSyncTests);
 
 % set the string parameters
 if isfinite(data.interleaves ), set(handles.interleaves,'String', num2str(data.interleaves));
@@ -216,6 +217,7 @@ tmp                  = get(handles.modality(1),'String');
 data.modality        = tmp(get(handles.modality(1),'Value'));      
 
 data.savestimparams  = get(handles.savestimparams,'Value');
+data.skipSyncTests   = get(handles.skipSyncTestCheckbox,'Value');
 data.repetitions     = str2num(get(handles.repetitions,     'String')); %#ok<*ST2NM>
 data.runPriority     = str2num(get(handles.runPriority,     'String'));
 data.skipCycleFrames = str2num(get(handles.skipCycleFrames, 'String'));
@@ -669,3 +671,12 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 return
+
+
+% --- Executes on button press in skipSyncTestCheckbox.
+function skipSyncTestCheckbox_Callback(hObject, eventdata, handles)
+% hObject    handle to skipSyncTestCheckbox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of skipSyncTestCheckbox

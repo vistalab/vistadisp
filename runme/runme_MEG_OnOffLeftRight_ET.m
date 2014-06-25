@@ -37,9 +37,7 @@ Screen('Preference', 'SkipSyncTests', 1);
 %% Calibration
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-
 hz  = FrameRate(d.screenNumber);
-% hz = 60;
 tr  = 1/hz*60;
 
 % Do we want to use the eyetracker?

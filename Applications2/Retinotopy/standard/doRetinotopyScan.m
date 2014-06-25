@@ -13,6 +13,8 @@ function doRetinotopyScan(params)
 
 % defaults
 if ~exist('params', 'var'), error('No parameters specified!'); end
+if ~isfield(params, 'skipSyncTests'), skipSyncTests = true;
+else                                  skipSyncTests = params.skipSyncTests; end
 
 % make/load stimulus
 stimulus = retLoadStimulus(params);
@@ -22,13 +24,12 @@ stimulus = retLoadStimulus(params);
 % the ones we are using are loaded.
 KbCheck;GetSecs;WaitSecs(0.001);
 
-% try
+try
     % check for OpenGL
     AssertOpenGL;
     
     % to skip annoying warning message on display (but not terminal)
-    % Screen('Preference','SkipSyncTests', 1);
-    Screen('Preference','SkipSyncTests', 0);
+    Screen('Preference','SkipSyncTests', skipSyncTests);
     
     % Open the screen
     params.display                = openScreen(params.display);
@@ -102,13 +103,13 @@ KbCheck;GetSecs;WaitSecs(0.001);
     % Close the one on-screen and many off-screen windows
     closeScreen(params.display);
 
-% catch ME
-%     % clean up if error occurred
-%     %Screen('CloseAll'); 
-%     Screen('Close'); 
-%     setGamma(0); Priority(0); ShowCursor;
-%     warning(ME.identifier, ME.message);
-% end;
+catch ME
+    % clean up if error occurred
+    %Screen('CloseAll'); 
+    Screen('Close'); 
+    setGamma(0); Priority(0); ShowCursor;
+    warning(ME.identifier, ME.message);
+end;
 
 
 return;
