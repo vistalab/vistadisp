@@ -13,8 +13,8 @@ if isfield(params, 'modality') && ...
     (strcmpi(params.modality, 'ecog') || strcmpi(params.modality, 'meg'))
     trigSeq = stimulus.seq * 1;
     trigSeq(2:2:end) = 2;
-    trigSeq(stimulus.seq==7) = 0;
-    trigSeq(stimulus.seq==8) = 0;
+    trigSeq(stimulus.seq==3) = 0;
+    trigSeq(stimulus.seq==4) = 0;
     stimulus.trigSeq = trigSeq;
 end
 

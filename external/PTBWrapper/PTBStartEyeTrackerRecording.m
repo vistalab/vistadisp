@@ -49,9 +49,9 @@ if exist([edf_file_name '.edf'],'file')
 	disp('WARNINGWARNINGWARNINGWARNINGWARNING');
 
 	% And to the screen
-	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
-		['Will overwrite file: ' PTBEyeTrackerFileName '.'],'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})	
-	PTBDisplayBlank({.1},'EDF warning');
+% 	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
+% 		['Will overwrite file: ' PTBEyeTrackerFileName '.'],'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})	
+% 	PTBDisplayBlank({.1},'EDF warning');
 end
 
 

@@ -26,19 +26,19 @@ function runme_MEG_OnOffLeftRight(n, stimfile)
 
 %% 
 % initialize stim tracker for MEG
-% PTBInitStimTracker;
+PTBInitStimTracker;
 global PTBTriggerLength 
 PTBTriggerLength = 0.001;
 
 % debug mode?
-PsychDebugWindowConfiguration
+% PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 1);
 
 %% Calibration
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-%hz  = FrameRate(d.screenNumber);
-hz = 60;
+hz  = FrameRate(d.screenNumber);
+% hz = 60;
 tr  = 1/hz*60;
 
 

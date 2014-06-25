@@ -45,6 +45,8 @@ end
 % NOTE: Until we fix the crashing, just return here
 %return;
 
+PTBEyeTrackerFileName = 'test';
+
 status = Eyelink('ReceiveFile',PTBEyeTrackerFileName, PTBEyeTrackerFileName);
 disp(['Got status ' num2str(status) ' for command for receive file.']);
 if status < 0

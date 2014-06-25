@@ -26,26 +26,35 @@ function runme_MEG_OnOffLeftRight_ET(n, stimfile)
 
 %% 
 % initialize stim tracker for MEG
-% PTBInitStimTracker;
+PTBInitStimTracker;
 global PTBTriggerLength 
 PTBTriggerLength = 0.001;
 
 % debug mode?
-PsychDebugWindowConfiguration
+% PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 1);
 
 %% Calibration
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-%hz  = FrameRate(d.screenNumber);
-hz = 60;
+
+hz  = FrameRate(d.screenNumber);
+% hz = 60;
 tr  = 1/hz*60;
 
 % Do we want to use the eyetracker?
 use_eyetracker = true;
 
+    d = openScreen(d);
+    global PTBTheWindowPtr
+    PTBTheWindowPtr = d.windowPtr;
+
 if use_eyetracker
-        PTBInitEyeTracker();
+    
+    %Open the screen
+
+    
+        PTBInitEyeTracker;
 %         paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
 %         PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
         PTBCalibrateEyeTracker;
@@ -87,15 +96,17 @@ if use_eyetracker
 
     % retrieve the file
 %     PTBDisplayParagraph({'The experiment is now over.','Please lie still while we save the data.'}, {'center', 30}, {.1});
-    PTBStopEyeTrackerRecording; % <----------- (can take a while)
 
-    % move the file to the logs directory
-    destination = [subject_dir filesep subject '_eyelink_'];
-    i = 0;
-    while exist([destination num2str(i) '.edf'], 'file')
-        i = i + 1;
-    end
-    movefile('eyelink.edf', [destination num2str(i) '.edf'])
+% Not for now
+%     PTBStopEyeTrackerRecording; % <----------- (can take a while)
+% 
+%     % move the file to the logs directory
+%     destination = [pwd '_eyelink_'];
+%     i = 0;
+%     while exist([destination num2str(i) '.edf'], 'file')
+%         i = i + 1;
+%     end
+%     movefile('eyelink.edf', [destination num2str(i) '.edf'])
 
 end
 
