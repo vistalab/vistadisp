@@ -106,9 +106,9 @@ if ~isempty(error_msg)
     disp('WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!');
 
 	% And to the screen
-	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
-		[error_msg ' No triggers will be sent.'],'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})	
-	PTBDisplayBlank({.1},'Trigger warning');
+% 	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
+% 		[error_msg ' No triggers will be sent.'],'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})	
+% 	PTBDisplayBlank({.1},'Trigger warning');
 	return;
 end
 
