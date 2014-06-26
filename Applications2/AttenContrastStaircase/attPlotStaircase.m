@@ -1,14 +1,16 @@
 function attPlotStaircase(stairParams, newDataSum)
 
 if(~isempty(stairParams.curStairVars))
-    val = stairParams.curStairVars{2};
-    var = stairParams.curStairVars{1};
+%     val = stairParams.curStairVars{2};
+%     var = stairParams.curStairVars{1};
+    val = stairParams.adjustableVarValues(1);
+    var = stairParams.alternativeVarValues(1);
 else
     var = '';
     val = [];
 end
 figure;
-for(ii=1:length(newDataSum))
+for(ii=1:length(newDataSum)) % how many staircases (we only have 1)
     n = length(newDataSum);
     subplot(n,2,ii*2-1);
     %semilogy(newDataSum(ii).history, 'o-');
@@ -32,8 +34,8 @@ for(ii=1:length(newDataSum))
     %plot the threshold val
     plot([thresh(ii) thresh(ii)], [0 1], 'r');
 end
-figure
-plot(val, thresh, 'ro-')
-xlabel(var)
-ylabel('thresh')
+% figure
+% plot(val, thresh, 'ro-')
+% xlabel(var)
+% ylabel('thresh')
 

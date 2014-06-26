@@ -32,8 +32,8 @@ blankStim   = createTextures(display, blankStim);
 %% Build the trial events 
 
 % trial = addTrialEvent(display,[],'stimulusEvent', 'stimulus', blankStim, stimParams.isi);
-trial = addTrialEvent(display,[],'stimulusEvent', 'stimulus', attStim, stimParams.isi);
-trial = addTrialEvent(display,trial,'ISIEvent', 'stimulus', blankStim, 'duration', stimParams.isi);
+trial = addTrialEvent(display,[],'stimulusEvent', 'stimulus', attStim);
+trial = addTrialEvent(display,trial,'ISIEvent', 'stimulus', blankStim, 'duration');
 
 data = 'done';
 return
