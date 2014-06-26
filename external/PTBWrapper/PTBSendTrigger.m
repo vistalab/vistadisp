@@ -113,7 +113,7 @@ end
 % elseif ~PTBEyeTrackerRecording
 %     error('Should never get here.');
 % end
-if PTBEyeTrackerRecording
-	PTBWriteLog(PTBLogFileID, 'TRIGGER', 'EyeLink', num2str(triggers), trig_time);	
+% if PTBEyeTrackerRecording
+% 	PTBWriteLog(PTBLogFileID, 'TRIGGER', 'EyeLink', num2str(triggers), trig_time);	
 end
     
