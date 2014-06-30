@@ -39,11 +39,12 @@ cal = 'meg_lcddisplayParams2';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*60;
+use_eyetracker = false;
 
 % Do we want to use the eyetracker?
 if n == 1; % Only for the first run
     
-    use_eyetracker = true;
+    use_eyetracker = false;
 
     d = openScreen(d);
     global PTBTheWindowPtr
