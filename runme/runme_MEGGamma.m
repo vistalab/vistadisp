@@ -11,6 +11,13 @@ PTBTriggerLength = 0.001;
 Screen('Preference', 'SkipSyncTests', 0);
 
 
+% screen
+cal = 'meg_lcddisplayParams2';
+d   = loadDisplayParams(cal);
+%hz  = FrameRate(d.screenNumber);
+hz = 60;
+tr  = 1/hz*60;
+
 %% Use Eyetracker?
 
 use_eyetracker = true;
@@ -32,12 +39,6 @@ end
 
 %% MEG Parameters
 
-
-cal = 'meg_lcddisplayParams2';
-d   = loadDisplayParams(cal);
-%hz  = FrameRate(d.screenNumber);
-hz = 60;
-tr  = 1/hz*60;
 
 params = retCreateDefaultGUIParams;
 
