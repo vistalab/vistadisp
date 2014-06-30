@@ -46,8 +46,8 @@ if Eyelink('Initialize','PsychEyelinkDispatchCallback')~= 0;
     disp('WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!');
 
 	% And to the screen
-	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
-		'Eyelink not detected. No data will be collected.','WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})	
+    % 	PTBDisplayParagraph({'WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!',...
+    % 		'Eyelink not detected. No data will be collected.','WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!'},{'center',30},{'any'})
 	PTBDisplayBlank({.1},'Trigger warning');
 	PTBEyeTrackerInitialized = 0;
 	return;	
