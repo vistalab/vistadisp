@@ -154,7 +154,7 @@ end
 
 
 % And present the stimulus
-if PTBAudioStimulus && PTBVisualStimulus
+if PTBAudioStimulus & PTBVisualStimulus
 	
 	% Have to compromise here. 
 	% TODO: Figure out which is better to go first.

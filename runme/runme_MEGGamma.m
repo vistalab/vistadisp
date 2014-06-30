@@ -7,7 +7,7 @@ global PTBTriggerLength
 PTBTriggerLength = 0.001;
 
 % debug mode?
-% PsychDebugWindowConfiguration
+PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 0);
 
 
