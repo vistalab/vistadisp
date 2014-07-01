@@ -20,7 +20,7 @@ tr  = 1/hz*60;
 
 %% Use Eyetracker?
 
-use_eyetracker = true;
+use_eyetracker = false;
 stop_eyetracker = false;
 
 if use_eyetracker
