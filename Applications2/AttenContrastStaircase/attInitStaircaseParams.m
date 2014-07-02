@@ -7,7 +7,7 @@ stairParams.conditionName           = {'ContrastMatch'};
 stairParams.alternativeVarName      = 'upper_or_lower';
 
 % decision values
-stairParams.alternativeVarValues    = [1 2]; % 0 is upper, 1 is lower
+stairParams.alternativeVarValues    = [1 2]; % 1 is upper, 2 is lower
 
 % decision keys
 stairParams.responseSet             = 'as';  % a is upper, s is lower
@@ -25,7 +25,8 @@ stairParams.curStairVars            = {}; %{'testContrast',.5};
 % stairParams.randomVars              = {'fixationSide', [-1 1]};  
 stairParams.randomVars              = {...
     'start_frame', stimParams.StartFrames;...
-    'probe_side', stimParams.LeftOrRight};
+    'probe_side', stimParams.LeftOrRight; ...
+    'upper_or_lower_distractor', stimParams.UpperOrLowerDistractor};
 
 % limit expt in case of lack of convergence
 stairParams.maxNumTrials            = 200;

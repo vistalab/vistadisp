@@ -38,17 +38,25 @@ n_time_points = stimParams.nTimePoints;
 
 % attend to which side?
 probe_side = stimParams.probe_side;
+distractor_side = 3 - probe_side;
 
-% targe is upper or lower?
-upper_or_lower = stimParams.upper_or_lower;
+% target is upper or lower?
+upper_or_lower_target = stimParams.upper_or_lower;
 
-row = stimParams.RowCoords(upper_or_lower) * stimsize;
-col = stimParams.ColCoords(probe_side) * stimsize;
+% distractor is upper or lower?
+upper_or_lower_distractor = stimParams.upper_or_lower_distractor; % 1 is upper, 2 is lower
+
+row_target = stimParams.RowCoords(upper_or_lower_target) * stimsize;
+col_target = stimParams.ColCoords(probe_side) * stimsize;
+
+row_distractor = stimParams.RowCoords(upper_or_lower_distractor) * stimsize;
+col_distractor = stimParams.ColCoords(distractor_side) * stimsize;
 
 stdrow = stimParams.gaussianSigma;
 stdcol = stimParams.gaussianSigma;
 
-G = makegaussian2d(stimsize,row,col,stdrow,stdcol, x, y);
+G = makegaussian2d(stimsize,row_target,col_target,stdrow,stdcol, x, y);
+G = G + makegaussian2d(stimsize,row_distractor,col_distractor,stdrow,stdcol, x, y);
 contrast_decrement = stimParams.contrast_decrement;
 
 % Make envelope for contrast decrement
@@ -66,7 +74,7 @@ mask_frames = zeros(stimsize,stimsize,length(envelope)+2);
 mask_frames(:,:,1) = imageA;
 mask_frames(:,:,2) = imageB;
 
-% Add contrast decrement to images
+% Add contrast decrement to images for target
 n = 1;
 
 for ii = 3:n_time_points+2;

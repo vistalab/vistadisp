@@ -7,8 +7,8 @@ display.fixType        = 'largecross';
 display.fixSizePixels  = 2;
 
 display.fixColorRgb    = [255 255 255 255; ... % white 
-                          127 0 0 255; ...    % red for cue
-                          0 0 0 0;... % white
+                            0   0   0 255; ... % black
+                          127   0   0 255; ... % red for cue                          
                         ];
 
 % Center the fixation in the middle of the screen
@@ -29,18 +29,14 @@ red_stick.right =   3:1:fix_radius;
                           
 
 % Define [X;Y] coordinates 
-display.fixCoords{1,1} = [  display.fixX*ones(2*fix_radius+1,1)' display.fixX+nr_points; 
-                              display.fixY+nr_points display.fixY*ones(2*fix_radius+1,1)']; % White cross
-display.fixCoords{1,2} = [  display.fixX+red_stick.left; display.fixY*ones(fix_radius-2,1)' ] ; % Red stick on the left
+%   White cross
+display.fixCoords{1} = [  display.fixX*ones(2*fix_radius+1,1)' display.fixX+nr_points; 
+                              display.fixY+nr_points display.fixY*ones(2*fix_radius+1,1)'];                          
+%   Red stick on the left
+display.fixCoords{2} = [  display.fixX+red_stick.left; display.fixY*ones(fix_radius-2,1)' ] ; 
                           
-display.fixCoords{2,1} = [  display.fixX*ones(2*fix_radius+1,1)' display.fixX+nr_points; 
-                              display.fixY+nr_points display.fixY*ones(2*fix_radius+1,1)']; % White cross
-display.fixCoords{2,2} = [  display.fixX+red_stick.right; display.fixY*ones(fix_radius-2,1)' ] ; % Red stick on the right
-
-
-display.fixCoords{3,1} = display.fixCoords{1,1}; % White cross, before first trial begins
-display.fixCoords{3,2} = display.fixCoords{1,1}; % White cross, before first trial begins
-                          
+%   Red stick on the right                          
+display.fixCoords{3} = [  display.fixX+red_stick.right; display.fixY*ones(fix_radius-2,1)' ] ; 
                               
 
 

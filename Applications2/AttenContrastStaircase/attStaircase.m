@@ -20,7 +20,7 @@
 %     6.                 => [show each frame; no external calls]
 %     7.                 => drawFixation(display, colindex)     
 
-% PsychDebugWindowConfiguration(0, .7); 
+PsychDebugWindowConfiguration(0, .7); 
 AssertOpenGL;
 
 %% initialize parameters for display, staircase, stimulus, and subject

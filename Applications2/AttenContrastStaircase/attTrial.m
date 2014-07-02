@@ -11,11 +11,40 @@ timing              = (1:imagesPerTrial)' /  stimParams.frequency;
 cmap                = display.gammaTable;
 probe_side          = stimParams.probe_side;
 
-% fixation should alternate between 1 (white) and 2 (black)
-fixSeq              = ones(size(timing));
 
 % specify the sequence of images as a vector of image indices
 sequence            = attMakeStimSeq(stimParams);
+
+% Make a fixation sequence
+frame_duration = 1/stimParams.frequency;
+%   minimum time between fixation change
+min_fix_frames = round(0/frame_duration);
+%   maximum time between fixation change
+max_fix_frames = round(5/frame_duration);
+%   initialize the fixation vector with ones. some of these will change
+%   to twos.
+fix_vector = ones(imagesPerTrial,1);
+counter = 1;
+
+
+which_fixation = randintrange(1, 2, 1);
+while counter < imagesPerTrial
+    % pick a random interval for this fixation where fix == 2
+    this_dur = randi([min_fix_frames max_fix_frames]);
+    fix_vector((1:this_dur)+counter-1) = which_fixation;
+    
+    % if it's a 2,make it a 1. if it's a 1, make it a 2.
+    which_fixation = 3 - which_fixation; 
+    
+    counter = counter + this_dur;
+end
+
+% clip fixation vector in case it is longer than the image sequence
+if length(fix_vector) > imagesPerTrial
+    fix_vector = fix_vector(1:imagesPerTrial);
+end
+
+fixSeq     = fix_vector;
 
 %% make attention stim
 attIm               = attMakeStimulus(stimParams, display);
@@ -43,7 +72,7 @@ preStim   = createStimulusStruct(blankIm,cmap,1,[], [], pre_stim_probe);
 preStim   = createTextures(display, preStim);
 
 % for post stim we add a uniform fixation (no cue to which side)
-postStim   = createStimulusStruct(blankIm,cmap,1,[], [], 4);
+postStim   = createStimulusStruct(blankIm,cmap,1,[], [], 1);
 postStim   = createTextures(display, postStim);
 
 %% Build the trial events 
