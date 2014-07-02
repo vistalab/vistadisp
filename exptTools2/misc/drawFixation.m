@@ -66,10 +66,15 @@ switch(lower(d.fixType))
     case {'large cross' , 'largecross','large cross x+','largecrossx+'},
         % Hack: use colIndex to control both color and fixation location
         if exist('no_color_flag', 'var'), which_side = 3; 
-        else which_side = colIndex; end % 1 = left, 2 = right
+        else which_side = colIndex; end % 1 = red on left, 2 = red on right, 3 = all white
         
-        Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 1}, d.fixSizePixels, d.fixColorRgb(1,:));
-        Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 2}, d.fixSizePixels, d.fixColorRgb(2,:));
+        switch which_side
+            case {1, 2}
+                Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 1}, d.fixSizePixels, d.fixColorRgb(1,:));
+                Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 2}, d.fixSizePixels, d.fixColorRgb(2,:));
+            case{3}
+                Screen('DrawDots', d.windowPtr, d.fixCoords{which_side, 1}, d.fixSizePixels, d.fixColorRgb(1,:));
+        end
         
     case {'double large cross' , 'doublelargecross'},
         Screen('DrawDots', d.windowPtr, d.fixCoords, d.fixSizePixels, d.fixColorRgb(1,:));
