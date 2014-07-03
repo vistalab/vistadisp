@@ -19,8 +19,8 @@ y = d.numPixels(2);
 % upper left
 trigRect = round([0*x 0*y .07*x .09*y]); 
 
-black = 30;  % these should be expressed in termes of display
-white = 230; % these should be expressed in termes of display
+black = round(d.maxGammaValue * .1);  
+white = round(d.maxGammaValue * .9); 
 
 if colIndex == 0, trigger_color = black; else trigger_color = white; end
     
