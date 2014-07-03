@@ -67,12 +67,13 @@ switch probe_side
     case 2 % attend right
         pre_stim_probe = 4; % red on right
 end
+post_stim_probe = 1; % all white
 
 preStim   = createStimulusStruct(blankIm,cmap,1,[], [], pre_stim_probe);
 preStim   = createTextures(display, preStim);
 
 % for post stim we add a uniform fixation (no cue to which side)
-postStim   = createStimulusStruct(blankIm,cmap,1,[], [], 1);
+postStim   = createStimulusStruct(blankIm,cmap,1,[], [], post_stim_probe);
 postStim   = createTextures(display, postStim);
 
 %% Build the trial events 

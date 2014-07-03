@@ -38,7 +38,7 @@ stimParams.TestContrasts = linspace(.01^(1/gamma),1,30).^gamma;
 % **** RANDOM VARIABLES **************
 % target positions, expressed as screen fraction ([0.5 0.5] is screen
 % center)
-stimParams.LeftOrRight = [1 2]; % 0 = no task; 1 = left; 2 = right
+stimParams.LeftOrRight = [0 1 2]; % 0 = no task; 1 = left; 2 = right
 
 stimParams.UpperOrLowerDistractor = [1 2]; % 1 is upper, 2 is lower
 

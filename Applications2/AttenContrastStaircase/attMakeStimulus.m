@@ -38,6 +38,7 @@ n_time_points = stimParams.nTimePoints;
 
 % attend to which side?
 probe_side = stimParams.probe_side;
+if probe_side == 0, probe_side = 1; end 
 distractor_side = 3 - probe_side;
 
 % target is upper or lower?
