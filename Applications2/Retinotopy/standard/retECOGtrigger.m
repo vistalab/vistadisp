@@ -10,11 +10,9 @@ function  stimulus = retECOGtrigger(params, stimulus)
 % be renamed and moved to, say, vistadisp/exptTools2/experimentControl
 
 if isfield(params, 'modality') && ...
-    (strcmpi(params.modality, 'ecog') || strcmpi(params.modality, 'meg'))
+    (strcmpi(params.modality, 'ecog'))
     trigSeq = stimulus.seq * 1;
     trigSeq(2:2:end) = 2;
-    trigSeq(stimulus.seq==3) = 0;
-    trigSeq(stimulus.seq==4) = 0;
     stimulus.trigSeq = trigSeq;
 end
 
