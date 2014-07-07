@@ -22,17 +22,11 @@ global PTBUSBBoxInitialized;
 global PTBStimTrackerInitialized;
 global PTBTriggerPortInitialized;
 global PTBEyeTrackerRecording;
-% if ~PTBUSBBoxInitialized && ~PTBStimTrackerInitialized &&...
-%         ~PTBTriggerPortInitialized && ~PTBEyeTrackerRecording
-% 
-% 	disp('WARNING: No trigger sent.');
-% 	return;
-%     
-% % This should never happen... 
-% % Check the Init functions
-% elseif (PTBStimTrackerInitialized + PTBUSBBoxInitialized + PTBTriggerPortInitialized) > 1
-%     error('Too many trigger devices in use.');
-% end
+
+if  ~PTBStimTrackerInitialized 
+	disp('WARNING: No trigger sent.');
+	return;
+end
 
 % Send the triggers
 global PTBUSBBoxDeviceID;

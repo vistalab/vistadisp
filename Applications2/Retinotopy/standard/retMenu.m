@@ -231,12 +231,6 @@ data.tempFreq        = str2num(get(handles.tempFreq,        'String'));
 data.contrast        = str2num(get(handles.contrast,        'String'));
 data.interleaves     = str2num(get(handles.interleaves,     'String'));
 data.tr              = str2num(get(handles.tr,              'String'));
-<<<<<<< HEAD
-data.saveMatrix      = get(handles.saveMatrix,              'String');      
-tmp                  = get(handles.loadMatrix,              'String');
-data.loadMatrix      = tmp(get(handles.loadMatrix,          'Value'));      
-=======
->>>>>>> attention_eline
 data.triggerKey      = get(handles.triggerKey,              'String');
 data.saveMatrix      = get(handles.saveMatrix,              'String');      
 
