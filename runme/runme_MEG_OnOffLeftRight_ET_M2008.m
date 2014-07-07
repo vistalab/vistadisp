@@ -34,8 +34,8 @@ PTBTriggerLength = 0.001;
 % PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 0);
 
-%% Calibration
-cal = 'meg_lcddisplayParams2';
+%% Initialize Eyetracker and do Calibration
+cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*60;
@@ -123,7 +123,7 @@ if n == 15;
         PTBStopEyeTrackerRecording; % <----------- (can take a while)
         
         % move the file to the logs directory
-        destination = [pwd '_eyelink_'];
+        destination = '~/Desktop/MEG_eyelink_';
         i = 0;
         while exist([destination num2str(i) '.edf'], 'file')
             i = i + 1;

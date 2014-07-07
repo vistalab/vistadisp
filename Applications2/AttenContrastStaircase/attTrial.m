@@ -15,6 +15,24 @@ probe_side          = stimParams.probe_side;
 % specify the sequence of images as a vector of image indices
 sequence            = attMakeStimSeq(stimParams);
 
+% specify the photodiode sequence
+diodeSeq = zeros(length(sequence),1);
+diodeSeq(1:2:end) = 1;
+
+% specify the trigger sequence, depending on probe side, we send different
+% triggers.
+trigSeq = zeros(length(sequence),1);
+trigSeq(2:2:end) = 2;
+if probe_side == 0;
+    trigSeq(1:2:end) = 1;
+elseif probe_side == 1;
+    trigSeq(1:2:end) = 3;
+elseif probe_side == 1;
+    trigSeq(1:2:end) = 4;
+end
+    
+
+
 % Make a fixation sequence
 frame_duration = 1/stimParams.frequency;
 %   minimum time between fixation change
@@ -48,7 +66,7 @@ fixSeq     = fix_vector;
 
 %% make attention stim
 attIm               = attMakeStimulus(stimParams, display);
-attStimStruct       = createStimulusStruct(attIm,cmap,sequence,[],timing, fixSeq);
+attStimStruct       = createStimulusStruct(attIm,cmap,sequence,[],timing, fixSeq, diodeSeq, trigSeq);
 attStim             = createTextures(display, attStimStruct);
 
 

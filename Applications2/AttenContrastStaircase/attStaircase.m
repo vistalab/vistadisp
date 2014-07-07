@@ -23,8 +23,46 @@
 PsychDebugWindowConfiguration(0, .7); 
 AssertOpenGL;
 
+%% Initialize Stimtracker
+cal = 'meg_lcd';
+d   = loadDisplayParams(cal);
+% hz  = FrameRate(d.screenNumber);
+hz = 60;
+tr  = 1/hz*60;
+
+% Initialize Stimtracker to send triggers
+PTBInitStimTracker;
+global PTBTriggerLength 
+PTBTriggerLength = 0.001;
+
+%% Eyetracker and Calibration: Do we want to use the eyetracker?  
+use_eyetracker = true;
+stop_eyetracker = false;
+
+% Open a screen so we can get a WindowPointer (Needed for PTBWrapper code)
+d = openScreen(d);
+global PTBTheWindowPtr
+PTBTheWindowPtr = d.windowPtr;
+
+if use_eyetracker
+
+    %Open the screen
+    PTBInitEyeTracker;
+    % paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
+    % PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
+    PTBCalibrateEyeTracker;
+
+    % actually starts the recording
+    % name correponding to MEG file (can only be 8 characters!!, no extension)
+    PTBStartEyeTrackerRecording('eyelink');
+end
+
+
+Screen('CloseAll');
+
+
 %% initialize parameters for display, staircase, stimulus, and subject
-display_name     = 'CBI_NYU_projector';
+display_name     = 'meg_lcd';
 display          = attInitDisplay(display_name);
 stimParams       = attInitStimParams(display);
 display          = attInitFixParams(display);
@@ -64,5 +102,20 @@ catch
     for ii = 1:100; ShowCursor; end
 end
 fclose(logFID(1));
+
+%% Stop recording with Eyetracker when done
+if use_eyetracker
+
+    PTBStopEyeTrackerRecording; % Saving the file takes a while
+
+    % move the file to the logs directory
+    destination = '~/Desktop/Experiments/Winawer/Eyelink_files/';
+    i = 0;
+    while exist([destination num2str(i) '.edf'], 'file')
+        i = i + 1;
+    end
+    movefile('eyelink.edf', [destination num2str(i) '.edf'])
+
+end
 
 

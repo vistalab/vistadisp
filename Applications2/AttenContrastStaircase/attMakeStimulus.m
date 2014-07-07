@@ -7,13 +7,14 @@ function im  = attMakeStimulus(stimParams, display)
 % Load in images from the precomputed image matrices
 
 % To do: Create images by script rather than loading stored images
-stored_images = load('stimulus_matrices/attention_onOffLeftRight_params1.mat');
+stored_images = load('vistadisp/Applications2/Retinotopy/standard/storedImagesMatrices/onOffLeftRight_params1.mat');
 imageA    = stored_images.stimulus.images(:,:,1);
 imageB    = stored_images.stimulus.images(:,:,2);
 
 % Derive the stimulus size and background value from the images themselves
 stimsize  = length(stored_images.stimulus.images(:,:,1));
-bkg       = mode(imageA(:));
+% bkg       = mode(double(imageA(:)));
+bkg = round(mode(double(imageA(:)))/2);
 
 % Check that background value in stored image is the same as the background
 % value in the display struct
@@ -83,22 +84,22 @@ for ii = 3:n_time_points+2;
         F = G * contrast_decrement * envelope(n);
         F = 1 - F;
         if mod(stimParams.start_frame,2) == 1 % If start frame is even, we need ImageA
-            mask_frames(:,:,ii) = imageA .* F ;
+            mask_frames(:,:,ii) = double(imageA) .* F ;
             n = n+1;
         else % If not, than we need ImageB
-            mask_frames(:,:,ii) = imageB .* F ;
+            mask_frames(:,:,ii) = double(imageB) .* F ;
             n = n+1;
         end
         
     elseif mod(ii,2) == 0;
         F = G * contrast_decrement * envelope(n);
         F = 1 - F;
-        mask_frames(:,:,ii) = imageA .* F ;
+        mask_frames(:,:,ii) = double(imageA) .* F ;
         n = n+1;
     elseif mod(ii,2) == 1;
         F = G * contrast_decrement * envelope(n);
         F = 1 - F;
-        mask_frames(:,:,ii) = imageB  .* F ;
+        mask_frames(:,:,ii) = double(imageB)  .* F ;
         n = n+1;
     end
     
