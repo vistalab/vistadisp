@@ -30,6 +30,13 @@ elseif probe_side == 1;
 elseif probe_side == 1;
     trigSeq(1:2:end) = 4;
 end
+
+% Send specific trigger if probe is on the screen
+for ii = 1:length(sequence)
+    if sequence(ii) == 3;
+        trigSeq(ii) = 8;
+    end
+end
     
 
 
