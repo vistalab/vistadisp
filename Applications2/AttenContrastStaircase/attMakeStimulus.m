@@ -8,13 +8,15 @@ function im  = attMakeStimulus(stimParams, display)
 
 % To do: Create images by script rather than loading stored images
 stored_images = load('vistadisp/Applications2/Retinotopy/standard/storedImagesMatrices/onOffLeftRight_params1.mat');
-imageA    = stored_images.stimulus.images(:,:,1);
-imageB    = stored_images.stimulus.images(:,:,2);
+imageA    = double(stored_images.stimulus.images(:,:,1));
+imageB    = double(stored_images.stimulus.images(:,:,2));
 
 % Derive the stimulus size and background value from the images themselves
 stimsize  = length(stored_images.stimulus.images(:,:,1));
 % bkg       = mode(double(imageA(:)));
-bkg = round(mode(double(imageA(:)))/2);
+% bkg = round(mode(double(imageA(:)))/2);
+col_values = unique(imageA(:));
+bkg = median(col_values);
 
 % Check that background value in stored image is the same as the background
 % value in the display struct
