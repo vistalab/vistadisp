@@ -19,11 +19,12 @@ y = d.numPixels(2);
 % upper left
 trigRect = round([0*x 0*y .07*x .09*y]); 
 
-if colIndex > 0
-    colIndex = mod(colIndex, 2)+1;
-end
+black = round(d.maxGammaValue * .1);  
+white = round(d.maxGammaValue * .9); 
 
-Screen('FillRect', d.windowPtr, 200 * (colIndex-1)+30, trigRect);
+if colIndex == 0, trigger_color = black; else trigger_color = white; end
+    
+Screen('FillRect', d.windowPtr, trigger_color, trigRect);
     
 
 return

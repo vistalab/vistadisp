@@ -24,8 +24,7 @@ try
 	c = display.backColorIndex;
 catch
 	c = display.backColorRgb;
-end;
-
+end
 for stimNum = 1:length(stimulus)
 
 	% if stored as cell?!
@@ -73,7 +72,7 @@ for stimNum = 1:length(stimulus)
 	end
 end;
 
-% call/load 'DrawTexture' prior to actual use (clears overhead)
+%% call/load 'DrawTexture' prior to actual use (clears overhead)
 Screen('DrawTexture', display.windowPtr, stimulus(1).textures(1), ...
 	stimulus(1).srcRect, stimulus(1).destRect);
 

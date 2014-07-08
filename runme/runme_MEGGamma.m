@@ -8,11 +8,11 @@ PTBTriggerLength = 0.001;
 
 % debug mode?
 PsychDebugWindowConfiguration
-Screen('Preference', 'SkipSyncTests', 0);
+Screen('Preference', 'SkipSyncTests', 1);
 
 
 % screen
-cal = 'meg_lcddisplayParams2';
+cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 %hz  = FrameRate(d.screenNumber);
 hz = 60;

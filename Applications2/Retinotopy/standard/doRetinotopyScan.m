@@ -105,10 +105,10 @@ try
 
 catch ME
     % clean up if error occurred
-    %Screen('CloseAll'); 
-    Screen('Close'); 
+    Screen('CloseAll'); 
     setGamma(0); Priority(0); ShowCursor;
-    warning(ME.identifier, ME.message);
+    %warning(ME.identifier, ME.message);
+    rethrow(ME)
 end;
 
 
