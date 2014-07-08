@@ -7,20 +7,20 @@ global PTBTriggerLength
 PTBTriggerLength = 0.001;
 
 % debug mode?
-PsychDebugWindowConfiguration
+% PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 1);
 
 
 % screen
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-%hz  = FrameRate(d.screenNumber);
-hz = 60;
+hz  = FrameRate(d.screenNumber);
+% hz = 60;
 tr  = 1/hz*60;
 
 %% Use Eyetracker?
 
-use_eyetracker = false;
+use_eyetracker = true;
 stop_eyetracker = false;
 
 if use_eyetracker
@@ -77,7 +77,7 @@ if stop_eyetracker
     PTBStopEyeTrackerRecording; % <----------- (can take a while)
 
     % move the file to the logs directory
-    destination = [pwd '_eyelink_'];
+    destination = '~/Desktop/MEG_Gamma_eyelink_';
     i = 0;
     while exist([destination num2str(i) '.edf'], 'file')
         i = i + 1;
