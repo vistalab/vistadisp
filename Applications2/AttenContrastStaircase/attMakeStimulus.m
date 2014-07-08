@@ -58,7 +58,7 @@ stdrow = stimParams.gaussianSigma;
 stdcol = stimParams.gaussianSigma;
 
 G = makegaussian2d(stimsize,row_target,col_target,stdrow,stdcol, x, y);
-G = G + makegaussian2d(stimsize,row_distractor,col_distractor,stdrow,stdcol, x, y);
+% G = G + makegaussian2d(stimsize,row_distractor,col_distractor,stdrow,stdcol, x, y);
 contrast_decrement = stimParams.contrast_decrement;
 
 % Make envelope for contrast decrement

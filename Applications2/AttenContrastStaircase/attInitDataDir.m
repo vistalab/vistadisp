@@ -2,8 +2,17 @@ function dataDir = attInitDataDir
 % function dataDir = attInitDataDir
 % choose the directory to store data for attInitDataDir
 
-dataDir = '/Volumes/server/Projects/MEG/Attentional_MEG/staircase_psychophysics/';
+MegDataDir = '~/Desktop/Experiments/Winawer/staircase_psychophysics/';
+LabDataDir = '/Volumes/server/Projects/MEG/Attention_MEG/staircase_psychophysics/';
 
-if(~exist(dataDir,'dir')), mkdir(dataDir); end
+global PTBStimTrackerInitialized
+
+if PTBStimTrackerInitialized
+    dataDir = MegDataDir;
+else
+    dataDir = LabDataDir;
+end
+
+if ~exist(dataDir, 'dir'), mkdir(dataDir); end
 
 return

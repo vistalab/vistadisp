@@ -1,4 +1,4 @@
-% attention Staircase
+% Attention Staircase
 %
 %   Purpose:
 %       main function for running psychophysical staircase
@@ -18,47 +18,64 @@
 %     4.       => doTrial(display,trial,runPriority,showTimingFlag,returnHistory)
 %     5.            => showStimulus(display, material.stimulus,runPriority, showTimingFlag);
 %     6.                 => [show each frame; no external calls]
-%     7.                 => drawFixation(display, colindex)     
+%     7.                 => drawFixation(display, colindex)   
 
-PsychDebugWindowConfiguration(0, .7); 
+
+
+% Before you run a MEG experiment with this code.. CHECK:
+% (a) Do you want to use the PsychDebugWindow?
+% (b) Is Framerate correct?
+% (c) Is stimtracker initiated?
+% (d) Do you want to use the eyetracker or not? 
+%     Use/Stop_eyetracker = True/False?
+% (e)Are the keys for responses correct? (Inside attInitStaircaseParams)?
+ 
+
+%% Open GL
 AssertOpenGL;
+
+%% Do you want the debug window?
+% PsychDebugWindowConfiguration(0, .7); 
 
 %% Initialize Stimtracker
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-% hz  = FrameRate(d.screenNumber);
-hz = 60;
+hz  = FrameRate(d.screenNumber);
+% hz = 60;
 tr  = 1/hz*60;
 
 % Initialize Stimtracker to send triggers
 PTBInitStimTracker;
 global PTBTriggerLength 
-PTBTriggerLength = 0.001;
+PTBTriggerLength = 0.001; % ms
 
 %% Eyetracker and Calibration: Do we want to use the eyetracker?  
-use_eyetracker = true;
+use_eyetracker = false;
 stop_eyetracker = false;
 
-% Open a screen so we can get a WindowPointer (Needed for PTBWrapper code)
-d = openScreen(d);
-global PTBTheWindowPtr
-PTBTheWindowPtr = d.windowPtr;
-
 if use_eyetracker
+    
+    % Open a screen so we can get a WindowPointer (Needed for PTBWrapper code)
+    d = openScreen(d);
+    global PTBTheWindowPtr
+    PTBTheWindowPtr = d.windowPtr;
 
-    %Open the screen
+    % Initialize Eyetracker
     PTBInitEyeTracker;
-    % paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
-    % PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
+    
+    % Start Calibration. Use C for calibration, then press enter when
+    % participant fixates to start the calibration. Use V for Validation,
+    % press enter when subjects fixates and you want to start validation.
+    % Use escape to go back to the matlab console.
     PTBCalibrateEyeTracker;
 
-    % actually starts the recording
+    % Starts the recording
     % name correponding to MEG file (can only be 8 characters!!, no extension)
     PTBStartEyeTrackerRecording('eyelink');
 end
 
 
-Screen('CloseAll');
+Screen('CloseAll'); % Close the screen you opened for the eyetracker Initiation & Calibration
 
 
 %% initialize parameters for display, staircase, stimulus, and subject
@@ -69,7 +86,7 @@ display          = attInitFixParams(display);
 stairParams      = attInitStaircaseParams(stimParams);
 dataDir          = attInitDataDir;
 subjectParams    = getSubjectParams(dataDir);
-priorityLevel    = 0;  %whats's this about??
+priorityLevel    = 0;  %what's this about??
 trialGenFuncName = 'attTrial'; %function called by doStaircase to make stimuli
 
 %% Subject data and log file
@@ -104,11 +121,14 @@ end
 fclose(logFID(1));
 
 %% Stop recording with Eyetracker when done
-if use_eyetracker
+if stop_eyetracker
 
     PTBStopEyeTrackerRecording; % Saving the file takes a while
 
     % move the file to the logs directory
+    if ~exist('~/Desktop/Experiments/Winawer/Eyelink_files/', 'dir')
+        mkdir('~/Desktop/Experiments/Winawer/Eyelink_files/')
+    end
     destination = '~/Desktop/Experiments/Winawer/Eyelink_files/';
     i = 0;
     while exist([destination num2str(i) '.edf'], 'file')

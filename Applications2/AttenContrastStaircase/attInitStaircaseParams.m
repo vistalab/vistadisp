@@ -54,7 +54,7 @@ stairParams.iti = 0.5;
 % This specifies the intitial value of the staircase, as an index into
 % stairParams.alternativeVarValues. If there are multiple interleaved
 % staircases, then we separately set the intial value for each staircase.
-initIndex = round(length(stairParams.adjustableVarValues)/1.2);
+initIndex = round(length(stairParams.adjustableVarValues)/1.5);
 if ~isempty(stairParams.curStairVars)
     stairParams.adjustableVarStart = repmat(initIndex, size(stairParams.curStairVars{2}));
 else
