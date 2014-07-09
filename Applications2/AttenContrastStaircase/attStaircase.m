@@ -9,6 +9,7 @@
 %   You need VISTADISP and KNK code to run this code!
 %
 %
+
 %  
 %
 %   Flow:
@@ -35,7 +36,7 @@
 AssertOpenGL;
 
 %% Do you want the debug window?
-% PsychDebugWindowConfiguration(0, .7); 
+PsychDebugWindowConfiguration(0, .7); 
 
 %% Initialize Stimtracker
 cal = 'meg_lcd';
@@ -103,8 +104,10 @@ logFID(2) = 1;
 hideCursor = false;
 
 %% do the staircase
-
+devices = getDevices;
 display = openScreen(display,hideCursor);
+display.devices = devices;
+
 newDataSum = doStaircase(display, stairParams, stimParams, trialGenFuncName, ...
     priorityLevel, logFID); %, 'precomputeFirstTrial');
 display = closeScreen(display);

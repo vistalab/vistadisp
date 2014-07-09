@@ -29,10 +29,10 @@ stairParams.randomVars              = {...
     'upper_or_lower_distractor', stimParams.UpperOrLowerDistractor};
 
 % limit expt in case of lack of convergence
-stairParams.maxNumTrials            = 200;
+stairParams.maxNumTrials            = 1000;
 
 % end expt after this many reversals
-stairParams.maxNumReversals         = 200;
+stairParams.maxNumReversals         = 1000;
 
 % increment size for correct answers for each successive reversal (normally
 % these numbers should go down as num reversals incr)

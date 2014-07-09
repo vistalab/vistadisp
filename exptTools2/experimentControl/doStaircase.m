@@ -184,7 +184,8 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %				a cell array so that each interleaved staircases can have their own
 %				data.  Also, added reversalStimLevel to dataSum.
 % 98/10/26 RFD: added history field to dataSum (keeps a history of the adjustableVarValue
-%				presented on each trial).  Also added "save('dataSumTemp', 'dataSum');"
+%				presented on each trial).  Also added "save('dataSumTemp',
+%				'dataSum');"
 %				so that the summary data are not lost in the event of an error or crash.
 % 98/10/26 RFD: added stairParams.conditionName.
 % 98/11/02 RFD: fixed precomputeFurstTrial so that it sets the first adjustableVarValue
@@ -242,7 +243,8 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                   experimental sessions.  In any case, it will be
 %                   written over by the next initialization.
 % 2009.09.18 RFB:   Be careful using the internal keyboard with numbers for
-%                   responses, for some reason KbQueueCheck has a bit of a hissy fit with
+%                   responses, for some reason KbQueueCheck has a bit of a
+%                   hissy fit with
 %                   this and doesn't register them accurately (as far as I
 %                   can tell).
 % 2010.07.08 JW:    Added optional input arg 'plotEachTrialFlag' to plot
@@ -317,7 +319,6 @@ if isfield(stairParams,'saveDataVars')
     end
 end
 % Get keyboard input device (see help file for specifics)
-device = getBestDevice(display);
 % Generate keyList for checking responses after the trial
 keyList = zeros(1,256);
 includeKeys = [];
@@ -607,7 +608,11 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         
         if isempty(respCode) % If respCode is still empty at this point, get one
             % Wait for the response
-            
+            if isfield(stimParams, 'inputDevice'), 
+                device = inputDevice; 
+            else
+                device = [];
+            end
             KbQueueCreate(device,keyList);
             KbQueueStart();
             [k.pressed k.firstPress k.firstRelease k.lastPress k.lastRelease] = KbQueueWaitCheck();

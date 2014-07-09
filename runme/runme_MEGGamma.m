@@ -4,7 +4,7 @@
 %% Initiliaze stimtracker 
 PTBInitStimTracker;
 global PTBTriggerLength 
-PTBTriggerLength = 0.001;
+PTBTriggerLength = 0.005;
 
 % debug mode?
 % PsychDebugWindowConfiguration
@@ -20,7 +20,7 @@ tr  = 1/hz*60;
 
 %% Use Eyetracker?
 
-use_eyetracker = true;
+use_eyetracker = false;
 stop_eyetracker = false;
 
 if use_eyetracker
@@ -60,13 +60,11 @@ params.skipSyncTests    = true;
 %  ***** GO ***********
 %  *********************
 
-% debug mode?
-PsychDebugWindowConfiguration
 Screen('Preference', 'SkipSyncTests', 1);
 
 
 stimfile = 'gammaStimuli_params';
-params.loadMatrix = sprintf('%s%d.mat', stimfile, 1);
+params.loadMatrix = sprintf('%s%d.mat', stimfile, 8);
 ret(params);
 
 
@@ -91,5 +89,5 @@ end
 
 
 
-
+%%
 

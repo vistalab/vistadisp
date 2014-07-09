@@ -4,6 +4,11 @@ function stimParams = attInitStimParams(display)
 % stimParams = attInitStimParams(display)
 
 % **** FIXED PARAMETERS *****************
+
+% specify which device for inputs
+display.devices = getDevices;
+stimParams.inputDevice = getBestDevice(display);
+
 % screen diameter in pixels
 screensize = min(display.numPixels);
 
