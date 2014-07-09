@@ -579,7 +579,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         % FlushEvents('keyDown');
         preTrialSecs = GetSecs-preTrialSecs;
         % run the trial
-        response = doTrial(display, trial, priority, showTimingFlag);
+        response = doTrial(display, trial, priority, showTimingFlag, stimParams);
         if stairParams.etFlag
             etData = etCheckEyes(stimParams.duration);
         end
@@ -609,7 +609,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         if isempty(respCode) % If respCode is still empty at this point, get one
             % Wait for the response
             if isfield(stimParams, 'inputDevice'), 
-                device = inputDevice; 
+                device = stimParams.inputDevice; 
             else
                 device = [];
             end
