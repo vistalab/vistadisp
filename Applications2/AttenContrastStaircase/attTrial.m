@@ -27,7 +27,7 @@ if probe_side == 0;
     trigSeq(1:2:end) = 1;
 elseif probe_side == 1;
     trigSeq(1:2:end) = 3;
-elseif probe_side == 1;
+elseif probe_side == 2;
     trigSeq(1:2:end) = 4;
 end
 
