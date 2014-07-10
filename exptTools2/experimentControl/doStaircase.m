@@ -613,7 +613,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             else
                 device = [];
             end
-            KbQueueCreate(device,keyList);
+            KbQueueCreate(device);
             KbQueueStart();
             [k.pressed k.firstPress k.firstRelease k.lastPress k.lastRelease] = KbQueueWaitCheck();
             response.secs = min(k.firstPress(k.firstPress~=0));
