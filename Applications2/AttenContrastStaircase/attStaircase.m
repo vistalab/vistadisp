@@ -132,7 +132,7 @@ if stop_eyetracker
     if ~exist('~/Desktop/Experiments/Winawer/Eyelink_files/', 'dir')
         mkdir('~/Desktop/Experiments/Winawer/Eyelink_files/')
     end
-    destination = '~/Desktop/Experiments/Winawer/Eyelink_files/';
+    destination = '~/Desktop/Experiments/Winawer/Eyelink_files/_eyelink_';
     i = 0;
     while exist([destination num2str(i) '.edf'], 'file')
         i = i + 1;
