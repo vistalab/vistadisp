@@ -38,7 +38,7 @@ stimParams.isi = 1; % seconds
 % spacing so that contrasts are densely sampled near 1 and sparesely near
 % 100.
 gamma = 2;
-stimParams.TestContrasts = linspace(.01^(1/gamma),1,30).^gamma;
+stimParams.TestContrasts = linspace(.001^(1/gamma),1,30).^gamma;
 
 % **** RANDOM VARIABLES **************
 % target positions, expressed as screen fraction ([0.5 0.5] is screen

@@ -8,6 +8,15 @@ function im  = attMakeStimulus(stimParams, display)
 
 % To do: Create images by script rather than loading stored images
 stored_images = load('vistadisp/Applications2/Retinotopy/standard/storedImagesMatrices/onOffLeftRight_params1.mat');
+
+% avoid using 0 and 255 beacuse these values may be reserved for things
+% like fixation and instructions
+black = stored_images.stimulus.images == 0;
+white = stored_images.stimulus.images == 255;
+
+stored_images.stimulus.images(black) = 1;
+stored_images.stimulus.images(white) = 254;
+
 imageA    = double(stored_images.stimulus.images(:,:,1));
 imageB    = double(stored_images.stimulus.images(:,:,2));
 
@@ -81,29 +90,21 @@ mask_frames(:,:,2) = imageB;
 % Add contrast decrement to images for target
 n = 1;
 
+imageAorB = zeros(1,n_time_points+2);
+if mod(stimParams.start_frame,2) == 1, 
+    imageAorB(2:2:end) = 1;
+else
+    imageAorB(1:2:end) = 1;
+end
+
 for ii = 3:n_time_points+2;
-    if ii == 3;
-        F = G * contrast_decrement * envelope(n);
-        F = 1 - F;
-        if mod(stimParams.start_frame,2) == 1 % If start frame is even, we need ImageA
-            mask_frames(:,:,ii) = double(imageA) .* F ;
-            n = n+1;
-        else % If not, than we need ImageB
-            mask_frames(:,:,ii) = double(imageB) .* F ;
-            n = n+1;
-        end
-        
-    elseif mod(ii,2) == 0;
-        F = G * contrast_decrement * envelope(n);
-        F = 1 - F;
-        mask_frames(:,:,ii) = double(imageA) .* F ;
-        n = n+1;
-    elseif mod(ii,2) == 1;
-        F = G * contrast_decrement * envelope(n);
-        F = 1 - F;
-        mask_frames(:,:,ii) = double(imageB)  .* F ;
-        n = n+1;
-    end
+    if imageAorB(ii) == 0, this_image = imageA;
+    else  this_image = imageB; end
+    
+    F = G * contrast_decrement * envelope(n);
+    F = 1 - F;
+    mask_frames(:,:,ii) = double(this_image) .* F ;
+    n = n+1;
     
 end
 

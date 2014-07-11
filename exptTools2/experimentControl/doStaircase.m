@@ -333,7 +333,8 @@ for i=1:size(stairParams.responseSet,2)
 end
 includeKeys = [includeKeys KbName(quitKey)];
 includeKeys = unique(includeKeys);
-keyList(includeKeys) = 1;
+% keyList(includeKeys) = 1; % Let's do all possible keys
+keyList(:) = 1;
 % Set some more defaults
 if ~isfield(stairParams, 'numIncorrectBeforeStep')
     stairParams.numIncorrectBeforeStep = 1;
@@ -613,6 +614,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             else
                 device = [];
             end
+            
             KbQueueCreate(device);
             KbQueueStart();
             [k.pressed k.firstPress k.firstRelease k.lastPress k.lastRelease] = KbQueueWaitCheck();
@@ -794,6 +796,7 @@ end
 if stairParams.initTrialCount==1 || stairParams.initTrialCount==0
     save(tcName,'trialCounts');
 end
+
 
 
 %ListenChar(false);
