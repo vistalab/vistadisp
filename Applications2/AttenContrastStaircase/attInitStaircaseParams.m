@@ -10,7 +10,7 @@ stairParams.alternativeVarName      = 'upper_or_lower';
 stairParams.alternativeVarValues    = [1 2]; % 1 is upper, 2 is lower
 
 % decision keys
-stairParams.responseSet             = '12';  % a is upper, s is lower
+stairParams.responseSet             = 'as';  % a is upper, s is lower
 
 % variable that is adjusted by staircase
 stairParams.adjustableVarName       = 'contrast_decrement';
@@ -39,7 +39,7 @@ stairParams.maxNumReversals         = 1000;
 stairParams.correctStepSize         = -1 * [1 1 1 1 1 1 1 1 1 1]; %[-4 -3 -3 -2 -1];
 stairParams.incorrectStepSize       =  1 * [1 1 1 1 1 1 1 1 1 1]; % [4 3 3 2 1];
 stairParams.numIncorrectForStep     = 1;
-stairParams.numCorrectForStep       = 2;
+stairParams.numCorrectForStep       = 1;
 
 % auditory feedback?
 stairParams.feedback                = 'none'; %{'auditory')

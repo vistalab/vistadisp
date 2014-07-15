@@ -1,4 +1,4 @@
-function trial = addTrialEvent(varargin)
+function [trial, eventNum] = addTrialEvent(varargin)
 % trial = addTrialEvent(display, trial, eventType, ...
 %				fieldName, fieldValue, [fieldName, fieldValue...])
 %

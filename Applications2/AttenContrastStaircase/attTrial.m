@@ -103,9 +103,25 @@ postStim   = createTextures(display, postStim);
 
 %% Build the trial events 
 
-trial = addTrialEvent(display,[],'ISIEvent', 'stimulus', preStim, 'duration', 6);
-trial = addTrialEvent(display,trial,'stimulusEvent', 'stimulus', attStim);
-trial = addTrialEvent(display,trial,'ISIEvent', 'stimulus', postStim, 'duration');
+if ~exist('eventNum', 'var') || exist('eventNum', 'var') && eventNum ~= 6
 
-data = 'done';
-return
+    [trial, eventNum] = addTrialEvent(display,[],'ISIEvent', 'stimulus', preStim, 'duration', 1);
+    [trial, eventNum] = addTrialEvent(display,trial,'stimulusEvent', 'stimulus', attStim);
+    [trial, eventNum] = addTrialEvent(display,trial,'ISIEvent', 'stimulus', postStim, 'duration');
+    [trial, eventNum] = addTrialEvent(display,trial,'ISIEvent', 'stimulus', postStim, 'duration', 6);
+    
+    data = 'done';
+    return
+
+elseif exist('eventNum', 'var') && eventNum == 6
+    
+    [trial, eventNum] = addTrialEvent(display,trial,'textEvent', 'stimulus', blankIm, 'duration', 10);
+    [trial, eventNum] = addTrialEvent(display,trial,'ISIEvent', 'stimulus', preStim, 'duration', 1);
+    [trial, eventNum] = addTrialEvent(display,trial,'stimulusEvent', 'stimulus', attStim);
+    [trial, eventNum] = addTrialEvent(display,trial,'ISIEvent', 'stimulus', postStim, 'duration');
+    [trial, eventNum] = addTrialEvent(display,trial,'ISIEvent', 'stimulus', postStim, 'duration', 6);
+    
+    data = 'done';
+    return
+    
+end

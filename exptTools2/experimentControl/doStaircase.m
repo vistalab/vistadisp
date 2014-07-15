@@ -646,147 +646,142 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
     % the function that makes the trial. also, we should then check to see
     % if the field exists before checking its value so that we don't get a
     % crash if the field is not defined.
-    if stimParams.probe_side == 0,
-        
-        fprintf('this trial doesnt count.\n'); drawnow;
-    else
-        if ~abort
-            trialCounts = trialCounts + 1;
-            stairHistory.numTrials(curStair) = 	stairHistory.numTrials(curStair) + 1;
-            dataSum(curStair).history(stairHistory.numTrials(curStair)) = adjustValue;
-            dataSum(curStair).response(stairHistory.numTrials(curStair)) = response.keyLabel;
-            dataSum(curStair).correct(stairHistory.numTrials(curStair)) = correct; % RFB - added trial by trial correct/incorrect info
-            dataSum(curStair).trialCounts(stairHistory.numTrials(curStair)) = trialCounts; % RFB - added trial by trial count info (useful with many staircases)
-            % If we're performing eye tracking, store the data
-            if stairParams.etFlag
-                dataSum(curStair).etData{1,stairHistory.numTrials(curStair)} = etData.horiz;
-                dataSum(curStair).etData{2,stairHistory.numTrials(curStair)} = etData.vert;
-                dataSum(curStair).etxForm{stairHistory.numTrials(curStair)} = stairParams.et.xform;
-            end
-            % If using code which records the start of the trial GetSecs, then
-            % compute the RT
-            if isfield(response,'secsStart')
-                dataSum(curStair).responseTime(stairHistory.numTrials(curStair)) = response.secs - response.secsStart;
-            end
-            
-            % If user indicates the need to save stuff out from the actual
-            % trials themselves, do so with the eval function.
-            if exist('saveData','var')
-                for i=1:1:size(saveData,1)
-                    eval(saveData{i,2});
-                end
-            end
-            
-            i = find(dataSum(curStair).stimLevels == adjustValue);
-            if isempty(i)
-                error('doStaircase: missing stimLevel in dataSum- data may not be valid!');
-            end
-            dataSum(curStair).numTrials(i) = dataSum(curStair).numTrials(i) + 1;
-            if correct
-                % auditory feedback
-                if ~isempty(correctSnd) sound(correctSnd); end
-                dataSum(curStair).numCorrect(i) = dataSum(curStair).numCorrect(i) + 1;
-            else
-                if ~isempty(incorrectSnd) sound(incorrectSnd); end
-            end
-        else
-            dataSum(1).abort = 1; % set a flag to allow users to alter their behavior outside of doStaircase should someone abort a trial
-            return;
+
+    if ~abort
+        trialCounts = trialCounts + 1;
+        stairHistory.numTrials(curStair) = 	stairHistory.numTrials(curStair) + 1;
+        dataSum(curStair).history(stairHistory.numTrials(curStair)) = adjustValue;
+        dataSum(curStair).response(stairHistory.numTrials(curStair)) = response.keyLabel;
+        dataSum(curStair).correct(stairHistory.numTrials(curStair)) = correct; % RFB - added trial by trial correct/incorrect info
+        dataSum(curStair).trialCounts(stairHistory.numTrials(curStair)) = trialCounts; % RFB - added trial by trial count info (useful with many staircases)
+        % If we're performing eye tracking, store the data
+        if stairParams.etFlag
+            dataSum(curStair).etData{1,stairHistory.numTrials(curStair)} = etData.horiz;
+            dataSum(curStair).etData{2,stairHistory.numTrials(curStair)} = etData.vert;
+            dataSum(curStair).etxForm{stairHistory.numTrials(curStair)} = stairParams.et.xform;
         end
-        
-        % print out the log
-        for i=1:length(logFID)
-            % incase altValues are characters: num2str(altValue) will work with characters, ints and floats
-            fprintf(logFID(i), '%d\t%d\t%.4f\t%d\t%s\t%s\t', curStair, stairHistory.numTrials(curStair), ...
-                adjustValue, correct, num2str(altValue),response.keyLabel);
-            for j=1:size(stairParams.randomVars, 1)
-                fprintf(logFID(i), '%.4f\t',  randVal(j));
-            end
-            for j=1:size(stairParams.curStairVars, 1)
-                fprintf(logFID(i), '%.4f\t',  curStairVal(j));
-            end
-            fprintf(logFID(i), '\n');
+        % If using code which records the start of the trial GetSecs, then
+        % compute the RT
+        if isfield(response,'secsStart')
+            dataSum(curStair).responseTime(stairHistory.numTrials(curStair)) = response.secs - response.secsStart;
         end
-        % save the dataSum file in case of a crash or error
-        save('dataSumTemp', 'dataSum');
-        
-        % if requested, update plot on each trial. useful for debugging.
-        if exist('plotEachTrialFlag', 'var'), plotStaircase(stairParams, dataSum, 1); end
-        
-        % adjust the adjustable
+
+        % If user indicates the need to save stuff out from the actual
+        % trials themselves, do so with the eval function.
+        if exist('saveData','var')
+            for i=1:1:size(saveData,1)
+                eval(saveData{i,2});
+            end
+        end
+
+        i = find(dataSum(curStair).stimLevels == adjustValue);
+        if isempty(i)
+            error('doStaircase: missing stimLevel in dataSum- data may not be valid!');
+        end
+        dataSum(curStair).numTrials(i) = dataSum(curStair).numTrials(i) + 1;
         if correct
-            stairHistory.numConsecCorrect(curStair) = stairHistory.numConsecCorrect(curStair) + 1;
-            stairHistory.numConsecIncorrect(curStair) = 0;
-            if mod(stairHistory.numConsecCorrect(curStair), stairParams.numCorrectForStep) == 0
-                stairHistory.curAdjustIndex(curStair) = stairHistory.curAdjustIndex(curStair) ...
-                    + stairParams.correctStepSize(correctStepIndex);
-                % check to see if this is a reversal
-                % if the current run is negative (the 'incorrect' direction), then meeting the
-                % numConsecCorrect criterion constitutes a reversal.
-                if stairHistory.runDirection(curStair) == -1
-                    stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
-                    dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
-                    stairHistory.runDirection(curStair) = +1;
-                end
-            end
+            % auditory feedback
+            if ~isempty(correctSnd) sound(correctSnd); end
+            dataSum(curStair).numCorrect(i) = dataSum(curStair).numCorrect(i) + 1;
         else
-            stairHistory.numConsecIncorrect(curStair) = stairHistory.numConsecIncorrect(curStair) + 1;
-            stairHistory.numConsecCorrect(curStair) = 0;
-            if mod(stairHistory.numConsecIncorrect(curStair), stairParams.numIncorrectForStep) == 0
-                stairHistory.curAdjustIndex(curStair) = stairHistory.curAdjustIndex(curStair) ...
-                    + stairParams.incorrectStepSize(incorrectStepIndex);
-                % check to see if this is a reversal
-                % if the current run is positive (the 'correct' direction), then meeting the
-                % numConsecIncorrect criterion constitutes a reversal.
-                if stairHistory.runDirection(curStair) == +1
-                    stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
-                    dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
-                    stairHistory.runDirection(curStair) = -1;
-                end
+            if ~isempty(incorrectSnd) sound(incorrectSnd); end
+        end
+    else
+        dataSum(1).abort = 1; % set a flag to allow users to alter their behavior outside of doStaircase should someone abort a trial
+        return;
+    end
+
+    % print out the log
+    for i=1:length(logFID)
+        % incase altValues are characters: num2str(altValue) will work with characters, ints and floats
+        fprintf(logFID(i), '%d\t%d\t%.4f\t%d\t%s\t%s\t', curStair, stairHistory.numTrials(curStair), ...
+            adjustValue, correct, num2str(altValue),response.keyLabel);
+        for j=1:size(stairParams.randomVars, 1)
+            fprintf(logFID(i), '%.4f\t',  randVal(j));
+        end
+        for j=1:size(stairParams.curStairVars, 1)
+            fprintf(logFID(i), '%.4f\t',  curStairVal(j));
+        end
+        fprintf(logFID(i), '\n');
+    end
+    % save the dataSum file in case of a crash or error
+    save('dataSumTemp', 'dataSum');
+
+    % if requested, update plot on each trial. useful for debugging.
+    if exist('plotEachTrialFlag', 'var'), plotStaircase(stairParams, dataSum, 1); end
+
+    % adjust the adjustable
+    if correct
+        stairHistory.numConsecCorrect(curStair) = stairHistory.numConsecCorrect(curStair) + 1;
+        stairHistory.numConsecIncorrect(curStair) = 0;
+        if mod(stairHistory.numConsecCorrect(curStair), stairParams.numCorrectForStep) == 0
+            stairHistory.curAdjustIndex(curStair) = stairHistory.curAdjustIndex(curStair) ...
+                + stairParams.correctStepSize(correctStepIndex);
+            % check to see if this is a reversal
+            % if the current run is negative (the 'incorrect' direction), then meeting the
+            % numConsecCorrect criterion constitutes a reversal.
+            if stairHistory.runDirection(curStair) == -1
+                stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
+                dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
+                stairHistory.runDirection(curStair) = +1;
             end
         end
-        
-        % ensure adjustable isn't out of range
-        % Note that if we have gone out of range, then we should (and do) count this as a
-        % reversal because it means the observer has hit one of the boundaries.  If we don't
-        % do something like this, the observer may get stuck at one of the bounds and do many
-        % unnecessary trials there!
-        if stairHistory.curAdjustIndex(curStair) > numLevels
-            % count this as a reversal
-            stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
-            dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
-            % constrain curAdjustIndex to the bounds
-            stairHistory.curAdjustIndex(curStair) = numLevels;
-        elseif stairHistory.curAdjustIndex(curStair) < 1
-            % count this as a reversal
-            stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
-            dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
-            % constrain curAdjustIndex to the bounds
-            stairHistory.curAdjustIndex(curStair) = 1;
+    else
+        stairHistory.numConsecIncorrect(curStair) = stairHistory.numConsecIncorrect(curStair) + 1;
+        stairHistory.numConsecCorrect(curStair) = 0;
+        if mod(stairHistory.numConsecIncorrect(curStair), stairParams.numIncorrectForStep) == 0
+            stairHistory.curAdjustIndex(curStair) = stairHistory.curAdjustIndex(curStair) ...
+                + stairParams.incorrectStepSize(incorrectStepIndex);
+            % check to see if this is a reversal
+            % if the current run is positive (the 'correct' direction), then meeting the
+            % numConsecIncorrect criterion constitutes a reversal.
+            if stairHistory.runDirection(curStair) == +1
+                stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
+                dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
+                stairHistory.runDirection(curStair) = -1;
+            end
         end
-        % check to see if we are done with this staircase
-        if stairHistory.numTrials(curStair) >= stairParams.maxNumTrials ...
-                || stairHistory.numReversals(curStair) >= stairParams.maxNumReversals
-            stairHistory.done(curStair) = 1;
-        end
-        
-        % choose the curStair pseudorandomly, giving preference to staircases that are less done.
-        completeIndex = stairHistory.numTrials./stairParams.maxNumTrials - randn(size(stairHistory.numTrials))*.2;
-        curStair = find(completeIndex == min(completeIndex));
-        curStair = curStair(round(rand*(length(curStair)-1))+1);
-        
-        % wait for an ITI, if needed
-        postTrialSecs = GetSecs-postTrialSecs;
-        postRespSecs = GetSecs-postRespSecs;
-        % we use the previous pre-trial time as a guess for how long the next
-        % pre-trial prep time will take.
-        if(prFlag), interval = postRespSecs; else interval = postTrialSecs; end
-        if(~all(stairHistory.done) && ~abort && interval<stairParams.iti)
-            waitTill(stairParams.iti-interval);
-        end
-        
-    
     end
+
+    % ensure adjustable isn't out of range
+    % Note that if we have gone out of range, then we should (and do) count this as a
+    % reversal because it means the observer has hit one of the boundaries.  If we don't
+    % do something like this, the observer may get stuck at one of the bounds and do many
+    % unnecessary trials there!
+    if stairHistory.curAdjustIndex(curStair) > numLevels
+        % count this as a reversal
+        stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
+        dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
+        % constrain curAdjustIndex to the bounds
+        stairHistory.curAdjustIndex(curStair) = numLevels;
+    elseif stairHistory.curAdjustIndex(curStair) < 1
+        % count this as a reversal
+        stairHistory.numReversals(curStair) = stairHistory.numReversals(curStair) + 1;
+        dataSum(curStair).reversalStimLevel(stairHistory.numReversals(curStair)) = adjustValue;
+        % constrain curAdjustIndex to the bounds
+        stairHistory.curAdjustIndex(curStair) = 1;
+    end
+    % check to see if we are done with this staircase
+    if stairHistory.numTrials(curStair) >= stairParams.maxNumTrials ...
+            || stairHistory.numReversals(curStair) >= stairParams.maxNumReversals
+        stairHistory.done(curStair) = 1;
+    end
+
+    % choose the curStair pseudorandomly, giving preference to staircases that are less done.
+    completeIndex = stairHistory.numTrials./stairParams.maxNumTrials - randn(size(stairHistory.numTrials))*.2;
+    curStair = find(completeIndex == min(completeIndex));
+    curStair = curStair(round(rand*(length(curStair)-1))+1);
+
+    % wait for an ITI, if needed
+    postTrialSecs = GetSecs-postTrialSecs;
+    postRespSecs = GetSecs-postRespSecs;
+    % we use the previous pre-trial time as a guess for how long the next
+    % pre-trial prep time will take.
+    if(prFlag), interval = postRespSecs; else interval = postTrialSecs; end
+    if(~all(stairHistory.done) && ~abort && interval<stairParams.iti)
+        waitTill(stairParams.iti-interval);
+    end
+        
     
     %if(~all(stairHistory.done) && ~abort && preTrialSecs+postTrialSecs<stairParams.iti)
     %    waitTill(stairParams.iti-preTrialSecs+postTrialSecs);

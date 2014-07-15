@@ -59,5 +59,11 @@ stimParams.ColCoords     = [0.35, 0.65]; % LEFT OR RIGHT
 stimParams.RowCoords  = [0.57 0.43];  % UPPER OR LOWER
 
 
+% *** Pause Event parameters ***
+stimParams.fontSize = 18;
+stimParams.fontFace = 'Arial';
+stimParams.curStr = 'Take a break';
+stimParams.centerLoc = screensize/2;
+stimParams.angle = 0;
 
 return

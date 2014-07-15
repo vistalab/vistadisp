@@ -6,9 +6,9 @@ function display = attInitFixParams(display)
 display.fixType        = 'largecross';
 display.fixSizePixels  = 2;
 
-display.fixColorRgb    = [0     255 0 255; ... % Green 
-                          255   0   0 255; ... % Red
-                          0     0   0 255; ... % black for cue                          
+display.fixColorRgb    = [0     0    0    255; ... % black 
+                          0     0    0    255; ... % black
+                          255   255  255  255; ... % white for cue                          
                         ];
 
 % Center the fixation in the middle of the screen
