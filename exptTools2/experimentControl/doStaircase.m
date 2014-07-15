@@ -781,7 +781,13 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
     if(~all(stairHistory.done) && ~abort && interval<stairParams.iti)
         waitTill(stairParams.iti-interval);
     end
-        
+    
+    % if requested, pause for a break
+    if isfield(stairParams, 'pause_between_blocks')
+        counter = mod(stairHistory.numTrials(curStair), stairParams.pause_between_blocks);
+        if counter == 0, KbQueueFlush();  KbQueueStop(); eval(instructions); end
+    end
+
     
     %if(~all(stairHistory.done) && ~abort && preTrialSecs+postTrialSecs<stairParams.iti)
     %    waitTill(stairParams.iti-preTrialSecs+postTrialSecs);

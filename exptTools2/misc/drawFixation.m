@@ -64,18 +64,17 @@ switch(lower(d.fixType))
             
     % no task (colIndex) for large crosses
     case {'large cross' , 'largecross','large cross x+','largecrossx+'},
-        % Hack: use colIndex to control both color and fixation location
-        %
-        % Colors: 1 = white, 2 = black, 3 = red;
+        % Colors: 1 = black, 2 = white
+                
+        fix_type = colIndex;  
         
-        which_side = colIndex;  % 1 = red on left, 2 = red on right, 3 = all white
-        
-        switch which_side
-            case 1, colIndex = [1 1 1]; 
-            case 2, colIndex = [2 2 2];
-            case 3, colIndex = [1 3 1];
-            case 4, colIndex = [1 1 3];                
-        end%         
+        switch fix_type
+            case 1, colIndex = [1 1 1]; % all black
+            case 2, colIndex = [2 2 2]; % all white
+            case 3, colIndex = [1 2 2]; % cue both sides
+            case 4, colIndex = [1 2 1]; % cue left
+            case 5, colIndex = [1 1 2]; % cue right
+        end    
         
         % Draw whole cross
         Screen('DrawDots', d.windowPtr, d.fixCoords{1}, d.fixSizePixels, d.fixColorRgb(colIndex(1),:));

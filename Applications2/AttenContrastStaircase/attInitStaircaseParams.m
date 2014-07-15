@@ -21,6 +21,8 @@ stairParams.adjustableVarValues     = stimParams.TestContrasts;
 % put things in here to run the staircase separately for a given condition
 stairParams.curStairVars            = {}; %{'testContrast',.5}; 
 
+stairParams.pause_between_blocks    = 2; % pause every 10 trials
+
 % put things here to randomly vary the value e.g. {'formDir',[0 90 180 270]}
 % stairParams.randomVars              = {'fixationSide', [-1 1]};  
 stairParams.randomVars              = {...
