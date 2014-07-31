@@ -39,13 +39,17 @@ stimParams.isi = 1; % seconds
 % 100.
 gamma = 2;
 stimParams.TestContrasts = linspace(.001^(1/gamma),1,30).^gamma;
+%% debug
+stimParams.TestContrasts = ones(size(stimParams.TestContrasts));
+%% debug
 
 % **** RANDOM VARIABLES **************
-% target positions, expressed as screen fraction ([0.5 0.5] is screen
-% center)
-stimParams.LeftOrRight = [0 1 2]; % 0 = no task; 1 = left; 2 = right
+% Attentional cue
+%   0 = attend both; 1 = attend left; 2 = attend right
+stimParams.LeftOrRight = [0 1 2]; 
 
-stimParams.UpperOrLowerDistractor = [1 2]; % 1 is upper, 2 is lower
+% When attending both, we need to choose a side for the probe at random
+stimParams.LeftOrRightAttendBoth = [1 2]; % 1 is left, 2 is right
 
 % Interval where constrast decrement can be presented
 earliest_onset = stimParams.nTimePoints/2;

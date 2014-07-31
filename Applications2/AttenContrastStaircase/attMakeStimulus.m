@@ -31,7 +31,7 @@ bkg = median(col_values);
 % value in the display struct
 assert(bkg == display.backColorIndex);
 
-% Check that stimulus size matches screen size
+% Check that stimulus size matches sc reen size
 assert(stimsize == min(display.numPixels));
 
 % Change value of images to be centered at 0 so that we can modulate
@@ -50,20 +50,14 @@ n_time_points = stimParams.nTimePoints;
 
 % attend to which side?
 probe_side = stimParams.probe_side;
-if probe_side == 0, probe_side = 1; end 
-distractor_side = 3 - probe_side;
+if probe_side == 0, probe_side = stimParams.probe_side_attend_both; end 
 
 % target is upper or lower?
 upper_or_lower_target = stimParams.upper_or_lower;
 
-% distractor is upper or lower?
-upper_or_lower_distractor = stimParams.upper_or_lower_distractor; % 1 is upper, 2 is lower
 
 row_target = stimParams.RowCoords(upper_or_lower_target) * stimsize;
 col_target = stimParams.ColCoords(probe_side) * stimsize;
-
-row_distractor = stimParams.RowCoords(upper_or_lower_distractor) * stimsize;
-col_distractor = stimParams.ColCoords(distractor_side) * stimsize;
 
 stdrow = stimParams.gaussianSigma;
 stdcol = stimParams.gaussianSigma;
