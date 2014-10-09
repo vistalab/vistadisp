@@ -35,6 +35,7 @@ if ~isempty(params.loadMatrix),
     % appropriate etc.
     load(params.loadMatrix);
     halfNumImages = params.numImages./2;
+    bk = params.display.backColorIndex;    
     fprintf('[%s]:loading images from %s.\n',mfilename,params.loadMatrix);
     %    disp(sprintf('[%s]:size stimulus: %dx%d pixels.',mfilename,n,m));
 else
