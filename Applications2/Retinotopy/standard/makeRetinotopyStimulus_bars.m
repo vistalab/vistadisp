@@ -351,6 +351,7 @@ end
 
 %% insert blanks (always off for 12 seconds)
 blankImage = uint8(ones(size(images,1),size(images,2)).*bk);
+blankInd  = size(images,3)+1;
 
 if params.insertBlanks.do,
     seq2      = zeros(size(sequence));
@@ -362,7 +363,6 @@ if params.insertBlanks.do,
     end
     onPeriod  = oneCycle-offPeriod;
     seq2      = repmat([zeros(onPeriod,1); ones(offPeriod,1)],params.insertBlanks.freq,1);
-    blankInd  = size(images,3)+1;
     if isempty(params.loadMatrix),
         sequence(seq2==1) = blankInd;
         images(:,:,blankInd)   = blankImage;
@@ -370,7 +370,9 @@ if params.insertBlanks.do,
     clear seq2;
     fprintf('[%s]:Stimulus on for %.1f and off for %.1f seconds.',...
         mfilename,onPeriod*duration.stimframe,offPeriod*duration.stimframe);
-end;
+else
+    images(:,:,blankInd) = blankImage;
+end
 
 %% Add prescsan
 % Insert the preappend images by copying some images from the
