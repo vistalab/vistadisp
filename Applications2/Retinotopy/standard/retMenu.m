@@ -82,7 +82,7 @@ if ~isempty(tmp),
     end;
     set(handles.loadMatrix,     'String',tmp2);  
 else
-    set(handles.loadMatrix,     'String','None');
+    set(handles.loadMatrix,     'String',{'None'});
 end;
 
 % Get calibration directories
