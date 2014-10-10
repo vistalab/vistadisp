@@ -79,10 +79,9 @@ for blockNum = 1:P.stim.numBlocks
     % 0.05 secs since start of expt) doing the above commands)
     WaitSecs('UntilTime',(startBlockTime+P.stim.fixLength(blockNum)));
     
-    % Show the block's stimuli
-    tic % do we need tic toc? we record the time
+    % Show the block's stimuli    
     [P.responses{blockNum}, timing, quitProg] = showScanBlock_noTrialStruct(P.scan.display,P.blockInfo{blockNum}); %#ok<ASGLU>    
-    toc
+    
     
     % If we are doing eCOG, then signal to photodiode to be black
     if isfield(P, 'modality') && strcmpi(P.modality, 'ecog')

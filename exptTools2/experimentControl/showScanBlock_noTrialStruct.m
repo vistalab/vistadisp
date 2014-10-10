@@ -15,17 +15,17 @@ function [response, timing, quitProg] = showScanBlock_noTrialStruct(display,stim
 %% Input checks
 
 if nargin < 2,
-	help(mfilename);
+    help(mfilename);
     return;
 end;
 
 % some more checks
 if ~isfield(stimulus,'textures')
-	% Generate textures for each image
-	disp('WARNING: Creating textures before stimulus presentation.');
-	disp(['         This should be done before calling ' mfilename ' for']);
-	disp('         accurate timing.  See "makeTextures" for help.');
-	stimulus = makeTextures(display,stimulus);
+    % Generate textures for each image
+    disp('WARNING: Creating textures before stimulus presentation.');
+    disp(['         This should be done before calling ' mfilename ' for']);
+    disp('         accurate timing.  See "makeTextures" for help.');
+    stimulus = makeTextures(display,stimulus);
 end;
 
 % quit key
@@ -60,10 +60,10 @@ if stimulus.seq(1)>0
     Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
     
     % If we are doing eCOG, then flash photodiode if requested
-    if isfield(stimulus, 'trigSeq') 
+    if isfield(stimulus, 'trigSeq')
         drawTrig(display,stimulus.trigSeq(1));
     end
-
+    
     drawFixation(display,stimulus.fixSeq(1));
 elseif stimulus.seq(1)<0
     % put in a color table
@@ -74,23 +74,14 @@ elseif stimulus.seq(1)<0
     
     drawFixation(display,stimulus.fixSeq(1));
     Screen('LoadNormalizedGammaTable', display.windowPtr, stimulus.cmap(:,:,gammaNum));
-            
+    
 end
 VBLstamps(1) = Screen('Flip',display.windowPtr);
 if nargin < 3 || isempty(t0),
     t0 = GetSecs; % "time 0" to keep timing going
 end;
 
-%% Start collecting key presses
-%keyList = zeros(1,256);
-%keyList([quitProgKey KbName()]) = 1;
-%KbQueueCreate(display.devices.keyInputExternal, keyList);
-keylist = ones(1,256);  %keys to record
-keylist(KbName('/')) = 0;  % ignore backslashes sent by Lucas 3T#2
-keylist(KbName('/?')) = 0;
-KbQueueCreate(display.devices.keyInputExternal,keylist);
-%keyRTstart = GetSecs;
-KbQueueStart();
+
 
 %% Then show the rest of the frames
 f    = cell(1, nFrames);
@@ -113,7 +104,7 @@ for frame = 2:nFrames
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
         
         % If we are doing eCOG, then flash photodiode if requested
-        if isfield(stimulus, 'trigSeq') 
+        if isfield(stimulus, 'trigSeq')
             drawTrig(display,stimulus.trigSeq(frame));
         end
         
@@ -126,44 +117,32 @@ for frame = 2:nFrames
         % in recent times (07.14.2008). So, for now we set it to 1.  It may
         % be that this hsould be
         
-        drawFixation(display,stimulus.fixSeq(frame));        
+        drawFixation(display,stimulus.fixSeq(frame));
         Screen('LoadNormalizedGammaTable', display.windowPtr, stimulus.cmap(:,:,gammaNum));
-                
+        
     end
     
     %--- get inputs (subject or experimentor)
-            %KbCheck(display.devices.keyInputExternal);
-
+    %KbCheck(display.devices.keyInputExternal);
+    
     while(waitTime<-0.005),
-        % Scan the keyboard for subject response -- we now use KbQueue so
-        % code below is not necessary
-
-%         [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-        
-%         if(ssKeyIsDown && ~strcmp(KbName(ssKeyCode),'/?') && ~strcmp(KbName(ssKeyCode),'/'))
-% %            kc = find(ssKeyCode);
-% %            response.keyCode(frame) = kc(1);
-% 
-%             if(ssKeyCode(quitProgKey)),
-%                 quitProg = 1;
-%                 break; % out of while loop
-%             end;
-% 
-%             response.keyCode(frame) = 1; % binary response for now
-%             response.secs(frame)    = ssSecs - t0;
-%         end
-        
+        % Scan the keyboard for subject response
+        [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
+        if(ssKeyIsDown)
+            %            kc = find(ssKeyCode);
+            %            response.keyCode(frame) = kc(1);
+            response.keyCode(frame) = 1; % binary response for now
+            response.secs(frame)    = ssSecs - t0;
+        end;
         % scan the keyboard for experimentor input
-        [exKeyIsDown,exSecs,exKeyCode] = KbCheck(display.devices.keyInputInternal); %#ok<ASGLU>
-        %[exkeys RT kinfo] = qkeys(startTime,goTime,display.devices.keyInputInternal);
-        
+        [exKeyIsDown,exSecs,exKeyCode] = KbCheck(display.devices.keyInputInternal);
         if(exKeyIsDown)
             if(exKeyCode(quitProgKey)),
                 quitProg = 1;
                 break; % out of while loop
             end;
         end;
-
+        
         % if there is time release cpu
         if(waitTime<-0.025),
             WaitSecs(0.005);
@@ -171,7 +150,7 @@ for frame = 2:nFrames
         
         % timing
         waitTime = (GetSecs-t0)-stimulus.seqtiming(frame-1);
-%         keyloopcounter(frame) = keyloopcounter(frame)+1; %debugging
+        %         keyloopcounter(frame) = keyloopcounter(frame)+1; %debugging
     end
     
     %--- stop?
@@ -179,32 +158,32 @@ for frame = 2:nFrames
         fprintf('[%s]:Quit signal recieved.\n',mfilename);
         break;
     end;
-
+    
     
     %--- update screen (i.e. put up the next frame)
-    % use whenToFlipOn to wait until the right time in case you're early.  
+    % use whenToFlipOn to wait until the right time in case you're early.
     % Note that it can take about one refresh to execute the screen flip.
     
-%     VBLtimingstart(frame) = GetSecs;  % debugging
+    % %     VBLtimingstart(frame) = GetSecs;  % debugging
     VBLstamps(frame) = Screen('Flip',display.windowPtr,whenToFlipOn(frame));
-    %VBLstamps(frame) = Screen('Flip',display.windowPtr);
-    %     VBLtimingend(frame) = GetSecs;   % debugging
-    
-    % get the key presses and RTs for each frame shown
-    [k.pressed, k.firstPress, k.firstRelease, k.lastPress, k.lastRelease]=...
-        KbQueueCheck();
-    f{frame} = find(k.firstPress);
-    if k.pressed
-        keys(frame) = str2double(KbName(k.firstPress));  % record the keys, if we want-- must be numbers!
-        response.keyCode(frame)=1;  %binary response for now
-        response.secs(frame) = k.firstPress(f{frame})-VBLstamps(1);
-    else
-        keys(frame)=NaN;
-        response.keyCode(frame)=0;
-        response.secs(frame) = 0;
-    end
+    %     %VBLstamps(frame) = Screen('Flip',display.windowPtr);
+    %     %     VBLtimingend(frame) = GetSecs;   % debugging
+    %
+    %     % get the key presses and RTs for each frame shown
+    %     [k.pressed, k.firstPress, k.firstRelease, k.lastPress, k.lastRelease]=...
+    %         KbQueueCheck();
+    %     f{frame} = find(k.firstPress);
+    %     if k.pressed
+    %         keys(frame) = str2double(KbName(k.firstPress));  % record the keys, if we want-- must be numbers!
+    %         response.keyCode(frame)=1;  %binary response for now
+    %         response.secs(frame) = k.firstPress(f{frame})-VBLstamps(1);
+    %     else
+    %         keys(frame)=NaN;
+    %         response.keyCode(frame)=0;
+    %         response.secs(frame) = 0;
+    %     end
 end
-KbQueueStop();
+% KbQueueStop();
 
 % leave the last frame up until you're supposed to be done
 if ~quitProg

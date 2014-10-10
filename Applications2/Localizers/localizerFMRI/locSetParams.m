@@ -96,6 +96,8 @@ if ~isempty(varargin)
                 params.scan.dispName             = varargin{ii+1};
             case {'modality'}
                 params.modality                  = varargin{ii+1}; 
+            case {'triggerkey'}
+                params.triggerKey                = varargin{ii+1}; 
 
                 % ******
             otherwise
