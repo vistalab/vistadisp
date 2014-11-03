@@ -21,8 +21,8 @@ function runme_EEG_OnOffLeftRight(n, stimfile)
 %
 %
 % Example
-%   runme_EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
 %   runme_EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
+%   runme_EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
 
 %% 
 
