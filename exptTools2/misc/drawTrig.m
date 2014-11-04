@@ -2,7 +2,7 @@ function colIndex = drawTrig(d, colIndex)
 %
 % drawTrig(display, [colIndex=1])
 %
-% Draws a square trigger to sync eCog recording with stimulus 
+% Draws a square trigger to sync ECoG recording with stimulus 
 %
 
 if nargin < 2, colIndex = 1; end;

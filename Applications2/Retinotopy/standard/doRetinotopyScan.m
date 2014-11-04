@@ -74,10 +74,17 @@ try
         
         
         % go
-        if isfield(params, 'modality') && ...
-                (strcmpi(params.modality, 'ecog') || strcmpi(params.modality, 'MEG'))
-            timeFromT0 = false;
-        else timeFromT0 = true;
+        if isfield(params, 'modality') 
+                            
+            switch lower(params.modality)
+                case {'eeg' 'meg' 'ecog'}
+                    timeFromT0 = false;
+                otherwise
+                    % do nothing
+                    timeFromT0 = true;
+            end
+        else
+            timeFromT0 = true;
         end
         [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0, timeFromT0); %#ok<ASGLU>
         

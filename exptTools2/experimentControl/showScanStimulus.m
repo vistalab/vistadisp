@@ -4,7 +4,7 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 %           [time0 = GetSecs], [timeFromT0 = true])
 %
 % Inputs
-%   display:    vistaisp display structure
+%   display:    vistadisp display structure
 %   stimulus:   vistadisp stimulus structure (e.g., see doRetinotopyScan.m)
 %   t0:         time the scan started in seconds acc to PsychtoolBox
 %               GetSecs function. By default stimulus timing is relative to
@@ -38,6 +38,10 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 %                 true, we time each screen flip from initial time (t0). If
 %                 false, we time each screen flip from the last screen
 %                 flip. Ideally the results are the same.
+
+
+% HACK
+params.modality = 'eeg';
 
 % input checks
 if nargin < 2,
@@ -79,7 +83,7 @@ response.flip = [];
 % go
 fprintf('[%s]:Running. Hit %s to quit.\n',mfilename,KbName(quitProgKey));
 
-% If we are doing ECoG, then start with black photodiode
+% If we are doing ECoG/MEG/EEG, then start with black photodiode
 if isfield(stimulus, 'diodeSeq'), drawTrig(display,0); end
 
 for frame = 1:nFrames
@@ -150,7 +154,12 @@ for frame = 1:nFrames
     % send trigger for MEG, if requested, and record the color of the PD
     % cue
     if isfield(stimulus, 'trigSeq') && stimulus.trigSeq(frame) > 0
-        PTBSendTrigger(stimulus.trigSeq(frame), 0);
+        switch lower(params.modality)
+            case 'meg'
+                PTBSendTrigger(stimulus.trigSeq(frame), 0);                                
+            case 'eeg'
+                    NetStation('Event','flip',VBLTimestamp);                
+        end
         fprintf('Trigger sent, %s\n, %s', datestr(now), stimulus.trigSeq(frame)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
     end

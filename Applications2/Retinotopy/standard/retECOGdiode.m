@@ -13,8 +13,13 @@ function retECOGdiode(params)
 
 drawFixation(params.display);
 
-if isfield(params, 'modality') && strcmpi(params.modality, 'ecog')
-    Rect        = params.display.rect;
-    trigRect    = [Rect(3)*0.93 Rect(4)*0.91 Rect(3) Rect(4)];
-    flinitseq(params.display.windowPtr,trigRect);
+if isfield(params, 'modality')
+    switch lower(params.modality)
+        case {'eeg' 'meg' 'ecog'}
+            Rect        = params.display.rect;
+            trigRect    = [Rect(3)*0.93 Rect(4)*0.91 Rect(3) Rect(4)];
+            flinitseq(params.display.windowPtr,trigRect);
+        otherwise
+            % do nothing
+    end
 end
