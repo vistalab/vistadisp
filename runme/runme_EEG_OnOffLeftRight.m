@@ -28,7 +28,7 @@ function runme_EEG_OnOffLeftRight(n, stimfile)
 
 % debug mode?
 % PsychDebugWindowConfiguration
-Screen('Preference', 'SkipSyncTests', 1);
+Screen('Preference', 'SkipSyncTests', 0);
 
 %% Calibration
 
@@ -36,9 +36,9 @@ Screen('Preference', 'SkipSyncTests', 1);
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
-
+hz = 75;
 % hz = 60;
-tr  = 1/hz*60;
+tr  = 1/hz*75;
 
 
 %% Default parameters
@@ -49,17 +49,17 @@ params = retCreateDefaultGUIParams;
 params.modality         = 'EEG'; 
 params.prescanDuration  = 0;
 params.interleaves      = NaN;
-params.tr               = 1/hz*60;
+params.tr               = 1/hz*75;
 params.calibration      = cal;
 params.framePeriod      = tr;
 params.startScan        = 0;
 params.motionSteps      = 2;
-params.tempFreq         = 6/tr;
+params.tempFreq         = 1/tr;
 params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
-params.period           = 12*params.tr;
-params.numCycles        = 6;
-
+params.period           = 3600*params.tr;
+params.numCycles        = 1;
+params.fixation         = 'dot';
 %% ********************
 %  ***** GO ***********
 %  *********************
@@ -79,7 +79,7 @@ hold on; plot(diff(response.flip), 'r-');
 
 ylim(median(diff(response.flip)) + [-.001 .001])
 % frames between stimuli
-frames = round(diff(response.flip) / (1/60)); 
+frames = round(diff(response.flip) / (1/75)); 
 
 % how many interstimulus frames differed from the median?
 disp(sum(frames ~= median(frames)))

@@ -2,6 +2,7 @@
 
 %ip_address may not be correct as defined by NetStation ECI window... check system preferences.
 ip_address = '169.254.187.13'; 
+%ip_address = '10.0.0.42'; 
 port_number = 55513;
 SynchLimit = 1.5;
 
@@ -16,7 +17,7 @@ NetStation('Synchronize', [SynchLimit]);
 NetStation ('StartRecording') 
 
 %Run experiment
-runme_EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
+runme_EEG_OnOffLeftRight(1, 'egi_calibration_params');
 
 %Instruct NetStation to stop recording EEG data
 NetStation ('StopRecording')
