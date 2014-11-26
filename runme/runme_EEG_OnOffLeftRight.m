@@ -36,9 +36,9 @@ Screen('Preference', 'SkipSyncTests', 0);
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
-hz = 75;
+% hz = 75;
 % hz = 60;
-tr  = 1/hz*75;
+tr  = 1/hz*60;
 
 
 %% Default parameters
@@ -49,7 +49,7 @@ params = retCreateDefaultGUIParams;
 params.modality         = 'EEG'; 
 params.prescanDuration  = 0;
 params.interleaves      = NaN;
-params.tr               = 1/hz*75;
+params.tr               = tr;
 params.calibration      = cal;
 params.framePeriod      = tr;
 params.startScan        = 0;
@@ -60,6 +60,8 @@ params.experiment       = 'Experiment From File';
 params.period           = 3600*params.tr;
 params.numCycles        = 1;
 params.fixation         = 'dot';
+params.skipSyncTests    = 0;
+
 %% ********************
 %  ***** GO ***********
 %  *********************

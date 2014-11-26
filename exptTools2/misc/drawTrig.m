@@ -22,6 +22,9 @@ trigRect = round([0*x 0*y .07*x .09*y]);
 black = round(d.maxGammaValue * .1);  
 white = round(d.maxGammaValue * .9); 
 
+black = round(d.maxGammaValue * 0);  
+white = round(d.maxGammaValue * 1); 
+
 if colIndex == 0, trigger_color = black; else trigger_color = white; end
     
 Screen('FillRect', d.windowPtr, trigger_color, trigRect);
