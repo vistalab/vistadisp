@@ -33,7 +33,7 @@ Screen('Preference', 'SkipSyncTests', 0);
 %% Calibration
 
 % TODO: calibrate the EEG display and then create an EEG calibration file
-cal = 'meg_lcd';
+cal = 'eeg_crt';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 % hz = 75;
@@ -81,7 +81,7 @@ hold on; plot(diff(response.flip), 'r-');
 
 ylim(median(diff(response.flip)) + [-.001 .001])
 % frames between stimuli
-frames = round(diff(response.flip) / (1/75)); 
+frames = round(diff(response.flip) / (1/60)); 
 
 % how many interstimulus frames differed from the median?
 disp(sum(frames ~= median(frames)))
