@@ -1,5 +1,5 @@
-function runme_EEG_OnOffLeftRight(n, stimfile)
-%RUNME EEG_OnOffLeftRight(n, stimfile)
+function EEG_OnOffLeftRight(n, stimfile)
+%EEG_OnOffLeftRight(n, stimfile)
 %
 % EEG Full-field on-off, left/right flicker experiment (steady state)
 % ------
@@ -23,8 +23,9 @@ function runme_EEG_OnOffLeftRight(n, stimfile)
 % Example
 %   runme_EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
 %   runme_EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
+%
+% To run on Dell Trinitron, resolution should be 800 x 600, 60 Hz refresh rate
 
-%% 
 
 % debug mode?
 % PsychDebugWindowConfiguration
@@ -32,13 +33,11 @@ Screen('Preference', 'SkipSyncTests', 0);
 
 %% Calibration
 
-% TODO: calibrate the EEG display and then create an EEG calibration file
 cal = 'eeg_crt';
+nominal_refresh_rate = 60; % 
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
-% hz = 75;
-% hz = 60;
-tr  = 1/hz*60;
+tr  = 1/hz*nominal_refresh_rate;
 
 
 %% Default parameters
@@ -80,8 +79,9 @@ plot(diff(stimulus.seqtiming));
 hold on; plot(diff(response.flip), 'r-'); 
 
 ylim(median(diff(response.flip)) + [-.001 .001])
+
 % frames between stimuli
-frames = round(diff(response.flip) / (1/60)); 
+frames = round(diff(response.flip) / (1/nominal_refresh_rate)); 
 
 % how many interstimulus frames differed from the median?
 disp(sum(frames ~= median(frames)))
