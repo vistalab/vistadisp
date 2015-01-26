@@ -1,7 +1,7 @@
 %% SSEEG
 
 %ip_address may not be correct as defined by NetStation ECI window... check system preferences.
-ip_address = '169.254.231.173';
+ip_address = '169.254.213.20';
 % ip_address = '10.0.0.42';
 port_number = 55513;
 SynchLimit = 1.5;
@@ -9,7 +9,7 @@ SynchLimit = 1.5;
 %Connect to NetStation (Data Acquisition Computer)
 NetStation ('Connect',ip_address,[port_number]);
 
-for run_num = 99
+for run_num = 9
     
     %Synchronize to the connected host. SynchLimit specifies the minimum
     %allowed time differential between host and STIM computer
