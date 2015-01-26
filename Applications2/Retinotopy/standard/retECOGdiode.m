@@ -17,7 +17,8 @@ if isfield(params, 'modality')
     switch lower(params.modality)
         case {'eeg' 'meg' 'ecog'}
             Rect        = params.display.rect;
-            trigRect    = [Rect(3)*0.93 Rect(4)*0.91 Rect(3) Rect(4)];
+            %trigRect    = [Rect(3)*0.93 Rect(4)*0.91 Rect(3) Rect(4)];
+            trigRect    = [1 1 .07*Rect(3) .09*Rect(4)];
             flinitseq(params.display.windowPtr,trigRect);
         otherwise
             % do nothing

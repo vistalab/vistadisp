@@ -206,5 +206,5 @@ else
     % monitor is greater than 100 Hz, this might make you a frame
     % early. [So consider going to down to 5 ms? What is the minimum we
     % need to ensure that we are not a frame late?]
-    waitTime = (GetSecs-lastFlip)-desiredWaitTime + .010;
+    waitTime = (GetSecs-lastFlip)-desiredWaitTime + .0165;
 end
