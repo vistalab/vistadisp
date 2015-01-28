@@ -68,7 +68,7 @@ params.loadMatrix = sprintf('%s%d.mat', stimfile, n);
 ret(params);
 
 %% Check timing results
-f = dir('~/Desktop/2014*.mat');
+f = dir('~/Desktop/2015*.mat');
 load(fullfile('~', 'Desktop', f(end).name));
 figure(101); clf
 

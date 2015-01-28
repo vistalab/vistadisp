@@ -1,4 +1,4 @@
 # Gitignore
 #  This is a directory to store the image files associated with a ret experiment.
 
-#*.mat
+*.mat
