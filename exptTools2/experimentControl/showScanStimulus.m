@@ -98,7 +98,7 @@ for frame = 1:nFrames
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
         drawFixation(display,stimulus.fixSeq(frame));
         
-        % If we are doing eCOG, then flash photodiode if requested
+        % If requested, then flash photodiode (usually for ECoG, EEG, MEG)
         if isfield(stimulus, 'diodeSeq')
             colIndex = drawTrig(display,stimulus.diodeSeq(frame));
         end
