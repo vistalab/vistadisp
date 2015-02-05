@@ -117,30 +117,31 @@ for frame = 1:nFrames
     waitTime = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
     
     %--- get inputs (subject or experimentor)
-    while(waitTime<0),
-        % Scan the keyboard for subject response
-        %[ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-        [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
-        if(ssKeyIsDown)
-            %            kc = find(ssKeyCode);
-            %            response.keyCode(frame) = kc(1);
-            response.keyCode(frame) = 1; % binary response for now
-            response.secs(frame)    = ssSecs - t0;
-            
-            if(ssKeyCode(quitProgKey)),
-                quitProg = 1;
-                break; % out of while loop
-            end;
+    % while(waitTime<0),
+
+    % Scan the keyboard for subject response
+    %[ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
+    [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
+    if(ssKeyIsDown)
+        %            kc = find(ssKeyCode);
+        %            response.keyCode(frame) = kc(1);
+        response.keyCode(frame) = 1; % binary response for now
+        response.secs(frame)    = ssSecs - t0;
+        
+        if(ssKeyCode(quitProgKey)),
+            quitProg = 1;
+            break; % out of while loop
         end;
-        
-        % if there is time release cpu
-        if(waitTime<-0.03), WaitSecs(0.01); end;
-        
-        
-        % timing
-        waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
-        
     end;
+    
+    % if there is time release cpu
+    if(waitTime<-0.03), WaitSecs(0.01); end;
+    
+    
+    % timing
+    waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
+    nextFlipTime = GetSecs - waitTime;
+   % end;
     
     %--- stop?
     if quitProg,
@@ -149,7 +150,7 @@ for frame = 1:nFrames
     end;
     
     %--- update screen
-    VBLTimestamp = Screen('Flip',display.windowPtr);
+    VBLTimestamp = Screen('Flip',display.windowPtr, nextFlipTime);
     
     % send trigger for MEG, if requested, and record the color of the PD
     % cue

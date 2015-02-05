@@ -73,12 +73,12 @@ load(fullfile('~', 'Desktop', f(end).name));
 figure(101); clf
 
 % desired inter-stimulus duration
-plot(diff(stimulus.seqtiming));
+plot(diff(stimulus.seqtiming)*Hz);
 
 % measured inter-stimulus duration
-hold on; plot(diff(response.flip), 'r-'); 
+hold on; plot(diff(response.flip)*Hz, 'r-'); 
 
-ylim(median(diff(response.flip)) + [-.001 .001])
+ylim(median(diff(response.flip)*Hz) + [-1 1])
 
 % frames between stimuli
 frames = round(diff(response.flip) / (1/nominal_refresh_rate)); 
