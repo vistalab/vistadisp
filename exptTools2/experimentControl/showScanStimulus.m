@@ -141,6 +141,7 @@ for frame = 1:nFrames
     % timing
     waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
     nextFlipTime = GetSecs - waitTime;
+    response.nextFlipTime(frame) = nextFlipTime;
    % end;
     
     %--- stop?
