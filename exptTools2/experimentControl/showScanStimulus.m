@@ -208,6 +208,6 @@ else
     % monitor is greater than 100 Hz, this might make you a frame
     % early. [So consider going to down to 5 ms? What is the minimum we
     % need to ensure that we are not a frame late?]
-    slopTime = .010; % maybe should be expressed as a fraction of one refresh duration
+    slopTime = .015; % maybe should be expressed as a fraction of one refresh duration
     waitTime = (GetSecs-lastFlip)-desiredWaitTime + slopTime;
 end

@@ -27,6 +27,16 @@ function runme_SSEEG(run_number,stimfile)
 
 
     %% Synchronize to the connected host. SynchLimit specifies the minimum
+    
+    %ip_address may not be correct as defined by NetStation ECI window... check system preferences.
+    ip_address = '169.254.213.20';
+    % ip_address = '10.0.0.42';
+    port_number = 55513;
+    SynchLimit = 1.5;
+
+    %Connect to NetStation (Data Acquisition Computer)
+    NetStation ('Connect',ip_address,[port_number]);
+    
     %allowed time differential between host and STIM computer
 	NetStation('Synchronize', [SynchLimit]);
     
