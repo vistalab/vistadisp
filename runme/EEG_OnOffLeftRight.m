@@ -77,7 +77,7 @@ plot(diff(stimulus.seqtiming)*Hz);
 
 % measured inter-stimulus duration
 hold on; plot(diff(response.flip)*Hz, 'r-');
-plot(diff(response.nextFlipTime)*Hz, 'g-');
+% plot(diff(response.nextFlipTime)*Hz, 'g-');
 
 ylim(median(diff(response.flip)*Hz) + [-1 1])
 
