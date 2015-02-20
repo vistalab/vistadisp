@@ -40,9 +40,6 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 %                 flip. Ideally the results are the same.
 
 
-% HACK
-params.modality = 'eeg';
-
 % input checks
 if nargin < 2,
     help(mfilename);
@@ -114,10 +111,9 @@ for frame = 1:nFrames
     end;
     
     %--- timing
-    waitTime = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
+    [waitTime, nextFlipTime] = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
     
     %--- get inputs (subject or experimentor)
-    % while(waitTime<0),
 
     % Scan the keyboard for subject response
     %[ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
@@ -136,14 +132,7 @@ for frame = 1:nFrames
     
     % if there is time release cpu
     if(waitTime<-0.03), WaitSecs(0.01); end;
-    
-    
-    % timing
-    waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
-    nextFlipTime = GetSecs - waitTime;
-    response.nextFlipTime(frame) = nextFlipTime;
-   % end;
-    
+            
     %--- stop?
     if quitProg,
         fprintf('[%s]:Quit signal recieved.\n',mfilename);
@@ -156,11 +145,15 @@ for frame = 1:nFrames
     % send trigger for MEG, if requested, and record the color of the PD
     % cue
     if isfield(stimulus, 'trigSeq') && stimulus.trigSeq(frame) > 0
-        switch lower(params.modality)
+        switch lower(display.modality)
             case 'meg'
                 PTBSendTrigger(stimulus.trigSeq(frame), 0);                                
             case 'eeg'
-                    NetStation('Event','flip',VBLTimestamp);                
+                    % NetStation('Event','flip',VBLTimestamp);                     
+                    if mod(frame, 72) == 1
+                        thisCode = sprintf('%4.0d', stimulus.trigSeq(frame));
+                        NetStation('Event', thisCode,VBLTimestamp);
+                    end
         end
         fprintf('Trigger sent, %s\n, %s', datestr(now), stimulus.trigSeq(frame)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
@@ -171,8 +164,9 @@ for frame = 1:nFrames
     end
     
     % record the flip time
-    response.flip(frame) = VBLTimestamp;
-    
+    response.flip(frame)         = VBLTimestamp;
+    response.nextFlipTime(frame) = nextFlipTime;
+
 end;
 
 % that's it
@@ -181,33 +175,3 @@ timing = GetSecs-t0;
 fprintf('[%s]:Stimulus run time: %f seconds [should be: %f].\n',mfilename,timing,max(stimulus.seqtiming));
 
 return;
-
-
-function waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0)
-% waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0)
-%
-% If timeFromT0 we wait until the current time minus the initial time is
-% equal to the desired presentation time, and then flip the screen.
-% If timeFromT0 is false, then we wait until the current time minus the
-% last screen flip time is equal to the desired difference in the
-% presentation time of the current flip and the prior flip.
-
-if timeFromT0
-    waitTime = (GetSecs-t0)-stimulus.seqtiming(frame);
-else
-    if frame > 1,
-        lastFlip = response.flip(frame-1);
-        desiredWaitTime = stimulus.seqtiming(frame) - stimulus.seqtiming(frame-1);
-    else
-        lastFlip = t0;
-        desiredWaitTime = stimulus.seqtiming(frame);
-    end
-    % we add 10 ms of slop time, otherwise we might be a frame late.
-    % This should NOT cause us to be 10 ms early, because PTB waits
-    % until the next screen flip. However, if the refresh rate of the
-    % monitor is greater than 100 Hz, this might make you a frame
-    % early. [So consider going to down to 5 ms? What is the minimum we
-    % need to ensure that we are not a frame late?]
-    slopTime = .015; % maybe should be expressed as a fraction of one refresh duration
-    waitTime = (GetSecs-lastFlip)-desiredWaitTime + slopTime;
-end

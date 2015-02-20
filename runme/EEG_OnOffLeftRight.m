@@ -21,9 +21,9 @@ function EEG_OnOffLeftRight(n, stimfile)
 %
 %
 % Example
-%   runme_EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
-%   runme_EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
-%
+%   EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
+%   EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
+%   EEG_OnOffLeftRight(1, 'onOffLeftRight_600x600params_12Hz');
 % To run on Dell Trinitron, resolution should be 800 x 600, 60 Hz refresh rate
 
 
@@ -60,7 +60,7 @@ params.period           = 3600*params.tr;
 params.numCycles        = 1;
 params.fixation         = 'dot';
 params.skipSyncTests    = 0;
-
+params.triggerType      = 'no trigger (manual)';
 %% ********************
 %  ***** GO ***********
 %  *********************
@@ -72,14 +72,14 @@ f = dir('~/Desktop/2015*.mat');
 load(fullfile('~', 'Desktop', f(end).name));
 figure(101); clf
 
-% desired inter-stimulus duration
-plot(diff(stimulus.seqtiming)*Hz);
-
 % measured inter-stimulus duration
-hold on; plot(diff(response.flip)*Hz, 'r-');
-% plot(diff(response.nextFlipTime)*Hz, 'g-');
+hold on; plot(diff(response.flip)*hz, 'r-o');
+plot(diff(response.nextFlipTime)*hz, 'g-o');
+plot(diff(stimulus.seqtiming)*hz, 'c-o');
 
-ylim(median(diff(response.flip)*Hz) + [-1 1])
+legend('Actual flip time', 'next flip time', 'seqtiming')
+
+ylim(median(diff(response.flip)*hz) + [-1 1])
 
 % frames between stimuli
 frames = round(diff(response.flip) / (1/nominal_refresh_rate)); 

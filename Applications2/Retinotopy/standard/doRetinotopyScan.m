@@ -75,7 +75,7 @@ try
         
         % go
         if isfield(params, 'modality') 
-                            
+            params.display.modality = params.modality;                
             switch lower(params.modality)
                 case {'eeg' 'meg' 'ecog'}
                     timeFromT0 = false;
@@ -86,7 +86,9 @@ try
         else
             timeFromT0 = true;
         end
+        
         [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0, timeFromT0); %#ok<ASGLU>
+        
         
         % reset priority
         Priority(0);
