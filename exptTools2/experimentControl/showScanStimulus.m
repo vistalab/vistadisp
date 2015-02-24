@@ -116,8 +116,8 @@ for frame = 1:nFrames
     %--- get inputs (subject or experimentor)
 
     % Scan the keyboard for subject response
-    %[ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-    [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
+    [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
+%     [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
     if(ssKeyIsDown)
         %            kc = find(ssKeyCode);
         %            response.keyCode(frame) = kc(1);
