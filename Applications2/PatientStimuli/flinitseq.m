@@ -16,15 +16,15 @@ flinit(1).init(1:4) = 0;
 flinit(2).init(1:4) = 0;
 flinit(3).init(1:4) = 0;
 
-% Flashing start sequence
 for n = 1:4
     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
-    [flinit(1).init(n)] = Screen(Window,'Flip',0,1);  
-    Screen(Window,'FillRect', 0, trigRect);
+    [flinit(1).init(n)] = Screen(Window,'Flip',0,1);
+        Screen(Window,'FillRect', 0, trigRect);
     Screen(Window,'Flip',0,1);
-    WaitSecs(0.020);
+    WaitSecs(0.030);
 end
 WaitSecs(1);
+
 for n = 1:4
     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
     [flinit(2).init(n)] = Screen(Window,'Flip',0,1);
@@ -33,6 +33,7 @@ for n = 1:4
     WaitSecs(0.050);
 end
 WaitSecs(1);
+
 for n = 1:4
     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
     [flinit(3).init(n)] = Screen(Window,'Flip',0,1);
