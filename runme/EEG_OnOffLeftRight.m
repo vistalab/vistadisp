@@ -39,7 +39,11 @@ d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*nominal_refresh_rate;
 
-
+%% Ensure that stimulus flickers every other frame
+a=load(sprintf('%s%d.mat', stimfile, n));
+a.stimulus.diodeSeq(1:2:end)=1;
+save(sprintf('%s%d.mat', stimfile, n), '-struct', 'a');
+    
 %% Default parameters
 params = retCreateDefaultGUIParams;
 
