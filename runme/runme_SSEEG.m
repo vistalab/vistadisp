@@ -43,7 +43,7 @@ function runme_SSEEG(run_number,stimfile)
 	NetStation ('StartRecording')
     
     %Run experiment    
-   qq
+    EEG_OnOffLeftRight(run_number, stimfile);
     
     %Instruct NetStation to stop recording EEG data
     NetStation ('StopRecording')  
