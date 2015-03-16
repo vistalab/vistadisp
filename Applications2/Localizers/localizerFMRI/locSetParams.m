@@ -99,8 +99,8 @@ if ~isempty(varargin)
             case {'modality'}
                 params.modality                  = varargin{ii+1}; 
             case {'triggerkey'}
-                    params.scan.triggerKey       = varargin{ii+1}; 
-                % ******
+                params.scan.triggerKey           = varargin{ii+1};
+                params.triggerKey                = varargin{ii+1}; 
             otherwise
                 error('Unknown input variable %s', varargin{ii})
         end

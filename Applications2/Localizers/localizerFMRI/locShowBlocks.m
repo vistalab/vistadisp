@@ -82,7 +82,7 @@ for blockNum = 1:P.stim.numBlocks
     % Show the block's stimuli    
     [P.responses{blockNum}, timing, quitProg] = ...
         showScanBlock_noTrialStruct(P.scan.display,P.blockInfo{blockNum}, [], P.scan.triggerKey); %#ok<ASGLU>    
-        
+      
     % If we are doing eCOG, then signal to photodiode to be black
     if isfield(P, 'modality') && strcmpi(P.modality, 'ecog')
         P.display = P.scan.display;
