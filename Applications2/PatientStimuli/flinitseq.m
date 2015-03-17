@@ -1,5 +1,4 @@
-
-function flinit = flinitseq(Window,trigRect)
+function flinit = flinitseq(Window, trigRect, duration, interval)
 % Flash initiation sequence
 % Window is an output arg from your OpenWindow cmd, e.g.,
 %  [Window, Rect] = Screen('OpenWindow',screenNumber);
@@ -11,20 +10,22 @@ function flinit = flinitseq(Window,trigRect)
 % 
 % j.chen 06/10/09
 
-% Initialize flinit struct (flip info for start sequence)
-waitframes      = 1;
-hz              = 60;
-last_flip       = Screen(Window, 'Flip');
+ifi         = Screen(Window, 'GetFlipInterval');
+last_flip   = GetSecs + interval;
 
-for n = 1:4
+% Flashing start sequence
+for n = 1:8
     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
-   	last_flip = Screen(Window,'Flip',last_flip + ((waitframes*5 - 0.5)/hz), 1);
-        Screen(Window,'FillRect', 0, trigRect);
-    last_flip = Screen(Window,'Flip',last_flip + ((waitframes - 0.5)/hz),1);
+        Screen(Window,'Flip', last_flip(n) - (ifi*0.5), 1);  
+    Screen(Window,'FillRect', 0, trigRect);
+    	Screen(Window,'Flip', last_flip(n) + duration, 1);
 end
-WaitSecs(0.5);
+
+
+end
 
 % 
+% WaitSecs(1);
 % for n = 1:4
 %     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
 %     [flinit(2).init(n)] = Screen(Window,'Flip',0,1);
@@ -33,7 +34,6 @@ WaitSecs(0.5);
 %     WaitSecs(0.050);
 % end
 % WaitSecs(1);
-% 
 % for n = 1:4
 %     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
 %     [flinit(3).init(n)] = Screen(Window,'Flip',0,1);
