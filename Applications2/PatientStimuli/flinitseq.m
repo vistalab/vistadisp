@@ -12,31 +12,32 @@ function flinit = flinitseq(Window,trigRect)
 % j.chen 06/10/09
 
 % Initialize flinit struct (flip info for start sequence)
-flinit(1).init(1:4) = 0;
-flinit(2).init(1:4) = 0;
-flinit(3).init(1:4) = 0;
+waitframes      = 1;
+hz              = 60;
+last_flip       = Screen(Window, 'Flip');
 
-% Flashing start sequence
 for n = 1:4
     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
-    [flinit(1).init(n)] = Screen(Window,'Flip',0,1);  
-    Screen(Window,'FillRect', 0, trigRect);
-    Screen(Window,'Flip',0,1);
-    WaitSecs(0.020);
-end
-WaitSecs(1);
-for n = 1:4
-    Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
-    [flinit(2).init(n)] = Screen(Window,'Flip',0,1);
+   	last_flip = Screen(Window,'Flip',last_flip + ((waitframes*5 - 0.5)/hz), 1);
         Screen(Window,'FillRect', 0, trigRect);
-    Screen(Window,'Flip',0,1);
-    WaitSecs(0.050);
+    last_flip = Screen(Window,'Flip',last_flip + ((waitframes - 0.5)/hz),1);
 end
-WaitSecs(1);
-for n = 1:4
-    Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
-    [flinit(3).init(n)] = Screen(Window,'Flip',0,1);
-        Screen(Window,'FillRect', 0, trigRect);
-    Screen(Window,'Flip',0,1);
-    WaitSecs(0.100);
-end
+WaitSecs(0.5);
+
+% 
+% for n = 1:4
+%     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
+%     [flinit(2).init(n)] = Screen(Window,'Flip',0,1);
+%         Screen(Window,'FillRect', 0, trigRect);
+%     Screen(Window,'Flip',0,1);
+%     WaitSecs(0.050);
+% end
+% WaitSecs(1);
+% 
+% for n = 1:4
+%     Screen(Window,'FillRect', 255, trigRect); %  ***** TRIGGER *******
+%     [flinit(3).init(n)] = Screen(Window,'Flip',0,1);
+%         Screen(Window,'FillRect', 0, trigRect);
+%     Screen(Window,'Flip',0,1);
+%     WaitSecs(0.100);
+% end
