@@ -10,7 +10,7 @@ function retECOGdiode(params)
 % note: this function doesn't have to be specific to retinotopy. could now
 % be renamed and moved to, say, vistadisp/exptTools2/screenUtils
 %
-
+interval = [2:2:16];
 drawFixation(params.display);
 
 if isfield(params, 'modality')
@@ -19,7 +19,7 @@ if isfield(params, 'modality')
             Rect        = params.display.rect;
             %trigRect    = [Rect(3)*0.93 Rect(4)*0.91 Rect(3) Rect(4)];
             trigRect    = [1 1 .07*Rect(3) .09*Rect(4)];
-            flinitseq(params.display.windowPtr,trigRect);
+            flinitseq(params.display.windowPtr, trigRect);
         otherwise
             % do nothing
     end
