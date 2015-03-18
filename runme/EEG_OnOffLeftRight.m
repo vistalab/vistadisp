@@ -44,6 +44,10 @@ fname = sprintf('%s%d.mat', stimfile, n);
 pth = fileparts(which(fname));
 a = load(fullfile(pth, fname));
 a.stimulus.diodeSeq(1:2:end)=1;
+a.stimulus.diodeSeq(2:2:end)=0;
+
+a.stimulus.trigSeq = zeros(size(a.stimulus.seq));
+a.stimulus.trigSeq(1:12:end) = a.stimulus.seq(1:12:end);
 save(fullfile(pth, fname), '-struct', 'a');
     
 %% Default parameters

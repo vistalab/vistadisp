@@ -41,7 +41,7 @@ switch lower(modality)
         % specifiy temporal sequence of photodiode signals to indicate
         % experiment start (1 is white, 0 is black)
         params.display.initstim.seq       = [0 1 0 1 0 1 0 1 0 1 0]; 
-        params.display.initstim.seqtiming = [2 5 7 12 16 20 28 35 40 45 51] ...
+        params.display.initstim.seqtiming = [2 5 7 12 16 20 28 35 40 55 59] ...
             ./ params.display.frameRate; % time in seconds 
         
         % Specify the position of the rectangle that signals to the

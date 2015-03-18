@@ -81,7 +81,9 @@ response.flip = [];
 fprintf('[%s]:Running. Hit %s to quit.\n',mfilename,KbName(quitProgKey));
 
 % If we are doing ECoG/MEG/EEG, then start with black photodiode
-if isfield(stimulus, 'diodeSeq'), drawTrig(display,0); end
+if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
+    drawTrig(display,0);
+end
 
 for frame = 1:nFrames
     
@@ -96,7 +98,7 @@ for frame = 1:nFrames
         drawFixation(display,stimulus.fixSeq(frame));
         
         % If requested, flash photodiode (for ECoG/EEG/MEG)
-        if isfield(stimulus, 'diodeSeq')
+        if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
             colIndex = drawTrig(display,stimulus.diodeSeq(frame));
         end
         
@@ -144,7 +146,8 @@ for frame = 1:nFrames
     
     % send trigger for MEG, if requested, and record the color of the PD
     % cue
-    if isfield(stimulus, 'trigSeq') && stimulus.trigSeq(frame) > 0
+    if isfield(stimulus, 'trigSeq') && ~isempty(stimulus.trigSeq) && ...
+            stimulus.trigSeq(frame) > 0
         switch lower(display.modality)
             case 'meg'
                 PTBSendTrigger(stimulus.trigSeq(frame), 0);        
@@ -153,11 +156,11 @@ for frame = 1:nFrames
                 NetStation('Event', thisCode,VBLTimestamp);
         end
         % Print out message indicating trigger was sent
-        %   fprintf('Trigger sent (%d), %s, \n', stimulus.trigSeq(frame), datestr(now)); drawnow
+        fprintf('Trigger sent (%d), %s, \n', stimulus.trigSeq(frame), datestr(now)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
     end
     
-    if isfield(stimulus, 'diodeSeq') 
+    if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
         response.LED(frame)  = colIndex;
     end
     
