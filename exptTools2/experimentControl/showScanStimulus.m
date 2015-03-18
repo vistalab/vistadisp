@@ -1,5 +1,4 @@
-function [response, timing, quitProg] = showScanStimulus(display,...
-    stimulus, t0, timeFromT0)
+function [response, timing, quitProg] = showScanStimulus(display, stimulus, t0)
 % [response, timing, quitProg] = showStimulus(display,stimulus, ...
 %           [time0 = GetSecs], [timeFromT0 = true])
 %
@@ -10,12 +9,6 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 %               GetSecs function. By default stimulus timing is relative to
 %               t0. If t0 does not exist it is created at the start of this
 %               program.
-%   timeFromT0: boolean. If true (default), then time each screen flip from
-%               t0. If false, then time each screen flip from last screen
-%               flip. The former is typically used for fMRI, where we want
-%               to avoid accumulation of timing errors. The latter may be
-%               more useful for ECoG/EEG where we care about the precise
-%               temporal frequency of the stimulus.
 % Outputs:
 %   response:   struct containing fields
 %                   keyCode: keyboard response at each frame, if any; if
@@ -49,7 +42,14 @@ if nargin < 3 || isempty(t0),
     t0 = GetSecs; % "time 0" to keep timing going
 end;
 
-if notDefined('timeFromT0'), timeFromT0 = true; end
+% timeFromT0: If true (default), then time each screen flip from
+%             t0. If false, then time each screen flip from last screen
+%             flip. The former is typically used for fMRI, where we want
+%             to avoid accumulation of timing errors. The latter may be
+%             more useful for ECoG/EEG/MEG where we care about the precise
+%             temporal frequency of the stimulus.
+if ~isfield(display, 'timeFromT0'), timeFromT0 = true; 
+else                                timeFromT0 = display.timeFromT0; end
 
 % some more checks
 if ~isfield(stimulus,'textures')
@@ -95,7 +95,7 @@ for frame = 1:nFrames
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
         drawFixation(display,stimulus.fixSeq(frame));
         
-        % If requested, then flash photodiode (usually for ECoG, EEG, MEG)
+        % If requested, flash photodiode (for ECoG/EEG/MEG)
         if isfield(stimulus, 'diodeSeq')
             colIndex = drawTrig(display,stimulus.diodeSeq(frame));
         end
@@ -147,15 +147,13 @@ for frame = 1:nFrames
     if isfield(stimulus, 'trigSeq') && stimulus.trigSeq(frame) > 0
         switch lower(display.modality)
             case 'meg'
-                PTBSendTrigger(stimulus.trigSeq(frame), 0);                                
+                PTBSendTrigger(stimulus.trigSeq(frame), 0);        
             case 'eeg'
-                    % NetStation('Event','flip',VBLTimestamp);                     
-                    if mod(frame, 72) == 1
-                        thisCode = sprintf('%4.0d', stimulus.trigSeq(frame));
-                        NetStation('Event', thisCode,VBLTimestamp);
-                    end
+                thisCode = sprintf('%4.0d', stimulus.trigSeq(frame));
+                NetStation('Event', thisCode,VBLTimestamp);
         end
-        fprintf('Trigger sent, %s\n, %s', datestr(now), stimulus.trigSeq(frame)); drawnow
+        % Print out message indicating trigger was sent
+        %   fprintf('Trigger sent (%d), %s, \n', stimulus.trigSeq(frame), datestr(now)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
     end
     

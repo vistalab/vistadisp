@@ -1,4 +1,4 @@
-function [stimulus, onebackSeq] = makeBarStimulus(params);
+function [stimulus, onebackSeq] = makeBarStimulus(params)
 % makeBarStimulus
 
 % various time measurements:

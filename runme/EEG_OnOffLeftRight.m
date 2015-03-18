@@ -36,7 +36,7 @@ Screen('Preference', 'SkipSyncTests', 0);
 cal = 'eeg_crt';
 nominal_refresh_rate = 60; % 
 d   = loadDisplayParams(cal);
-hz  = FrameRate(d.screenNumber);
+try hz  = FrameRate(d.screenNumber); catch, hz = nominal_refresh_rate; end
 tr  = 1/hz*nominal_refresh_rate;
 
 %% Ensure that stimulus flickers every other frame

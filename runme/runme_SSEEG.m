@@ -13,16 +13,13 @@ function runme_SSEEG(run_number,stimfile)
 %   n is the runnumber [1 10]
 %   stimfile is the prefix for the stimulus fils containing images, and can
 %            be either 
-%               - onOffLeftRight_600x600params
 %               - onOffLeftRight_600x600params_12Hz
 % The actual stim files have names like
-%   onOffLeftRight_600x600params1.mat
-%   onOffLeftRight_600x600params_12Hz9.mat
-%   etc
+%               - onOffLeftRight_600x600params_12Hz9.mat
+%                   etc
 %
 %
 % Example
-%   runme_SSEEG(1, 'onOffLeftRight_600x600params');
 %   runme_SSEEG(1, 'onOffLeftRight_600x600params_12Hz');
 
 

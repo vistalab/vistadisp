@@ -19,19 +19,12 @@ function params = ret(params)
 %   ret
 %
 % 2. Specify your experimental params in advance, open the GUI, and then
-% click OK:
+%    click OK:
 %   
 %   params = retCreateDefaultGUIParams
 %   % modify fields as you like, e.g.
 %   params.fixation = 'dot';
 %   ret(params)
-
-% clean up - it's good to clean up but mex files are extremely slow to be
-% loaded for the first time in MacOSX, so I chose not to do this to speed
-% things up.
-%close all;close hidden;
-%clear mex; clear all;
-%pack;
 
 % get some parameters from graphical interface
 if ~exist('params', 'var'), params = []; end

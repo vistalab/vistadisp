@@ -32,4 +32,11 @@ switch lower(params.experiment)
         stimulus = makeRetinotopyStimulus(params);
 end
 
+% If we are doing ECoG, MEG, EEG, and we have not created an experiment
+% from a file, then add photodiode flash to every other frame of stimulus.
+% This can be used later for syncing stimulus to electrode outputs.
+if ~strcmpi(params.experiment, 'experiment from file')
+    stimulus = retCreateDiodeSequence(params, stimulus);
+end
+
 return
