@@ -66,7 +66,7 @@ switch(lower(params.display.fixType))
     case {'digits'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
-        params.display.fixSizePixels = 6;
+        params.display.fixSizePixels = 15;
         % for digits between 0 to 9
         params.display.fixColorRgb    = [repmat([255 255 255 255], 10, 1); repmat([0 0 0 255], 10, 1)]; %B/W by default
        
