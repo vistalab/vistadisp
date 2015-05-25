@@ -47,7 +47,7 @@ switch(lower(d.fixType))
         % when digits are ranging from 0 to 9
         display_digit = mod(colIndex, 10);
         Screen('DrawText', d.windowPtr, num2str(display_digit), d.fixX, d.fixY,  d.fixColorRgb(colIndex+1,:));
-        Screen('TextSize',d.windowPtr, 15);
+        Screen('TextSize',d.windowPtr, d.fixSizePixels);
         
     case {'dot' 'dot with grid' 'small dot'}
         Screen('glPoint', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY, d.fixSizePixels);
