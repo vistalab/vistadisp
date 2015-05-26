@@ -28,6 +28,7 @@ function params = retSetFixationParams(params, expName)
 % except for last switch statement on bottom, which would need to be moved)
 
 fixString  = {...
+                'digits'...
                 'disk'...
                 'dot'...
                 'dot with grid'...
@@ -62,6 +63,13 @@ sz    = params.display.fixSizePixels;
 params.display.fixColorRgb    = [255 0 0 255; 0 255 0 255]; %R/G by default
 
 switch(lower(params.display.fixType))
+    case {'digits'}
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 15;
+        % for digits between 0 to 9
+        params.display.fixColorRgb    = [repmat([255 255 255 255], 10, 1); repmat([0 0 0 255], 10, 1)]; %B/W by default
+       
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
