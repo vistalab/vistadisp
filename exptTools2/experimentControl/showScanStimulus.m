@@ -95,6 +95,8 @@ for frame = 1:nFrames
         % put in an image
         imgNum = mod(stimulus.seq(frame)-1,nImages)+1;
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
+        
+        disp([stimulus.seqtiming(frame) stimulus.fixSeq(frame)])
         drawFixation(display,stimulus.fixSeq(frame));
         
         % If requested, flash photodiode (for ECoG/EEG/MEG)
@@ -118,8 +120,14 @@ for frame = 1:nFrames
     %--- get inputs (subject or experimentor)
 
     % Scan the keyboard for subject response
+    
+    % ****************************************
+    % TODO: REPLACE KbCheck with KbQueueCheck!!
+    % ****************************************    
     [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-%     [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
+    % ****************************************
+    
+%   
     if(ssKeyIsDown)
         %            kc = find(ssKeyCode);
         %            response.keyCode(frame) = kc(1);

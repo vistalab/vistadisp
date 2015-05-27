@@ -18,14 +18,19 @@ if isfield(stimulus, 'textures'), stimulus = rmfield(stimulus, 'textures'); end
 
 %% fixation dot sequence
 % change on the fastest every 6 seconds
-duration.stimframe  = median(diff(stimulus.seqtiming));
-minsec = round(6./duration.stimframe);
-
-fixSeq = ones(minsec,1)*round(rand(1,ceil(length(stimulus.seq)/minsec)));
-fixSeq = fixSeq(:)+1;
-
-% force binary
-fixSeq(fixSeq>2)=2;
-fixSeq(fixSeq<1)=1;
-
-stimulus.fixSeq = fixSeq;
+if isfield(stimulus, 'fixSeq') && ~isempty(stimulus.fixSeq)
+    % if the field exists, don't overwrite
+else
+    % if the fixSeq doesn't exist, create it
+    duration.stimframe  = median(diff(stimulus.seqtiming));
+    minsec = round(6./duration.stimframe);
+    
+    fixSeq = ones(minsec,1)*round(rand(1,ceil(length(stimulus.seq)/minsec)));
+    fixSeq = fixSeq(:)+1;
+    
+    % force binary
+    fixSeq(fixSeq>2)=2;
+    fixSeq(fixSeq<1)=1;
+    
+    stimulus.fixSeq = fixSeq;
+end
