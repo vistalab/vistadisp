@@ -33,7 +33,7 @@ function varargout = retMenu(varargin)
 % Edit the above text to modify the response to help retMenu
 
 
-% Last Modified by GUIDE v2.5 24-Jun-2014 11:04:07
+% Last Modified by GUIDE v2.5 14-Jun-2015 20:01:40
 % Last Modified by GUIDE v2.5 04-Feb-2009 10:05:20
 
 
@@ -683,3 +683,36 @@ function skipSyncTestCheckbox_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of skipSyncTestCheckbox
+
+
+% --- Executes on selection change in popupmenu9.
+function popupmenu9_Callback(hObject, eventdata, handles)
+% hObject    handle to popupmenu9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu9 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from popupmenu9
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu9_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu9 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: popupmenu controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on key press with focus on popupmenu9 and none of its controls.
+function popupmenu9_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to popupmenu9 (see GCBO)
+% eventdata  structure with the following fields (see UICONTROL)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)

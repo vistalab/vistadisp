@@ -56,7 +56,7 @@ try
         
         % wait for go signal
         onlyWaitKb = false;
-        pressKey2Begin(params.display, onlyWaitKb, [], [], params.triggerKey);
+        time0Stim = pressKey2Begin(params.display, onlyWaitKb, [], [], params.triggerKey);
 
 
         % If we are doing ECoG/MEG/EEG, then initialize the experiment with
@@ -64,9 +64,17 @@ try
         stimulus.flashTimes = retInitDiode(params);
         
         % countdown + get start time (time0)
-        [time0] = countDown(params.display,params.countdown,params.startScan, params.trigger);
-        time0   = time0 + params.startScan; % we know we should be behind by that amount
-                        
+        time0Scan = countDown(params.display,params.countdown,params.startScan, params.trigger);
+        time0Scan = time0Scan + params.startScan; % we know we should be behind by that amount
+                  
+        switch lower(params.trigger)
+            case {'scanner triggers computer' 'no trigger (manual)'}
+                time0 = time0Stim; 
+            case 'computer triggers scanner'            
+                time0 = time0Scan;
+            otherwise
+                error('Unknown trigger condition')
+        end
         [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0); %#ok<ASGLU>
                 
         % reset priority

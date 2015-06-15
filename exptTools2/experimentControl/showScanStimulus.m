@@ -68,7 +68,7 @@ else
 end;
 
 % initialize KbQueue
-KbQueueCreate(-1, 1:256); % display.devices.keyInputExternal); 
+KbQueueCreate(display.devices.keyInputExternal, 1:256); % display.devices.keyInputExternal); 
 
 % some variables
 nFrames = length(stimulus.seq);
@@ -90,7 +90,7 @@ end
 
 for frame = 1:nFrames
     
-    KbQueueStart;
+    KbQueueStart(display.devices.keyInputExternal);
 
     %--- update display
     % If the sequence number is positive, draw the stimulus and the
@@ -160,7 +160,7 @@ for frame = 1:nFrames
 
 
     % Scan the keyboard for subject response    
-    [pressed, firstPress]=KbQueueCheck;
+    [pressed, firstPress]=KbQueueCheck(display.devices.keyInputExternal);
        
     if pressed
         
@@ -185,8 +185,8 @@ for frame = 1:nFrames
         end;
     end;
     
-    KbQueueFlush;
-    KbQueueStop;
+    KbQueueFlush(display.devices.keyInputExternal);
+    KbQueueStop(display.devices.keyInputExternal);
     
 end;
 
