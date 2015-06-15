@@ -33,7 +33,7 @@ function varargout = retMenu(varargin)
 % Edit the above text to modify the response to help retMenu
 
 
-% Last Modified by GUIDE v2.5 14-Jun-2015 20:01:40
+% Last Modified by GUIDE v2.5 15-Jun-2015 11:01:37
 % Last Modified by GUIDE v2.5 04-Feb-2009 10:05:20
 
 
@@ -89,6 +89,19 @@ end;
 tmp = getDisplaysList;
 mydir = ['none' tmp];
 set(handles.calibration,'String',mydir);
+
+% Get devices
+devices = getDevices;
+str = cell(1, length(devices.keyInputInternal) + length(devices.keyInputExternal));
+for ii = 1:length(devices.keyInputInternal)
+    str{ii} = sprintf('Internal: %d', devices.keyInputInternal(ii));
+end
+for ii = 1:length(devices.keyInputExternal)
+    str{ii+length(devices.keyInputInternal)} = ...
+        sprintf('External: %d', devices.keyInputExternal(ii));
+end
+set(handles.devices,'String',str);
+
 
 % Set default params for retMenu
 if notDefined('varargin'), data = [];
@@ -182,6 +195,9 @@ v = getPopupValue(handles.loadMatrix,data.loadMatrix);
 set(handles.loadMatrix,'Value',v);
 v = getPopupValue(handles.calibration,data.calibration);
 set(handles.calibration,'Value',v);
+v = getPopupValue(handles.devices,data.devices);
+set(handles.devices,'Value',v);
+
 set(handles.triggerKey, 'String', data.triggerKey);
 
      
@@ -240,6 +256,9 @@ data.loadMatrix      = tmp(get(handles.loadMatrix,          'Value'));
 tmp                  = get(handles.calibration,             'String');
 data.calibration     = tmp(get(handles.calibration,         'Value'));      
 
+tmp                  = get(handles.devices,                 'String');
+data.devices         = tmp(get(handles.devices,             'Value'));      
+
 data.stimSize        = str2num(get(handles.stimSize,        'String'));
 if isempty(data.stimSize),  data.stimSize    = 'max'; end;
 
@@ -254,6 +273,8 @@ if iscell(data.modality),    data.modality = data.modality{1};       end;
 if iscell(data.loadMatrix),  data.loadMatrix = data.loadMatrix{1};   end;
 
 if iscell(data.calibration), data.calibration = data.calibration{1}; end;
+
+if iscell(data.devices),     data.devices = data.devices{1};        end;
 
 if iscell(data.trigger),     data.trigger = data.trigger{1};         end;
 
@@ -549,6 +570,22 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 return;
 
+%----------------------------------------------------------
+function devices_Callback(hObject, eventdata, handles)
+contents = get(hObject,'String');
+if iscell(contents),
+    handles.data.devices=contents{get(hObject,'Value')};
+else
+    handles.data.devices=contents;
+end;
+guidata(hObject,handles);
+return
+
+function devices_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+return;
 
 %----------------------------------------------------------
 function stimSize_Callback(hObject, eventdata, handles)
@@ -685,19 +722,19 @@ function skipSyncTestCheckbox_Callback(hObject, eventdata, handles)
 % Hint: get(hObject,'Value') returns toggle state of skipSyncTestCheckbox
 
 
-% --- Executes on selection change in popupmenu9.
+% --- Executes on selection change in devices.
 function popupmenu9_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu9 (see GCBO)
+% hObject    handle to devices (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu9 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu9
+% Hints: contents = cellstr(get(hObject,'String')) returns devices contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from devices
 
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu9_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu9 (see GCBO)
+% hObject    handle to devices (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -708,9 +745,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
 end
 
 
-% --- Executes on key press with focus on popupmenu9 and none of its controls.
-function popupmenu9_KeyPressFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu9 (see GCBO)
+% --- Executes on key press with focus on devices and none of its controls.
+function devices_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to devices (see GCBO)
 % eventdata  structure with the following fields (see UICONTROL)
 %	Key: name of the key that was pressed, in lower case
 %	Character: character interpretation of the key(s) that was pressed

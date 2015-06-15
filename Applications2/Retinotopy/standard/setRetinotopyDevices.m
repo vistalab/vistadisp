@@ -8,7 +8,19 @@ function params = setRetinotopyDevices(params)
 % note: this function doesn't have to be specific to retinotopy. could now
 % be renamed and moved to, say, vistadisp/exptTools2/experimentControl
 
-params.devices = getDevices;
+allDevices = getDevices;
+
+devices.str = params.devices;
+devices.keyInputExternal = str2num(params.devices(end));
+if isempty(allDevices.keyInputInternal)
+    devices.keyInputInternal = devices.keyInputExternal;
+else
+    devices.keyInputInternal = allDevices.keyInputInternal(1);
+end
+
+params.devices = devices;
+
+return
 
 if isempty(params.devices.keyInputExternal),
     params.devices.keyInputExternal = params.devices.keyInputInternal(1);

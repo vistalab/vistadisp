@@ -37,6 +37,7 @@ params.tr              = 1.5;%seconds
 params.loadMatrix      = 'None';
 params.saveMatrix      = 'None';
 params.calibration     = 'Demo';
+params.devices         = [];
 params.stimSize        = 'max';
 params.countdown       = 0;
 params.startScan       = 0;
