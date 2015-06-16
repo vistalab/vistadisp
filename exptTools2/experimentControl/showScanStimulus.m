@@ -68,7 +68,8 @@ else
 end;
 
 % initialize KbQueue
-KbQueueCreate(display.devices.keyInputExternal, 1:256); % display.devices.keyInputExternal); 
+okkeys = ones(1,256); okkeys(53) = 0;
+KbQueueCreate(display.devices.keyInputExternal, okkeys); % display.devices.keyInputExternal); 
 
 % some variables
 nFrames = length(stimulus.seq);
