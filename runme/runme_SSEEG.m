@@ -14,6 +14,7 @@ function runme_SSEEG(run_number,stimfile)
 %   stimfile is the prefix for the stimulus fils containing images, and can
 %            be either 
 %               - onOffLeftRight_600x600params_12Hz
+%               - onOffLeftRight_600x600params_12Hz_blinkblock
 % The actual stim files have names like
 %               - onOffLeftRight_600x600params_12Hz9.mat
 %                   etc
