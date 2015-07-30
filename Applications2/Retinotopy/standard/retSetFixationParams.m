@@ -45,6 +45,7 @@ fixString  = {...
                 'right'...
                 'upper'...
                 'lower'...
+                'emoji'...
                 };
 
 if ~exist('params', 'var'), params = fixString; return; end
@@ -60,7 +61,7 @@ dim.x = params.display.numPixels(1);
 dim.y = params.display.numPixels(2);
 sz    = params.display.fixSizePixels;
 params.display.fixColorRgb    = [255 0 0 255; 0 255 0 255]; %R/G by default
-
+params.fixation.duration   = 2; % maximum duration between fixation change
 switch(lower(params.display.fixType))
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
@@ -167,6 +168,12 @@ switch(lower(params.display.fixType))
         params.display.fixX = round(dim.x./2);
         params.display.fixY = dim.y - round(max(.5*(dim.y - dim.x),sz));
 
+    case 'emoji'
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 120;
+       
+        
     otherwise,
         error('Unknown fixationType!');
 end

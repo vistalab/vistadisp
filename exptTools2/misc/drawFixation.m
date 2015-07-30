@@ -93,6 +93,11 @@ switch(lower(d.fixType))
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY-(d.gapSize/2),d.dotSize);
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY+(d.gapSize/2),d.dotSize);
 
+    case{'emoji'}
+        Screen('DrawTexture', d.windowPtr, d.fixationStimulus.textures(colIndex), ...
+            d.fixationStimulus.srcRect, d.fixationStimulus.destRect);
+        
+
     otherwise,
         error('Unknown fixationType!');
 end

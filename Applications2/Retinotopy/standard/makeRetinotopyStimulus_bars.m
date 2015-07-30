@@ -331,8 +331,8 @@ end;
 sequence=sequence+motionSeq-1;
 
 %% fixation dot sequence
-% change on the fastest every 6 seconds
-minsec = round(6./duration.stimframe);
+% change on the fastest every n seconds
+minsec = round(params.fixation.duration./duration.stimframe);
 fixSeq = ones(minsec,1)*round(rand(1,ceil(length(sequence)/minsec)));
 fixSeq = fixSeq(:)+1;
 % check that the sequence of fixations is at least as long as the sequence
