@@ -534,57 +534,52 @@ eval(instructions);
 
 % Main staircase loop
 while (~all(stairHistory.done) && ~abort) % While there are trials to be completed, and user hasn't aborted
-    if exist('trialArray', 'var') % Can't figure this out - the variable isn't defined anywhere else
-        % Clear the keyboard queue
-        % FlushEvents('keyDown');
-        preTrialSecs = 0;
-        % Run pre-built trial
-        response = doTrial(display, trialArray{curStair, stairHistory.curAdjustIndex(curStair)}, priority);
-        
-    else % Given the comment on the if above, this seems to be the only instance that is executed.
-        preTrialSecs = GetSecs;
-        % We need to build the trial
-        adjustValue = stairParams.adjustableVarValues(min(curStair,numLevelVectors), ...
-            stairHistory.curAdjustIndex(curStair));
-        
-        %
-        correctStepIndex = min(length(stairParams.correctStepSize), stairHistory.numReversals(curStair)+1);
-        incorrectStepIndex =  min(length(stairParams.incorrectStepSize), stairHistory.numReversals(curStair)+1);
-        
-        % Set the adjustable variable value
-        stimParams.(stairParams.adjustableVarName) = adjustValue;
-        % Set the random variable values in the appropriate stimParams fields
-        for i=1:size(stairParams.randomVars, 1)
-            randVal(i) = stairParams.randomVars{i,2}(ceil(rand*length(stairParams.randomVars{i,2})));
-            stimParams.(stairParams.randomVars{i,1}) = randVal(i);
-        end
-        % Set the curStair variable values in the appropriate stimParams fields
-        for i=1:size(stairParams.curStairVars, 1)
-            curStairVal(i) = stairParams.curStairVars{i,2}(min(curStair,length(stairParams.curStairVars{i,2})));
-            stimParams.(stairParams.curStairVars{i,1}) = curStairVal(i);
-        end
-        
-        % Randomly choose and then set the alternative variable
-        altIndex = round(rand*(numAlternatives-1))+1;
-        altValue = stairParams.alternativeVarValues(altIndex);
-        stimParams.(stairParams.alternativeVarName) = altValue;
-        
-        % build the trial
-        if(stairParams.useGlobalData)
-            [trial, data] = eval(trialGenFuncName);
-        else
-            [trial, data{curStair}] = eval(trialGenFuncName);
-        end
-        
-        % clear the keyboard queue
-        % FlushEvents('keyDown');
-        preTrialSecs = GetSecs-preTrialSecs;
-        % run the trial
-        response = doTrial(display, trial, priority, showTimingFlag, stimParams);
-        if stairParams.etFlag
-            etData = etCheckEyes(stimParams.duration);
-        end
+    
+    
+    
+    preTrialSecs = GetSecs;
+    % We need to build the trial
+    adjustValue = stairParams.adjustableVarValues(min(curStair,numLevelVectors), ...
+        stairHistory.curAdjustIndex(curStair));
+    
+    %
+    correctStepIndex = min(length(stairParams.correctStepSize), stairHistory.numReversals(curStair)+1);
+    incorrectStepIndex =  min(length(stairParams.incorrectStepSize), stairHistory.numReversals(curStair)+1);
+    
+    % Set the adjustable variable value
+    stimParams.(stairParams.adjustableVarName) = adjustValue;
+    % Set the random variable values in the appropriate stimParams fields
+    for i=1:size(stairParams.randomVars, 1)
+        randVal(i) = stairParams.randomVars{i,2}(ceil(rand*length(stairParams.randomVars{i,2})));
+        stimParams.(stairParams.randomVars{i,1}) = randVal(i);
     end
+    % Set the curStair variable values in the appropriate stimParams fields
+    for i=1:size(stairParams.curStairVars, 1)
+        curStairVal(i) = stairParams.curStairVars{i,2}(min(curStair,length(stairParams.curStairVars{i,2})));
+        stimParams.(stairParams.curStairVars{i,1}) = curStairVal(i);
+    end
+    
+    % Randomly choose and then set the alternative variable
+    altIndex = round(rand*(numAlternatives-1))+1;
+    altValue = stairParams.alternativeVarValues(altIndex);
+    stimParams.(stairParams.alternativeVarName) = altValue;
+    
+    % build the trial
+    if(stairParams.useGlobalData)
+        [trial, data] = eval(trialGenFuncName);
+    else
+        [trial, data{curStair}] = eval(trialGenFuncName);
+    end
+    
+    % clear the keyboard queue
+    % FlushEvents('keyDown');
+    preTrialSecs = GetSecs-preTrialSecs;
+    % run the trial
+    [response, ~, dataOut]= doTrial(display, trial, priority, showTimingFlag, stimParams);
+    if stairParams.etFlag
+        etData = etCheckEyes(stimParams.duration);
+    end
+    
     postTrialSecs = GetSecs;
     
     if isfield(stairParams, 'responseSet')
@@ -609,8 +604,8 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         
         if isempty(respCode) % If respCode is still empty at this point, get one
             % Wait for the response
-            if isfield(stimParams, 'inputDevice'), 
-                device = stimParams.inputDevice; 
+            if isfield(stimParams, 'inputDevice'),
+                device = stimParams.inputDevice;
             else
                 device = [];
             end
@@ -646,7 +641,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
     % the function that makes the trial. also, we should then check to see
     % if the field exists before checking its value so that we don't get a
     % crash if the field is not defined.
-
+    
     if ~abort
         trialCounts = trialCounts + 1;
         stairHistory.numTrials(curStair) = 	stairHistory.numTrials(curStair) + 1;
@@ -654,6 +649,9 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         dataSum(curStair).response(stairHistory.numTrials(curStair)) = response.keyLabel;
         dataSum(curStair).correct(stairHistory.numTrials(curStair)) = correct; % RFB - added trial by trial correct/incorrect info
         dataSum(curStair).trialCounts(stairHistory.numTrials(curStair)) = trialCounts; % RFB - added trial by trial count info (useful with many staircases)
+        dataSum(curStair).dataOut(stairHistory.numTrials(curStair)).data = dataOut;
+
+        
         % If we're performing eye tracking, store the data
         if stairParams.etFlag
             dataSum(curStair).etData{1,stairHistory.numTrials(curStair)} = etData.horiz;
@@ -665,7 +663,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         if isfield(response,'secsStart')
             dataSum(curStair).responseTime(stairHistory.numTrials(curStair)) = response.secs - response.secsStart;
         end
-
+        
         % If user indicates the need to save stuff out from the actual
         % trials themselves, do so with the eval function.
         if exist('saveData','var')
@@ -673,7 +671,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
                 eval(saveData{i,2});
             end
         end
-
+        
         i = find(dataSum(curStair).stimLevels == adjustValue);
         if isempty(i)
             error('doStaircase: missing stimLevel in dataSum- data may not be valid!');
@@ -690,7 +688,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         dataSum(1).abort = 1; % set a flag to allow users to alter their behavior outside of doStaircase should someone abort a trial
         return;
     end
-
+    
     % print out the log
     for i=1:length(logFID)
         % incase altValues are characters: num2str(altValue) will work with characters, ints and floats
@@ -706,10 +704,10 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
     end
     % save the dataSum file in case of a crash or error
     save('dataSumTemp', 'dataSum');
-
+    
     % if requested, update plot on each trial. useful for debugging.
     if exist('plotEachTrialFlag', 'var'), plotStaircase(stairParams, dataSum, 1); end
-
+    
     % adjust the adjustable
     if correct
         stairHistory.numConsecCorrect(curStair) = stairHistory.numConsecCorrect(curStair) + 1;
@@ -742,7 +740,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             end
         end
     end
-
+    
     % ensure adjustable isn't out of range
     % Note that if we have gone out of range, then we should (and do) count this as a
     % reversal because it means the observer has hit one of the boundaries.  If we don't
@@ -766,12 +764,12 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             || stairHistory.numReversals(curStair) >= stairParams.maxNumReversals
         stairHistory.done(curStair) = 1;
     end
-
+    
     % choose the curStair pseudorandomly, giving preference to staircases that are less done.
     completeIndex = stairHistory.numTrials./stairParams.maxNumTrials - randn(size(stairHistory.numTrials))*.2;
     curStair = find(completeIndex == min(completeIndex));
     curStair = curStair(round(rand*(length(curStair)-1))+1);
-
+    
     % wait for an ITI, if needed
     postTrialSecs = GetSecs-postTrialSecs;
     postRespSecs = GetSecs-postRespSecs;
@@ -787,7 +785,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         counter = mod(stairHistory.numTrials(curStair), stairParams.pause_between_blocks);
         if counter == 0, KbQueueFlush();  KbQueueStop(); eval(instructions); end
     end
-
+    
     
     %if(~all(stairHistory.done) && ~abort && preTrialSecs+postTrialSecs<stairParams.iti)
     %    waitTill(stairParams.iti-preTrialSecs+postTrialSecs);
