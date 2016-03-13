@@ -34,13 +34,18 @@ function [response, timing, quitProg] = showScanStimulus(display, stimulus, t0)
 
 
 % input checks
-if nargin < 2,
-    help(mfilename);
-    return;
-end;
+if nargin < 2, help(mfilename); return; end;
+
 if nargin < 3 || isempty(t0),
     t0 = GetSecs; % "time 0" to keep timing going
 end;
+
+if ~isfield(stimulus, 'saveMovie'), saveMovie = 0; 
+else                                saveMovie = stimulus.saveMovie; end
+    
+if saveMovie   
+   imageArray = zeros(display.rect(4),display.rect(3), length(stimulus.seq),3);    
+end
 
 % timeFromT0: If true (default), then time each screen flip from
 %             t0. If false, then time each screen flip from last screen
@@ -135,6 +140,10 @@ for frame = 1:nFrames
     %--- update screen
     VBLTimestamp = Screen('Flip',display.windowPtr, nextFlipTime);
     
+    if saveMovie,
+        imageArray(:,:,frame,:) = Screen('GetImage', display.windowPtr,display.rect);
+    end
+    
     % send trigger for MEG, if requested, and record the color of the PD
     % cue
     if isfield(stimulus, 'trigSeq') && ~isempty(stimulus.trigSeq) && ...
@@ -195,5 +204,10 @@ end;
 ShowCursor;
 timing = GetSecs-t0;
 fprintf('[%s]:Stimulus run time: %f seconds [should be: %f].\n',mfilename,timing,max(stimulus.seqtiming));
+
+if saveMovie
+    stimulus.movie = imageArray;
+    save('~/Desktop/myVistadispMovie.mat', 'stimulus');
+end
 
 return;
