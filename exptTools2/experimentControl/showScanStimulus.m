@@ -207,7 +207,7 @@ fprintf('[%s]:Stimulus run time: %f seconds [should be: %f].\n',mfilename,timing
 
 if saveMovie
     stimulus.movie = imageArray;
-    save('~/Desktop/myVistadispMovie.mat', 'stimulus');
+    save('~/Desktop/myVistadispMovie.mat', 'stimulus', '-v7.3');
 end
 
 return;
