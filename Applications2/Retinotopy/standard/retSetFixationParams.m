@@ -60,8 +60,8 @@ if ~exist('params', 'var'), params = fixString; return; end
 dim.x = params.display.numPixels(1);
 dim.y = params.display.numPixels(2);
 sz    = params.display.fixSizePixels;
-params.display.fixColorRgb    = [255 0 0 255; 0 255 0 255]; %R/G by default
-params.fixation.duration   = 2; % maximum duration between fixation change
+params.display.fixColorRgb  = [255 0 0 255; 0 255 0 255]; %R/G by default
+params.display.fixDuration  = 2; % maximum duration between fixation change
 switch(lower(params.display.fixType))
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
