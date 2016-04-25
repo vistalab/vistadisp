@@ -45,10 +45,11 @@ switch(lower(d.fixType))
         
     case{'digits'}
         % when digits are ranging from 0 to 9
-        display_digit = mod(colIndex, 10)
+        display_digit = mod(colIndex, 10);
         % colIndex ranging from 0 to 19 for digits 0-9 in black and white, blank when colIndex = 20
         if colIndex < 20
-            Screen('DrawText', d.windowPtr, num2str(display_digit), d.fixX, d.fixY,  d.fixColorRgb(colIndex+1,:));
+            %Screen('DrawText', d.windowPtr, num2str(display_digit), d.fixX, d.fixY,  d.fixColorRgb(colIndex+1,:));
+            DrawFormattedText(d.windowPtr, num2str(display_digit), 'center', 'center', d.fixColorRgb(colIndex+1,:));
             Screen('TextSize',d.windowPtr, d.fixSizePixels);
         end
         

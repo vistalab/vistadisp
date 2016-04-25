@@ -67,6 +67,9 @@ else
     quitProgKey = KbName('q');
 end;
 
+% initialize KbQueue
+KbQueueCreate(-1, 1:256); % display.devices.keyInputExternal); 
+
 % some variables
 nFrames = length(stimulus.seq);
 HideCursor;
@@ -87,6 +90,8 @@ end
 
 for frame = 1:nFrames
     
+    KbQueueStart;
+
     %--- update display
     % If the sequence number is positive, draw the stimulus and the
     % fixation.  If the sequence number is negative, draw only the
@@ -95,8 +100,7 @@ for frame = 1:nFrames
         % put in an image
         imgNum = mod(stimulus.seq(frame)-1,nImages)+1;
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
-        
-        disp([stimulus.seqtiming(frame) stimulus.fixSeq(frame)])
+                
         drawFixation(display,stimulus.fixSeq(frame));
         
         % If requested, flash photodiode (for ECoG/EEG/MEG)
@@ -117,29 +121,7 @@ for frame = 1:nFrames
     %--- timing
     [waitTime, nextFlipTime] = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
     
-    %--- get inputs (subject or experimentor)
 
-    % Scan the keyboard for subject response
-    
-    % ****************************************
-    % TODO: REPLACE KbCheck with KbQueueCheck!!
-    % ****************************************    
-    [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-    % ****************************************
-    
-%   
-    if(ssKeyIsDown)
-        %            kc = find(ssKeyCode);
-        %            response.keyCode(frame) = kc(1);
-        response.keyCode(frame) = 1; % binary response for now
-        response.secs(frame)    = ssSecs - t0;
-        
-        if(ssKeyCode(quitProgKey)),
-            quitProg = 1;
-            break; % out of while loop
-        end;
-    end;
-    
     % if there is time release cpu
     if(waitTime<-0.03), WaitSecs(0.01); end;
             
@@ -176,6 +158,36 @@ for frame = 1:nFrames
     response.flip(frame)         = VBLTimestamp;
     response.nextFlipTime(frame) = nextFlipTime;
 
+
+    % Scan the keyboard for subject response    
+    [pressed, firstPress]=KbQueueCheck;
+       
+    if pressed
+        
+        % which key was pressed first?
+        whichKeys = find(firstPress);
+        whichTimes = firstPress(whichKeys)-t0;
+        [~, firstKey] = min(whichTimes);
+        
+        response.keyCode(frame) = whichKeys(firstKey); 
+        response.secs(frame)    = whichTimes(firstKey) - t0;
+        
+        
+        fprintf('Frame: %d\tPressed: %d\n', frame, pressed)
+        disp(whichKeys)
+        disp(whichTimes)
+        disp(whichKeys(firstKey))
+        fprintf('End of frame \n\n')
+        
+        if firstPress(quitProgKey)
+            quitProg = 1;
+            break; % out of while loop
+        end;
+    end;
+    
+    KbQueueFlush;
+    KbQueueStop;
+    
 end;
 
 % that's it
