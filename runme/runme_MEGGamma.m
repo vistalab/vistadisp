@@ -15,13 +15,23 @@ Screen('Preference', 'SkipSyncTests', 1);
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
-% hz = 60;
+% hz  = 60;
 tr  = 1/hz*60;
 
-%% Use Eyetracker?
+% Run number?
+runnr = 12;
 
-use_eyetracker = false;
-stop_eyetracker = false;
+%% Use Eyetracker?
+if runnr == 1
+    use_eyetracker = true;
+    stop_eyetracker = false;
+elseif runnr > 1 && runnr < 12
+    use_eyetracker = false;
+    stop_eyetracker = false;
+else
+    use_eyetracker = false;
+    stop_eyetracker = true;
+end
 
 if use_eyetracker
     d = openScreen(d);
@@ -42,7 +52,7 @@ end
 
 params = retCreateDefaultGUIParams;
 
-params.modality         = 'MEG';
+params.modality         = 'meg';
 params.prescanDuration  = 0;
 params.interleaves      = NaN;
 params.tr               = 1/hz*60;
@@ -55,7 +65,7 @@ params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
 params.period           = 1;
 params.numCycles        = 1;
-params.skipSyncTests    = true;
+params.skipSyncTests    = false;
 %% ********************
 %  ***** GO ***********
 %  *********************
@@ -64,7 +74,7 @@ Screen('Preference', 'SkipSyncTests', 1);
 
 
 stimfile = 'gammaStimuli_params';
-params.loadMatrix = sprintf('%s%d.mat', stimfile, 8);
+params.loadMatrix = sprintf('%s%d.mat', stimfile, runnr);
 ret(params);
 
 
@@ -75,12 +85,12 @@ if stop_eyetracker
     PTBStopEyeTrackerRecording; % <----------- (can take a while)
 
     % move the file to the logs directory
-    destination = '~/Desktop/MEG_Gamma_eyelink_';
+    destination = '~/Desktop/Experiments/Winawer/';
     i = 0;
-    while exist([destination num2str(i) '.edf'], 'file')
+    while exist([destination 'eyelink' num2str(i) '.edf'], 'file')
         i = i + 1;
     end
-    movefile('eyelink.edf', [destination num2str(i) '.edf'])
+    movefile('eyelink.edf', [destination 'eyelink' num2str(i) '.edf'])
 
 end
 

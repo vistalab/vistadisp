@@ -41,7 +41,7 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 
 
 % HACK
-params.modality = 'eeg';
+params.modality = 'meg';
 
 % input checks
 if nargin < 2,
@@ -158,7 +158,7 @@ for frame = 1:nFrames
             case 'meg'
                 PTBSendTrigger(stimulus.trigSeq(frame), 0);                                
             case 'eeg'
-                    NetStation('Event','flip',VBLTimestamp);                
+                NetStation('Event','flip',VBLTimestamp);                
         end
         fprintf('Trigger sent, %s\n, %s', datestr(now), stimulus.trigSeq(frame)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
