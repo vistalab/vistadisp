@@ -76,6 +76,7 @@ params.experiment       = 'Experiment From File';
 params.period           = 1;
 params.numCycles        = 1;
 params.skipSyncTests    = true;
+params.fixation         = 'left and right';
 
 
 

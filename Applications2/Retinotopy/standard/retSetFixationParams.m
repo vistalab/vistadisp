@@ -46,6 +46,7 @@ fixString  = {...
                 'right'...
                 'upper'...
                 'lower'...
+                'left and right' ...
                 };
 
 if ~exist('params', 'var'), params = fixString; return; end
@@ -174,6 +175,18 @@ switch(lower(params.display.fixType))
     case 'lower'
         params.display.fixX = round(dim.x./2);
         params.display.fixY = dim.y - round(max(.5*(dim.y - dim.x),sz));
+        
+    case 'left and right'   
+        % Left
+        params.display.fixX1 = round(dim.x/2-dim.y/4);
+        params.display.fixY1 = round(dim.y./2);
+        
+        % Right
+        params.display.fixX2 = dim.x - round(dim.x/2-dim.y/4);
+        params.display.fixY2 = round(dim.y./2);
+        
+        % See if we want to get a grid
+        params.display.fixGrid = 2;
 
     otherwise,
         error('Unknown fixationType!');
