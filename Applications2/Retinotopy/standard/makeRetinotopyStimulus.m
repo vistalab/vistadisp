@@ -226,8 +226,8 @@ end;
 % end
 
 duration.stimframe          = 1./params.temporal.frequency./params.temporal.motionSteps;
-duration.scan.seconds       = params.ncycles*params.period;
-duration.scan.stimframes    = round(params.ncycles*params.period./duration.stimframe);
+duration.scan.seconds       = params.numCycles*params.period;
+duration.scan.stimframes    = round(params.numCycles*params.period./duration.stimframe);
 duration.cycle.seconds      = params.period;
 duration.cycle.stimframes   = round(params.period./duration.stimframe);
 duration.prescan.seconds    = params.prescanDuration;
@@ -251,10 +251,10 @@ if params.insertBlanks.do,
             completeCycle;...
             completeCycle(1:round(end/2))];
     else
-        sequence = repmat(sequence(:),params.ncycles,1);
+        sequence = repmat(sequence(:),params.numCycles,1);
     end;
 else
-    sequence = repmat(sequence(:),params.ncycles,1);
+    sequence = repmat(sequence(:),params.numCycles,1);
 end;
 
 

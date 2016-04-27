@@ -28,6 +28,7 @@ function params = retSetFixationParams(params, expName)
 % except for last switch statement on bottom, which would need to be moved)
 
 fixString  = {...
+                'digits'...
                 'disk'...
                 'dot'...
                 'dot with grid'...
@@ -45,6 +46,7 @@ fixString  = {...
                 'right'...
                 'upper'...
                 'lower'...
+                'left and right' ...
                 };
 
 if ~exist('params', 'var'), params = fixString; return; end
@@ -62,6 +64,13 @@ sz    = params.display.fixSizePixels;
 params.display.fixColorRgb    = [255 0 0 255; 0 255 0 255]; %R/G by default
 
 switch(lower(params.display.fixType))
+    case {'digits'}
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 15;
+        % for digits between 0 to 9
+        params.display.fixColorRgb    = [repmat([255 255 255 255], 10, 1); repmat([0 0 0 255], 10, 1)]; %B/W by default
+       
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
@@ -166,6 +175,18 @@ switch(lower(params.display.fixType))
     case 'lower'
         params.display.fixX = round(dim.x./2);
         params.display.fixY = dim.y - round(max(.5*(dim.y - dim.x),sz));
+        
+    case 'left and right'   
+        % Left
+        params.display.fixX1 = round(dim.x/2-dim.y/4);
+        params.display.fixY1 = round(dim.y./2);
+        
+        % Right
+        params.display.fixX2 = dim.x - round(dim.x/2-dim.y/4);
+        params.display.fixY2 = round(dim.y./2);
+        
+        % See if we want to get a grid
+        params.display.fixGrid = 2;
 
     otherwise,
         error('Unknown fixationType!');

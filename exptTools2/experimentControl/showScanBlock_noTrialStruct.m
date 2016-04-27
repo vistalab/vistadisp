@@ -15,7 +15,7 @@ function [response, timing, quitProg] = showScanBlock_noTrialStruct(display,stim
 %% Input checks
 
 if nargin < 2,
-	help(mfilename);
+    help(mfilename);
     return;
 end;
 
@@ -23,11 +23,11 @@ if notDefined('timeFromT0'), timeFromT0 = true; end
 
 % some more checks
 if ~isfield(stimulus,'textures')
-	% Generate textures for each image
-	disp('WARNING: Creating textures before stimulus presentation.');
-	disp(['         This should be done before calling ' mfilename ' for']);
-	disp('         accurate timing.  See "makeTextures" for help.');
-	stimulus = makeTextures(display,stimulus);
+    % Generate textures for each image
+    disp('WARNING: Creating textures before stimulus presentation.');
+    disp(['         This should be done before calling ' mfilename ' for']);
+    disp('         accurate timing.  See "makeTextures" for help.');
+    stimulus = makeTextures(display,stimulus);
 end;
 
 % quit key
@@ -67,10 +67,10 @@ if stimulus.seq(1)>0
     Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
     
     % If we are doing eCOG, then flash photodiode if requested
-    if isfield(stimulus, 'trigSeq') 
+    if isfield(stimulus, 'trigSeq')
         drawTrig(display,stimulus.trigSeq(1));
     end
-
+    
     drawFixation(display,stimulus.fixSeq(1));
 elseif stimulus.seq(1)<0
     % put in a color table
@@ -81,7 +81,7 @@ elseif stimulus.seq(1)<0
     
     drawFixation(display,stimulus.fixSeq(1));
     Screen('LoadNormalizedGammaTable', display.windowPtr, stimulus.cmap(:,:,gammaNum));
-            
+    
 end
 VBLstamps(1) = Screen('Flip',display.windowPtr);
 if nargin < 3 || isempty(t0),
@@ -111,7 +111,7 @@ for frame = 2:nFrames
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
         
         % If we are doing eCOG, then flash photodiode if requested
-        if isfield(stimulus, 'trigSeq') 
+        if isfield(stimulus, 'trigSeq')
             drawTrig(display,stimulus.trigSeq(frame));
         end
         
@@ -124,12 +124,13 @@ for frame = 2:nFrames
         % in recent times (07.14.2008). So, for now we set it to 1.  It may
         % be that this hsould be
         
-        drawFixation(display,stimulus.fixSeq(frame));        
+        drawFixation(display,stimulus.fixSeq(frame));
         Screen('LoadNormalizedGammaTable', display.windowPtr, stimulus.cmap(:,:,gammaNum));
-                
+        
     end
     
     %--- get inputs (subject or experimentor)
+<<<<<<< HEAD
             %KbCheck(display.devices.keyInputExternal);
 
       %--- get inputs (subject or experimentor)
@@ -145,6 +146,19 @@ for frame = 2:nFrames
             end
         end;
         
+=======
+    %KbCheck(display.devices.keyInputExternal);
+    
+    while(waitTime<-0.005),
+        % Scan the keyboard for subject response
+        [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
+        if(ssKeyIsDown)
+            %            kc = find(ssKeyCode);
+            %            response.keyCode(frame) = kc(1);
+            response.keyCode(frame) = 1; % binary response for now
+            response.secs(frame)    = ssSecs - t0;
+        end;
+>>>>>>> master
         % scan the keyboard for experimentor input
         [exKeyIsDown,exSecs,exKeyCode] = KbCheck(display.devices.keyInputInternal);
         if(exKeyIsDown)
@@ -162,14 +176,20 @@ for frame = 2:nFrames
         % timing
         % waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
         waitTime = (GetSecs-t0)-stimulus.seqtiming(frame-1);
+<<<<<<< HEAD
         
     end;
+=======
+        %         keyloopcounter(frame) = keyloopcounter(frame)+1; %debugging
+    end
+>>>>>>> master
     
     %--- stop?
     if quitProg,
         fprintf('[%s]:Quit signal recieved.\n',mfilename);
         break;
     end;
+<<<<<<< HEAD
         
     %--- update screen
     VBLTimestamp = Screen('Flip',display.windowPtr);
@@ -178,6 +198,34 @@ for frame = 2:nFrames
     if isfield(stimulus, 'trigSeq'), response.LED(frame)  = colIndex; end
     
 end
+=======
+    
+    
+    %--- update screen (i.e. put up the next frame)
+    % use whenToFlipOn to wait until the right time in case you're early.
+    % Note that it can take about one refresh to execute the screen flip.
+    
+    % %     VBLtimingstart(frame) = GetSecs;  % debugging
+    VBLstamps(frame) = Screen('Flip',display.windowPtr,whenToFlipOn(frame));
+    %     %VBLstamps(frame) = Screen('Flip',display.windowPtr);
+    %     %     VBLtimingend(frame) = GetSecs;   % debugging
+    %
+    %     % get the key presses and RTs for each frame shown
+    %     [k.pressed, k.firstPress, k.firstRelease, k.lastPress, k.lastRelease]=...
+    %         KbQueueCheck();
+    %     f{frame} = find(k.firstPress);
+    %     if k.pressed
+    %         keys(frame) = str2double(KbName(k.firstPress));  % record the keys, if we want-- must be numbers!
+    %         response.keyCode(frame)=1;  %binary response for now
+    %         response.secs(frame) = k.firstPress(f{frame})-VBLstamps(1);
+    %     else
+    %         keys(frame)=NaN;
+    %         response.keyCode(frame)=0;
+    %         response.secs(frame) = 0;
+    %     end
+end
+% KbQueueStop();
+>>>>>>> master
 
 % leave the last frame up until you're supposed to be done
 if ~quitProg

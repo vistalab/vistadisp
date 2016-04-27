@@ -12,27 +12,24 @@ function params = setRetinotopyParams(expName, params)
 %
 % 99.08.12 RFD rewrote WAP's code with a cleaner wrapper.
 % 05.07.04 SOD ported to OSX; several changes
-% 05.2010  JW  moved code into subroutines to imrprove readability
+% 05.2010  JW  moved code into subroutines to improve readability
 
 disp(['[' mfilename ']:Setting stimulus parameters for ' expName '.']);
 
-
-% Common defaults (these can be overwritten depending on fixation and
-% experiment
+% Common defaults (Can be overwritten depending on fixation and experiment)
 params = retSetCommonDefaults(params, expName);
 
-
-% Stimulus-specific parameters                                      %
+% Experiment-specific parameters
 params = retSetExperimentParams(params, expName);
 
-
-% Fixation parameters                                               %
+% Fixation parameters 
 params = retSetFixationParams(params, expName);
 
+% Modality parameters (fMRI, EEG, MEG, ECoG)
+params = retSetModalityParams(params);
 
-% Derived parameters (not to be updated by user)				    %
+% Derived parameters (not to be updated by user)
 params = retSetDerivedParams(params);
 
-params.period = round(params.period/params.framePeriod) * params.framePeriod;
 % some checks, must be done before we reset certain params
-retParamsCheck(params);
+params = retParamsCheck(params);
