@@ -62,10 +62,10 @@ params = retCreateDefaultGUIParams;
 
 
 %% Hemifield and ONOFF mixture
-params.modality         = 'MEG';
+params.modality         = 'meg';
 params.prescanDuration  = 0;
 params.interleaves      = NaN;
-params.tr               = 1/hz*60;
+params.tr               = 1/60; %1/hz*60;
 params.calibration      = cal;
 params.framePeriod      = tr;
 params.startScan        = 0;
@@ -75,7 +75,7 @@ params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
 params.period           = 1;
 params.numCycles        = 1;
-params.skipSyncTests    = true;
+params.skipSyncTests    = false;
 params.fixation         = 'left and right';
 
 initials = 'xx';

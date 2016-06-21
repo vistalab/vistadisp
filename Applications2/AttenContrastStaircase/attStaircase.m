@@ -36,13 +36,13 @@
 AssertOpenGL;
 
 %% Do you want the debug window?
-PsychDebugWindowConfiguration(0, .7); 
+% PsychDebugWindowConfiguration(0, .7); 
 
 %% Initialize Stimtracker
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
-% hz  = FrameRate(d.screenNumber);
-hz = 60;
+hz  = FrameRate(d.screenNumber);
+% hz = 60;
 tr  = 1/hz*60;
 
 % Initialize Stimtracker to send triggers
@@ -51,7 +51,7 @@ global PTBTriggerLength
 PTBTriggerLength = 0.001; % ms
 
 %% Eyetracker and Calibration: Do we want to use the eyetracker?  
-use_eyetracker = true;
+use_eyetracker = false;
 stop_eyetracker = false;
 
 if use_eyetracker
@@ -137,7 +137,7 @@ if stop_eyetracker
     while exist([destination num2str(i) '.edf'], 'file')
         i = i + 1;
     end
-    movefile('eyelink.edf', [destination num2str(i) '.edf'])
+    movefile('eyelink', [destination num2str(i) '.edf'])
 
 end
 

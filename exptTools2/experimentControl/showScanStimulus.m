@@ -33,6 +33,9 @@ function [response, timing, quitProg] = showScanStimulus(display, stimulus, t0)
 %                 flip. Ideally the results are the same.
 
 
+% HACK
+params.modality = 'meg';
+
 % input checks
 if nargin < 2,
     help(mfilename);
@@ -142,6 +145,7 @@ for frame = 1:nFrames
             case 'meg'
                 PTBSendTrigger(stimulus.trigSeq(frame), 0);        
             case 'eeg'
+%                 NetStation('Event','flip',VBLTimestamp);                
                 thisCode = sprintf('%4.0d', stimulus.trigSeq(frame));
                 NetStation('Event', thisCode,VBLTimestamp);
         end
@@ -167,7 +171,7 @@ for frame = 1:nFrames
         % which key was pressed first?
         whichKeys = find(firstPress);
         whichTimes = firstPress(whichKeys)-t0;
-        [~, firstKey] = min(whichTimes);
+        [val, firstKey] = min(whichTimes);
         
         response.keyCode(frame) = whichKeys(firstKey); 
         response.secs(frame)    = whichTimes(firstKey) - t0;

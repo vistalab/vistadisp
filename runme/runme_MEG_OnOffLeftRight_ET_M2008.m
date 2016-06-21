@@ -38,17 +38,18 @@ Screen('Preference', 'SkipSyncTests', 0);
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
+hz  = 60;
 tr  = 1/hz*60;
 use_eyetracker = false;
 
 % Do we want to use the eyetracker?
 if n == 1; % Only for the first run
     
-    use_eyetracker = false;
+%     use_eyetracker = true;
 
-    d = openScreen(d);
-    global PTBTheWindowPtr
-    PTBTheWindowPtr = d.windowPtr;
+%     d = openScreen(d);
+%     global PTBTheWindowPtr
+%     PTBTheWindowPtr = d.windowPtr;
     
 
     if use_eyetracker
@@ -85,6 +86,7 @@ params.repetitions      = 1;
 params.experiment       = 'Experiment From File';
 params.period           = 12*params.tr;
 params.numCycles        = 6;
+params.skipSyncTests    = false;
 
 
 

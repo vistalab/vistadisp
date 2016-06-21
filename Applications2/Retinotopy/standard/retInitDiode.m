@@ -22,7 +22,7 @@ if isfield(params, 'modality')
             % Flashing start sequence
             for frame = 1:nframes               
                 drawTrig(params.display, seq(frame));   
-                [~, nextFlipTime] = getWaitTime(params.display.initstim, initresponse, frame, t0, false);                
+                [waitTime, nextFlipTime] = getWaitTime(params.display.initstim, initresponse, frame, t0, false);                
                 initresponse.flip(frame) = Screen(params.display.windowPtr,'Flip', nextFlipTime, 1);
             end
             
