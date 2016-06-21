@@ -43,11 +43,11 @@ elseif isfield(d, 'fixGrid') && d.fixGrid==2
     maxY = d.numPixels(2);
     
     % Left
-    cenX1 = round(maxX/2-maxY/4);
+    cenX1 = round(maxX/2-maxY/4) +20;
     cenY1 = maxY ./ 2;
     
     % Right
-    cenX2 = maxX - round(maxX/2-maxY/4);
+    cenX2 = maxX - round(maxX/2-maxY/4) -20;
     cenY2 = maxY ./ 2;
     
     rangeTheta = 0:30:330;
@@ -57,31 +57,35 @@ elseif isfield(d, 'fixGrid') && d.fixGrid==2
     maxR2 = min([cenX1, cenY2]);
 	rangeR2 = 0:100:maxR2;
 	
-	for r1 = rangeR1(1:3)
+	for r1 = rangeR1(2)
         col = d.backColorIndex + 20;
 		Screen('FrameOval', d.windowPtr, col, [cenX1-r1 cenY1-r1 cenX1+r1 cenY1+r1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX1-r1-1 cenY1-r1-1 cenX1+r1+1 cenY1+r1+1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX1-r1-2 cenY1-r1-2 cenX1+r1+2 cenY1+r1+2]);
     end
     
-    for r2 = rangeR2(1:3)
+    for r2 = rangeR2(2)
         col = d.backColorIndex + 20;
 		Screen('FrameOval', d.windowPtr, col, [cenX2-r2 cenY2-r2 cenX2+r2 cenY2+r2]);
+        Screen('FrameOval', d.windowPtr, col, [cenX2-r2-1 cenY2-r2-1 cenX2+r2+1 cenY2+r2+1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX2-r2-2 cenY2-r2-2 cenX2+r2+2 cenY2+r2+2]);
 	end
 		
-	for th = rangeTheta
-        col = d.backColorIndex + 20;
-		[x1 y1] = pol2cart(deg2rad(th), maxR1);
-		x1 = x1 + cenX1;
-		y1 = y1 + cenY1;
-		Screen('DrawLine', d.windowPtr, col, cenX1, cenY1, x1, y1);
-    end
-    
-    for th = rangeTheta
-        col = d.backColorIndex + 20;
-		[x2 y2] = pol2cart(deg2rad(th), maxR2);
-		x2 = x2 + cenX2;
-		y2 = y2 + cenY2;
-		Screen('DrawLine', d.windowPtr, col, cenX2, cenY2, x2, y2);
-	end
+% 	for th = rangeTheta
+%         col = d.backColorIndex + 20;
+% 		[x1 y1] = pol2cart(deg2rad(th), maxR1);
+% 		x1 = x1 + cenX1;
+% 		y1 = y1 + cenY1;
+% 		Screen('DrawLine', d.windowPtr, col, cenX1, cenY1, x1, y1);
+%     end
+%     
+%     for th = rangeTheta
+%         col = d.backColorIndex + 20;
+% 		[x2 y2] = pol2cart(deg2rad(th), maxR2);
+% 		x2 = x2 + cenX2;
+% 		y2 = y2 + cenY2;
+% 		Screen('DrawLine', d.windowPtr, col, cenX2, cenY2, x2, y2);
+% 	end
     
 end
 
@@ -114,8 +118,8 @@ switch(lower(d.fixType))
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY, d.fixSizePixels);
     
     case {'left and right'}
-        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX1, d.fixY1, round(d.fixSizePixels/2));
-        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX2, d.fixY2, round(d.fixSizePixels/2));
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX1 +20, d.fixY1, round(d.fixSizePixels/2));
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX2 -20, d.fixY2, round(d.fixSizePixels/2));
         
     case {'double disk','left double disk','right double disk'}
         % draw mean luminance 'edge' big one first

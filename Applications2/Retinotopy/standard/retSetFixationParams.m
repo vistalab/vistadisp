@@ -188,7 +188,7 @@ switch(lower(params.display.fixType))
         params.display.fixY2 = round(dim.y./2);
 %         
         % See if we want to get a grid
-        params.display.fixGrid = 0;
+        params.display.fixGrid = 2;
         
     otherwise,
         error('Unknown fixationType!');
