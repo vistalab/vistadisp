@@ -78,16 +78,16 @@ params.numCycles        = 1;
 params.skipSyncTests    = false;
 params.fixation         = 'left and right';
 
-initials = 'xx';
-coords = load(sprintf('coordinates_%s.txt',initials));
-
-% Coordinates for left fixation dot 
-params.fixX1 = coords(1);
-params.fixY1 = coords(2);
-
-% Coordinates for right fixation dot 
-params.fixX2 = coords(3);
-params.fixY2 = coords(4);
+% initials = 'xx';
+% coords = load(sprintf('coordinates_%s.txt',initials));
+% 
+% % Coordinates for left fixation dot 
+% params.fixX1 = coords(1);
+% params.fixY1 = coords(2);
+% 
+% % Coordinates for right fixation dot 
+% params.fixX2 = coords(3);
+% params.fixY2 = coords(4);
 
 %% ********************
 %  ***** GO ***********
