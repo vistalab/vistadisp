@@ -114,8 +114,8 @@ switch(lower(d.fixType))
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY, d.fixSizePixels);
     
     case {'left and right'}
-        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX1, d.fixY1, d.fixSizePixels);
-        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX2, d.fixY2, d.fixSizePixels);
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX1, d.fixY1, round(d.fixSizePixels/2));
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX2, d.fixY2, round(d.fixSizePixels/2));
         
     case {'double disk','left double disk','right double disk'}
         % draw mean luminance 'edge' big one first

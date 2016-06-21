@@ -178,16 +178,18 @@ switch(lower(params.display.fixType))
         
     case 'left and right'   
         % Left
-        params.display.fixX1 = round(dim.x/2-dim.y/4);
-        params.display.fixY1 = round(dim.y./2);
+        params.display.fixX1 = params.display.fixX1;
         
-        % Right
-        params.display.fixX2 = dim.x - round(dim.x/2-dim.y/4);
-        params.display.fixY2 = round(dim.y./2);
-        
+%         params.display.fixX1 = round(dim.x/2-dim.y/4);
+%         params.display.fixY1 = round(dim.y./2);
+%         
+%         % Right
+%         params.display.fixX2 = dim.x - round(dim.x/2-dim.y/4);
+%         params.display.fixY2 = round(dim.y./2);
+%         
         % See if we want to get a grid
-        params.display.fixGrid = 2;
-
+        params.display.fixGrid = 0;
+        
     otherwise,
         error('Unknown fixationType!');
 end

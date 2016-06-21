@@ -88,9 +88,9 @@ params.backRGB.dir          = [1 1 1]';	% These two values are your
 params.backRGB.scale        = 0.5;		% standard default gray.
 params.stimLMS.dir          = [1 1 1]';
 params.stimLMS.scale        = 1.0;
-%bk = findName(params.display.reservedColor,'background');
-%params.display.reservedColor(bk).gunVal = (params.display.numColors-1) * ...
-%								params.backRGB.scale*params.backRGB.dir';
+% bk = findName(params.display.reservedColor,'background');
+% params.display.reservedColor(bk).gunVal = (params.display.numColors-1) * ...
+% 								params.backRGB.scale*params.backRGB.dir';
 
 % ************************
 % Stimulus dimensions
