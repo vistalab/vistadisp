@@ -18,6 +18,7 @@ function runme_GAMMA_BR(n, stimfile)
 %
 % Example
 %   runme_GAMMA_BR(1, 'gammaBRstim');
+%   runme_GAMMA_BR(1, 'gammaBRstimFoveal');
 
 %% 
 % initialize stim tracker for MEG
@@ -76,7 +77,7 @@ params.experiment       = 'Experiment From File';
 params.period           = 1;
 params.numCycles        = 1;
 params.skipSyncTests    = false;
-params.fixation         = 'left and right';
+params.fixation         = 'dot';
 
 % initials = 'xx';
 % coords = load(sprintf('coordinates_%s.txt',initials));

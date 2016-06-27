@@ -74,7 +74,7 @@ switch(lower(params.display.fixType))
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
-        params.display.fixSizePixels = 3;
+        params.display.fixSizePixels = 2;
         
     case {'dot with grid' 'grid'}
         params.display.fixX = round(dim.x./2);
@@ -178,8 +178,6 @@ switch(lower(params.display.fixType))
         
     case 'left and right'   
         % Left
-%         params.display.fixX1 = params.display.fixX1;
-        
         params.display.fixX1 = round(dim.x/2-dim.y/4);
         params.display.fixY1 = round(dim.y./2);
         
