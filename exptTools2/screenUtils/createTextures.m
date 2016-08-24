@@ -71,7 +71,7 @@ for stimNum = 1:length(stimulus)
         
         stimulus(stimNum).textures(imgNum) = ...
 			Screen('MakeTexture',display.windowPtr, ...
-			double(stimulus(stimNum).images(:,:,imgNum)));  % fwc:	changed display.screenNumber into display.windowPtr
+			double(squeeze(stimulus(stimNum).images(:,:,imgNum,:))));  % fwc:	changed display.screenNumber into display.windowPtr
 	end;
 
 	% clean up
