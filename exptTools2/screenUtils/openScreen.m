@@ -92,6 +92,8 @@ try
     Screen('Resolution', displayID.screenNumber, displayID.numPixels(1), displayID.numPixels(2), displayID.frameRate);
 catch ME
     warning(ME.identifier, ME.message)
+    Screen('CloseAll')
+    
 end
 
 params = Screen('Resolution', displayID.screenNumber);
@@ -104,13 +106,13 @@ if (params.width~=displayID.numPixels(1) || params.height~=displayID.numPixels(2
     %   displayID.dimensions(2) = params.width;
     displayID.numPixels     = [params.width params.height];
 
-    displayID.frameRate     = params.hz;
-
+    displayID.frameRate     = params.hz;    
+    
     beep;
-    display('WARNING: Failed to set indicated resolution and refresh rate.');
-    display('Saving current resolution and refresh rate to display structure...');
+    disp('WARNING: Failed to set indicated resolution and refresh rate.');
+    disp('Saving current resolution and refresh rate to display structure...');
 else
-    display('Resolution and refresh rate successfully set.');
+    disp('Resolution and refresh rate successfully set.');
 end
         
 

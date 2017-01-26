@@ -30,8 +30,18 @@ try
     Screen('Preference','SkipSyncTests', 1);
     
     % Open the screen
+    xy = params.display.numPixels; % store screen dimensions in case they change
     params.display                = openScreen(params.display);
     params.display.devices        = params.devices;
+    
+    % Reset Fixation parameters if needed (ie if the dimensions of the
+    % screen after opening do not match the dimensions specified in the
+    % calibration file) 
+    if isequal(xy, params.display.numPixels)
+        % OK, nothing changed
+    else
+        params = retSetFixationParams(params, params.experiment);
+    end
     
     % to allow blending
     Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -50,7 +60,7 @@ try
     % outputs.
     stimulus = retECOGtrigger(params, stimulus);
     
-    for n = 1:params.repetitions,
+    for n = 1:params.repetitions
         % set priority
         Priority(params.runPriority);
         
@@ -64,18 +74,25 @@ try
 
         % If we are doing eCOG, then signal to photodiode that expt is
         % starting by giving a patterned flash
-        retECOGdiode(params);
+        % retECOGdiode(params);
         
         % countdown + get start time (time0)
         [time0] = countDown(params.display,params.countdown,params.startScan, params.trigger);
         time0   = time0 + params.startScan; % we know we should be behind by that amount
         
         
-        % go
-        if isfield(params, 'modality') && strcmpi(params.modality, 'ecog')
+        % Check modality (fMRI, ECoG, stanford ecog)
+        if isfield(params, 'modality') && ...
+                (strcmpi(params.modality, 'ecog') || strcmpi(params.modality, 'stanford ecog'))
             timeFromT0 = false;
-        else timeFromT0 = true;
+        else, timeFromT0 = true;
         end
+        
+        % copy this field because we don't have access to params inside
+        % showScanStimulus
+        params.display.modality = params.modality;
+        
+        % go
         [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0, timeFromT0); %#ok<ASGLU>
         
         % reset priority
@@ -86,7 +103,7 @@ try
         fprintf('[%s]: percent correct: %.1f %%, reaction time: %.1f secs',mfilename,pc,rc);
         
         % save
-        if params.savestimparams,
+        if params.savestimparams
             filename = ['~/Desktop/' datestr(now,30) '.mat'];
             save(filename);                % save parameters
             fprintf('[%s]:Saving in %s.',mfilename,filename);
