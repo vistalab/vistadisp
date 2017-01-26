@@ -12,7 +12,7 @@ function runme_MEG_OnOffLeftRight_ET_M2008(n, stimfile)
 %   n is the runnumber [1 15]
 %   stimfile is the prefix for the stimulus fils containing images, and can
 %            be either
-%               - attention_onOffLeftRight_params 
+%               - attention_onOffLeftRight_params
 %               - onOffLeftRight_params
 % The actual stim files have names like
 %   attention_onOffLeftRight_params1.mat
@@ -24,10 +24,10 @@ function runme_MEG_OnOffLeftRight_ET_M2008(n, stimfile)
 %   runme_MEG_OnOffLeftRight_ET_M2008(1, 'attention_onOffLeftRight_params');
 %   runme_MEG_OnOffLeftRight_ET_M2008(1, 'onOffLeftRight_params');
 
-%% 
+%%
 % initialize stim tracker for MEG
 PTBInitStimTracker;
-global PTBTriggerLength 
+global PTBTriggerLength
 PTBTriggerLength = 0.001;
 
 % debug mode?
@@ -38,34 +38,33 @@ Screen('Preference', 'SkipSyncTests', 0);
 cal = 'meg_lcd';
 d   = loadDisplayParams(cal);
 hz  = FrameRate(d.screenNumber);
-hz  = 60;
+%hz  = %60;
 tr  = 1/hz*60;
-use_eyetracker = false;
+use_eyetracker = true;
 
 % Do we want to use the eyetracker?
 if n == 1; % Only for the first run
-    
-%     use_eyetracker = true;
-
-%     d = openScreen(d);
-%     global PTBTheWindowPtr
-%     PTBTheWindowPtr = d.windowPtr;
-    
-
-    if use_eyetracker
-
-        %Open the screen
-        PTBInitEyeTracker;
-        % paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
-        % PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
-        PTBCalibrateEyeTracker;
-
-        % actually starts the recording
-        % name correponding to MEG file (can only be 8 characters!!, no extension)
-        PTBStartEyeTrackerRecording('eyelink');
+    if use_eyetracker == true;
+        
+        d = openScreen(d);
+        global PTBTheWindowPtr
+        PTBTheWindowPtr = d.windowPtr;
+        
+        
+        if use_eyetracker
+            
+            %Open the screen
+            PTBInitEyeTracker;
+            % paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
+            % PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
+            PTBCalibrateEyeTracker;
+            
+            % actually starts the recording
+            % name correponding to MEG file (can only be 8 characters!!, no extension)
+            PTBStartEyeTrackerRecording('eyelink');
+        end
     end
 end
-
 Screen('CloseAll');
 
 %% Default parameters
@@ -73,7 +72,7 @@ params = retCreateDefaultGUIParams;
 
 
 %% Hemifield and ONOFF mixture
-params.modality         = 'MEG'; 
+params.modality         = 'MEG';
 params.prescanDuration  = 0;
 params.interleaves      = NaN;
 params.tr               = 1/hz*60;
@@ -99,7 +98,7 @@ ret(params);
 
 
 %% Check timing results
-f = dir('~/Desktop/2014*.mat');
+f = dir('~/Desktop/2017*.mat');
 load(fullfile('~', 'Desktop', f(end).name));
 figure(101); clf
 
@@ -107,11 +106,11 @@ figure(101); clf
 plot(diff(stimulus.seqtiming));
 
 % measured inter-stimulus duration
-hold on; plot(diff(response.flip), 'r-'); 
+hold on; plot(diff(response.flip), 'r-');
 
 ylim(median(diff(response.flip)) + [-.001 .001])
 % frames between stimuli
-frames = round(diff(response.flip) / (1/60)); 
+frames = round(diff(response.flip) / (1/60));
 
 % how many interstimulus frames differed from the median?
 disp(sum(frames ~= median(frames)))
@@ -121,16 +120,16 @@ disp(sum(frames ~= median(frames)))
 
 if n == 15;
     if use_eyetracker
-
+        
         PTBStopEyeTrackerRecording; % <----------- (can take a while)
         
         % move the file to the logs directory
-        destination = '~/Desktop/MEG_eyelink_';
+        destination = 'eyelink';
         i = 0;
         while exist([destination num2str(i) '.edf'], 'file')
             i = i + 1;
         end
         movefile('eyelink.edf', [destination num2str(i) '.edf'])
-
+        
     end
 end

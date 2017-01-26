@@ -47,7 +47,7 @@ end
 
 PTBEyeTrackerFileName = 'test';
 
-status = Eyelink('ReceiveFile',PTBEyeTrackerFileName, PTBEyeTrackerFileName);
+status = Eyelink('ReceiveFile')%,PTBEyeTrackerFileName, PTBEyeTrackerFileName);
 disp(['Got status ' num2str(status) ' for command for receive file.']);
 if status < 0
     error('Eyetracker file not received.');

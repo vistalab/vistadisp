@@ -19,7 +19,7 @@ hz  = FrameRate(d.screenNumber);
 tr  = 1/hz*60;
 
 % Run number?
-runnr = 12;
+runnr = 1;
 
 %% Use Eyetracker?
 if runnr == 1
@@ -34,19 +34,23 @@ else
 end
 
 if use_eyetracker
+    
     d = openScreen(d);
     global PTBTheWindowPtr
     PTBTheWindowPtr = d.windowPtr;
-
-
+    
     %Open the screen
     PTBInitEyeTracker;
+    % paragraph = {'Eyetracker initialized.','Get ready to calibrate.'};
+    % PTBDisplayParagraph(paragraph, {'center',30}, {'a'});
     PTBCalibrateEyeTracker;
+    
+    % actually starts the recording
+    % name correponding to MEG file (can only be 8 characters!!, no extension)
     PTBStartEyeTrackerRecording('eyelink');
-
-    Screen('CloseAll');
+    
 end
-
+Screen('CloseAll');
 %% MEG Parameters
 
 
@@ -85,12 +89,12 @@ if stop_eyetracker
     PTBStopEyeTrackerRecording; % <----------- (can take a while)
 
     % move the file to the logs directory
-    destination = '~/Desktop/Experiments/Winawer/';
+    destination = 'eyelink';
     i = 0;
-    while exist([destination 'eyelink' num2str(i) '.edf'], 'file')
+    while exist([destination num2str(i) '.edf'], 'file')
         i = i + 1;
     end
-    movefile('eyelink.edf', [destination 'eyelink' num2str(i) '.edf'])
+    movefile('eyelink.edf', [destination num2str(i) '.edf'])
 
 end
 
