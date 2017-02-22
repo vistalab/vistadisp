@@ -21,9 +21,9 @@ function EEG_OnOffLeftRight(n, stimfile)
 %
 %
 % Example
-%   runme_EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
-%   runme_EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
-%
+%   EEG_OnOffLeftRight(1, 'onOffLeftRight_params');
+%   EEG_OnOffLeftRight(1, 'attention_onOffLeftRight_params');
+%   EEG_OnOffLeftRight(1, 'onOffLeftRight_600x600params_12Hz');
 % To run on Dell Trinitron, resolution should be 800 x 600, 60 Hz refresh rate
 
 
@@ -36,10 +36,20 @@ Screen('Preference', 'SkipSyncTests', 0);
 cal = 'eeg_crt';
 nominal_refresh_rate = 60; % 
 d   = loadDisplayParams(cal);
-hz  = FrameRate(d.screenNumber);
+try hz  = FrameRate(d.screenNumber); catch, hz = nominal_refresh_rate; end
 tr  = 1/hz*nominal_refresh_rate;
 
+%% Ensure that stimulus flickers every other frame
+fname = sprintf('%s%d.mat', stimfile, n);
+pth = fileparts(which(fname));
+a = load(fullfile(pth, fname));
+a.stimulus.diodeSeq(1:2:end)=1;
+a.stimulus.diodeSeq(2:2:end)=0;
 
+a.stimulus.trigSeq = zeros(size(a.stimulus.seq));
+a.stimulus.trigSeq(1:12:end) = a.stimulus.seq(1:12:end);
+save(fullfile(pth, fname), '-struct', 'a');
+    
 %% Default parameters
 params = retCreateDefaultGUIParams;
 
@@ -60,7 +70,7 @@ params.period           = 3600*params.tr;
 params.numCycles        = 1;
 params.fixation         = 'dot';
 params.skipSyncTests    = 0;
-
+params.triggerType      = 'no trigger (manual)';
 %% ********************
 %  ***** GO ***********
 %  *********************
@@ -72,13 +82,14 @@ f = dir('~/Desktop/2015*.mat');
 load(fullfile('~', 'Desktop', f(end).name));
 figure(101); clf
 
-% desired inter-stimulus duration
-plot(diff(stimulus.seqtiming));
-
 % measured inter-stimulus duration
-hold on; plot(diff(response.flip), 'r-'); 
+hold on; plot(diff(response.flip)*hz, 'r-o');
+plot(diff(response.nextFlipTime)*hz, 'g-o');
+plot(diff(stimulus.seqtiming)*hz, 'c-o');
 
-ylim(median(diff(response.flip)) + [-.001 .001])
+legend('Actual flip time', 'next flip time', 'seqtiming')
+
+ylim(median(diff(response.flip)*hz) + [-1 1])
 
 % frames between stimuli
 frames = round(diff(response.flip) / (1/nominal_refresh_rate)); 

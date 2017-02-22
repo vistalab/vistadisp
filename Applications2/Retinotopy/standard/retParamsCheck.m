@@ -1,5 +1,5 @@
-function retParamsCheck(params)
-% retParamsCheck - sanity checks of parameters
+function params = retParamsCheck(params)
+% params = retParamsCheck - sanity checks of parameters
 %
 % SOD 10/2005: wrote it.
 
@@ -28,9 +28,9 @@ end
 % priority check
 if params.runPriority==0
 	bn = questdlg('Warning: runPriority is 0!','warning','OK','Make it 7','Make it 1','OK');
-	if strmatch(bn,'Make it 7')
+	if strcmpi(bn,'Make it 7')
 		params.runPriority = 7;
-	elseif strmatch(bn, 'Make it 1') 
+	elseif strcmpi(bn, 'Make it 1') 
 		params.runPriority = 1;
 	end
 end
@@ -41,6 +41,15 @@ switch params.experiment
     case '2 rings'
         params.numCycles = 1;
 end;
+
+% Check that the period is an integer multiple of the frame period (TR if
+%       an fMRI experiment)
+integerPeriod = round(params.period/params.framePeriod) * params.framePeriod;
+if ~isequal(params.period, integerPeriod);
+    fprintf('Warning: changing period from %5.3f to %5.3f to be a multiple of the frame period (%5.3f)\n', ...
+        params.period,  integerPeriod, params.framePeriod);    
+    params.period = integerPeriod;
+end
 
 % verification
 message = sprintf(['\n\n\n\n*******************************************\n' ...

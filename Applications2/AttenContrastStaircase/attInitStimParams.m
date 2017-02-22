@@ -40,7 +40,7 @@ stimParams.isi = 1; % seconds
 gamma = 2;
 stimParams.TestContrasts = linspace(.001^(1/gamma),1,30).^gamma;
 %% debug
-stimParams.TestContrasts = ones(size(stimParams.TestContrasts));
+% stimParams.TestContrasts = ones(size(stimParams.TestContrasts));
 %% debug
 
 % **** RANDOM VARIABLES **************

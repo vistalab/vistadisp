@@ -225,7 +225,7 @@ switch expName
         params.type = 'center-surround';
         params.centerInnerRad = 0.2;
         params.centerOuterRad = 4;
-        params.surroundInnerRad = 6%14;
+        params.surroundInnerRad = 6;
         params.surroundOuterRad = 20;
         params.numImages = 2;
         params.duration = params.period/params.numImages;

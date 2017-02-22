@@ -1,8 +1,8 @@
-function list = getDisplaysList;
+function list = getDisplaysList
 % Return a list of the display parameters saved in the VISTADISP
 % repository.
 %
-% list = getDisplayList;
+% list = getDisplayList
 %
 % BACKGROUND: The VISTADISP exptTools toolbox saves information about
 % displays relevant to different stimulus computer/display combinations.

@@ -39,7 +39,7 @@ params.scan.display.screenNumber = max(screens);
 % OK - devices are not really display parameters. There is probably some
 % reason we attach devices to the display field. See ret code. It may have
 % an explanation.
-params.scan.display.devices = getDevices; 
+params.scan.display = setRetinotopyDevices(params.scan.display);
 
 % check for OpenGL
 AssertOpenGL;

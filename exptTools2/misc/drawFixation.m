@@ -35,14 +35,74 @@ if isfield(d, 'fixGrid') && d.fixGrid==1
 		x = x + cenX;
 		y = y + cenY;
 		Screen('DrawLine', d.windowPtr, col, cenX, cenY, x, y);
+    end
+    
+elseif isfield(d, 'fixGrid') && d.fixGrid==2
+	%% draw a polar grid to help the eye find fixation
+    maxX = d.numPixels(1);
+    maxY = d.numPixels(2);
+    
+    % Left
+    cenX1 = round(maxX/2-maxY/4) +20;
+    cenY1 = maxY ./ 2;
+    
+    % Right
+    cenX2 = maxX - round(maxX/2-maxY/4) -20;
+    cenY2 = maxY ./ 2;
+    
+    rangeTheta = 0:30:330;
+	maxR1 = min([cenX1, cenY1]);
+	rangeR1 = 0:100:maxR1;
+    
+    maxR2 = min([cenX1, cenY2]);
+	rangeR2 = 0:100:maxR2;
+	
+	for r1 = rangeR1(2)
+        col = d.backColorIndex + 20;
+		Screen('FrameOval', d.windowPtr, col, [cenX1-r1 cenY1-r1 cenX1+r1 cenY1+r1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX1-r1-1 cenY1-r1-1 cenX1+r1+1 cenY1+r1+1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX1-r1-2 cenY1-r1-2 cenX1+r1+2 cenY1+r1+2]);
+    end
+    
+    for r2 = rangeR2(2)
+        col = d.backColorIndex + 20;
+		Screen('FrameOval', d.windowPtr, col, [cenX2-r2 cenY2-r2 cenX2+r2 cenY2+r2]);
+        Screen('FrameOval', d.windowPtr, col, [cenX2-r2-1 cenY2-r2-1 cenX2+r2+1 cenY2+r2+1]);
+        Screen('FrameOval', d.windowPtr, col, [cenX2-r2-2 cenY2-r2-2 cenX2+r2+2 cenY2+r2+2]);
 	end
+		
+% 	for th = rangeTheta
+%         col = d.backColorIndex + 20;
+% 		[x1 y1] = pol2cart(deg2rad(th), maxR1);
+% 		x1 = x1 + cenX1;
+% 		y1 = y1 + cenY1;
+% 		Screen('DrawLine', d.windowPtr, col, cenX1, cenY1, x1, y1);
+%     end
+%     
+%     for th = rangeTheta
+%         col = d.backColorIndex + 20;
+% 		[x2 y2] = pol2cart(deg2rad(th), maxR2);
+% 		x2 = x2 + cenX2;
+% 		y2 = y2 + cenY2;
+% 		Screen('DrawLine', d.windowPtr, col, cenX2, cenY2, x2, y2);
+% 	end
     
 end
 
 switch(lower(d.fixType))
     case {'none'}
         %do nothing
- 
+        
+    case{'digits'}
+        % when digits are ranging from 0 to 9
+        display_digit = mod(colIndex, 10);
+        % colIndex ranging from 0 to 19 for digits 0-9 in black and white, blank when colIndex = 20
+        if colIndex < 20
+            %Screen('DrawText', d.windowPtr, num2str(display_digit), d.fixX, d.fixY,  d.fixColorRgb(colIndex+1,:));
+            DrawFormattedText(d.windowPtr, num2str(display_digit), 'center', 'center', d.fixColorRgb(colIndex+1,:));
+            Screen('TextSize',d.windowPtr, d.fixSizePixels);
+        end
+        
     case {'dot' 'dot with grid' 'small dot'}
         Screen('glPoint', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY, d.fixSizePixels);
     
@@ -57,6 +117,10 @@ switch(lower(d.fixType))
     case {'disk','left disk','right disk', 'upper left', 'lower left', 'upper right', 'lower right', 'left', 'right', 'upper', 'lower'}
         Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX, d.fixY, d.fixSizePixels);
     
+    case {'left and right'}
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX1 +20, d.fixY1, round(d.fixSizePixels/2));
+        Screen('gluDisk', d.windowPtr, d.fixColorRgb(colIndex,:), d.fixX2 -20, d.fixY2, round(d.fixSizePixels/2));
+        
     case {'double disk','left double disk','right double disk'}
         % draw mean luminance 'edge' big one first
         Screen('gluDisk', d.windowPtr, [128 128 128], d.fixX, d.fixY, d.fixSizePixels.*2);

@@ -10,7 +10,7 @@ stairParams.alternativeVarName      = 'upper_or_lower';
 stairParams.alternativeVarValues    = [1 2]; % 1 is upper, 2 is lower
 
 % decision keys
-stairParams.responseSet             = 'as';  % a is upper, s is lower
+stairParams.responseSet             = '12';  % a is upper, s is lower
 
 % variable that is adjusted by staircase
 stairParams.adjustableVarName       = 'contrast_decrement';
@@ -21,7 +21,7 @@ stairParams.adjustableVarValues     = stimParams.TestContrasts;
 % put things in here to run the staircase separately for a given condition
 stairParams.curStairVars            = {}; %{'testContrast',.5}; 
 
-stairParams.pause_between_blocks    = 2; % pause every 10 trials
+stairParams.pause_between_blocks    = 10; % pause every 10 trials
 
 % put things here to randomly vary the value e.g. {'formDir',[0 90 180 270]}
 % stairParams.randomVars              = {'fixationSide', [-1 1]};  
@@ -56,7 +56,7 @@ stairParams.iti = 0.5;
 % This specifies the intitial value of the staircase, as an index into
 % stairParams.alternativeVarValues. If there are multiple interleaved
 % staircases, then we separately set the intial value for each staircase.
-initIndex = round(length(stairParams.adjustableVarValues)/3);
+initIndex = round(length(stairParams.adjustableVarValues)/2);
 if ~isempty(stairParams.curStairVars)
     stairParams.adjustableVarStart = repmat(initIndex, size(stairParams.curStairVars{2}));
 else

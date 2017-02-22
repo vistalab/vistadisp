@@ -21,8 +21,8 @@ function stimulus = makeRetinotopyStimulus_bars(params)
 
 % various time measurements:
 duration.stimframe          = 1./params.temporal.frequency./params.temporal.motionSteps;
-duration.scan.seconds       = params.ncycles*params.period;
-duration.scan.stimframes    = params.ncycles*params.period./duration.stimframe;
+duration.scan.seconds       = params.numCycles*params.period;
+duration.scan.stimframes    = params.numCycles*params.period./duration.stimframe;
 duration.cycle.seconds      = params.period;
 duration.cycle.stimframes   = params.period./duration.stimframe;
 duration.prescan.seconds    = params.prescanDuration;
@@ -35,6 +35,7 @@ if ~isempty(params.loadMatrix),
     % appropriate etc.
     load(params.loadMatrix);
     halfNumImages = params.numImages./2;
+    bk = params.display.backColorIndex;    
     fprintf('[%s]:loading images from %s.\n',mfilename,params.loadMatrix);
     %    disp(sprintf('[%s]:size stimulus: %dx%d pixels.',mfilename,n,m));
 else
@@ -293,10 +294,10 @@ if params.insertBlanks.do,
             completeCycle;...
             completeCycle(1:round(end/2))];
     else
-        sequence = repmat(sequence,params.ncycles,1);
+        sequence = repmat(sequence,params.numCycles,1);
     end;
 else
-    sequence = repmat(sequence,params.ncycles,1);
+    sequence = repmat(sequence,params.numCycles,1);
 end;
 
 % we make only half so we need to flip the rest
@@ -350,6 +351,7 @@ end
 
 %% insert blanks (always off for 12 seconds)
 blankImage = uint8(ones(size(images,1),size(images,2)).*bk);
+blankInd  = size(images,3)+1;
 
 if params.insertBlanks.do,
     seq2      = zeros(size(sequence));
@@ -361,7 +363,6 @@ if params.insertBlanks.do,
     end
     onPeriod  = oneCycle-offPeriod;
     seq2      = repmat([zeros(onPeriod,1); ones(offPeriod,1)],params.insertBlanks.freq,1);
-    blankInd  = size(images,3)+1;
     if isempty(params.loadMatrix),
         sequence(seq2==1) = blankInd;
         images(:,:,blankInd)   = blankImage;
@@ -369,7 +370,9 @@ if params.insertBlanks.do,
     clear seq2;
     fprintf('[%s]:Stimulus on for %.1f and off for %.1f seconds.',...
         mfilename,onPeriod*duration.stimframe,offPeriod*duration.stimframe);
-end;
+else
+    images(:,:,blankInd) = blankImage;
+end
 
 %% Add prescsan
 % Insert the preappend images by copying some images from the

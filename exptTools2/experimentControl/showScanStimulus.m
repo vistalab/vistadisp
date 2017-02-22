@@ -1,5 +1,4 @@
-function [response, timing, quitProg] = showScanStimulus(display,...
-    stimulus, t0, timeFromT0)
+function [response, timing, quitProg] = showScanStimulus(display, stimulus, t0)
 % [response, timing, quitProg] = showStimulus(display,stimulus, ...
 %           [time0 = GetSecs], [timeFromT0 = true])
 %
@@ -10,12 +9,6 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 %               GetSecs function. By default stimulus timing is relative to
 %               t0. If t0 does not exist it is created at the start of this
 %               program.
-%   timeFromT0: boolean. If true (default), then time each screen flip from
-%               t0. If false, then time each screen flip from last screen
-%               flip. The former is typically used for fMRI, where we want
-%               to avoid accumulation of timing errors. The latter may be
-%               more useful for ECoG/EEG where we care about the precise
-%               temporal frequency of the stimulus.
 % Outputs:
 %   response:   struct containing fields
 %                   keyCode: keyboard response at each frame, if any; if
@@ -41,7 +34,7 @@ function [response, timing, quitProg] = showScanStimulus(display,...
 
 
 % HACK
-params.modality = 'eeg';
+params.modality = 'meg';
 
 % input checks
 if nargin < 2,
@@ -52,7 +45,14 @@ if nargin < 3 || isempty(t0),
     t0 = GetSecs; % "time 0" to keep timing going
 end;
 
-if notDefined('timeFromT0'), timeFromT0 = true; end
+% timeFromT0: If true (default), then time each screen flip from
+%             t0. If false, then time each screen flip from last screen
+%             flip. The former is typically used for fMRI, where we want
+%             to avoid accumulation of timing errors. The latter may be
+%             more useful for ECoG/EEG/MEG where we care about the precise
+%             temporal frequency of the stimulus.
+if ~isfield(display, 'timeFromT0'), timeFromT0 = true; 
+else                                timeFromT0 = display.timeFromT0; end
 
 % some more checks
 if ~isfield(stimulus,'textures')
@@ -70,6 +70,9 @@ else
     quitProgKey = KbName('q');
 end;
 
+% initialize KbQueue
+KbQueueCreate(-1, 1:256); % display.devices.keyInputExternal); 
+
 % some variables
 nFrames = length(stimulus.seq);
 HideCursor;
@@ -84,10 +87,14 @@ response.flip = [];
 fprintf('[%s]:Running. Hit %s to quit.\n',mfilename,KbName(quitProgKey));
 
 % If we are doing ECoG/MEG/EEG, then start with black photodiode
-if isfield(stimulus, 'diodeSeq'), drawTrig(display,0); end
+if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
+    drawTrig(display,0);
+end
 
 for frame = 1:nFrames
     
+    KbQueueStart;
+
     %--- update display
     % If the sequence number is positive, draw the stimulus and the
     % fixation.  If the sequence number is negative, draw only the
@@ -96,10 +103,11 @@ for frame = 1:nFrames
         % put in an image
         imgNum = mod(stimulus.seq(frame)-1,nImages)+1;
         Screen('DrawTexture', display.windowPtr, stimulus.textures(imgNum), stimulus.srcRect, stimulus.destRect);
+                
         drawFixation(display,stimulus.fixSeq(frame));
         
-        % If requested, then flash photodiode (usually for ECoG, EEG, MEG)
-        if isfield(stimulus, 'diodeSeq')
+        % If requested, flash photodiode (for ECoG/EEG/MEG)
+        if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
             colIndex = drawTrig(display,stimulus.diodeSeq(frame));
         end
         
@@ -114,34 +122,12 @@ for frame = 1:nFrames
     end;
     
     %--- timing
-    waitTime = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
+    [waitTime, nextFlipTime] = getWaitTime(stimulus, response, frame,  t0, timeFromT0);
     
-    %--- get inputs (subject or experimentor)
-    while(waitTime<0),
-        % Scan the keyboard for subject response
-        %[ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck(display.devices.keyInputExternal);
-        [ssKeyIsDown,ssSecs,ssKeyCode] = KbCheck;
-        if(ssKeyIsDown)
-            %            kc = find(ssKeyCode);
-            %            response.keyCode(frame) = kc(1);
-            response.keyCode(frame) = 1; % binary response for now
-            response.secs(frame)    = ssSecs - t0;
+
+    % if there is time release cpu
+    if(waitTime<-0.03), WaitSecs(0.01); end;
             
-            if(ssKeyCode(quitProgKey)),
-                quitProg = 1;
-                break; % out of while loop
-            end;
-        end;
-        
-        % if there is time release cpu
-        if(waitTime<-0.03), WaitSecs(0.01); end;
-        
-        
-        % timing
-        waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0);
-        
-    end;
-    
     %--- stop?
     if quitProg,
         fprintf('[%s]:Quit signal recieved.\n',mfilename);
@@ -149,27 +135,62 @@ for frame = 1:nFrames
     end;
     
     %--- update screen
-    VBLTimestamp = Screen('Flip',display.windowPtr);
+    VBLTimestamp = Screen('Flip',display.windowPtr, nextFlipTime);
     
     % send trigger for MEG, if requested, and record the color of the PD
     % cue
-    if isfield(stimulus, 'trigSeq') && stimulus.trigSeq(frame) > 0
-        switch lower(params.modality)
+    if isfield(stimulus, 'trigSeq') && ~isempty(stimulus.trigSeq) && ...
+            stimulus.trigSeq(frame) > 0
+        switch lower(display.modality)
             case 'meg'
-                PTBSendTrigger(stimulus.trigSeq(frame), 0);                                
+                PTBSendTrigger(stimulus.trigSeq(frame), 0);        
             case 'eeg'
-                    NetStation('Event','flip',VBLTimestamp);                
+%                 NetStation('Event','flip',VBLTimestamp);                
+                thisCode = sprintf('%4.0d', stimulus.trigSeq(frame));
+                NetStation('Event', thisCode,VBLTimestamp);
         end
-        fprintf('Trigger sent, %s\n, %s', datestr(now), stimulus.trigSeq(frame)); drawnow
+        % Print out message indicating trigger was sent
+        fprintf('Trigger sent (%d), %s, \n', stimulus.trigSeq(frame), datestr(now)); drawnow
         response.trig(frame) = stimulus.trigSeq(frame);
     end
     
-    if isfield(stimulus, 'diodeSeq') 
+    if isfield(stimulus, 'diodeSeq') && ~isempty(stimulus.diodeSeq)
         response.LED(frame)  = colIndex;
     end
     
     % record the flip time
-    response.flip(frame) = VBLTimestamp;
+    response.flip(frame)         = VBLTimestamp;
+    response.nextFlipTime(frame) = nextFlipTime;
+
+
+    % Scan the keyboard for subject response    
+    [pressed, firstPress]=KbQueueCheck;
+       
+    if pressed
+        
+        % which key was pressed first?
+        whichKeys = find(firstPress);
+        whichTimes = firstPress(whichKeys)-t0;
+        [val, firstKey] = min(whichTimes);
+        
+        response.keyCode(frame) = whichKeys(firstKey); 
+        response.secs(frame)    = whichTimes(firstKey) - t0;
+        
+        
+        fprintf('Frame: %d\tPressed: %d\n', frame, pressed)
+        disp(whichKeys)
+        disp(whichTimes)
+        disp(whichKeys(firstKey))
+        fprintf('End of frame \n\n')
+        
+        if firstPress(quitProgKey)
+            quitProg = 1;
+            break; % out of while loop
+        end;
+    end;
+    
+    KbQueueFlush;
+    KbQueueStop;
     
 end;
 
@@ -179,32 +200,3 @@ timing = GetSecs-t0;
 fprintf('[%s]:Stimulus run time: %f seconds [should be: %f].\n',mfilename,timing,max(stimulus.seqtiming));
 
 return;
-
-
-function waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0)
-% waitTime = getWaitTime(stimulus, response, frame, t0, timeFromT0)
-%
-% If timeFromT0 we wait until the current time minus the initial time is
-% equal to the desired presentation time, and then flip the screen.
-% If timeFromT0 is false, then we wait until the current time minus the
-% last screen flip time is equal to the desired difference in the
-% presentation time of the current flip and the prior flip.
-
-if timeFromT0
-    waitTime = (GetSecs-t0)-stimulus.seqtiming(frame);
-else
-    if frame > 1,
-        lastFlip = response.flip(frame-1);
-        desiredWaitTime = stimulus.seqtiming(frame) - stimulus.seqtiming(frame-1);
-    else
-        lastFlip = t0;
-        desiredWaitTime = stimulus.seqtiming(frame);
-    end
-    % we add 10 ms of slop time, otherwise we might be a frame late.
-    % This should NOT cause us to be 10 ms early, because PTB waits
-    % until the next screen flip. However, if the refresh rate of the
-    % monitor is greater than 100 Hz, this might make you a frame
-    % early. [So consider going to down to 5 ms? What is the minimum we
-    % need to ensure that we are not a frame late?]
-    waitTime = (GetSecs-lastFlip)-desiredWaitTime + .0165;
-end
