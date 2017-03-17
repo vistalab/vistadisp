@@ -1,6 +1,8 @@
 function runme_MEG_flicker_frequency_2017_03_17(run, carrier)
 
-
+PTBInitStimTracker;
+global PTBTriggerLength
+PTBTriggerLength = 0.001; % seconds
 
 
 
