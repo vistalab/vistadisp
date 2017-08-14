@@ -16,6 +16,10 @@ if ~exist('params', 'var'), error('No parameters specified!'); end
 if ~isfield(params, 'skipSyncTests'), skipSyncTests = true;
 else                                  skipSyncTests = params.skipSyncTests; end
 
+if isempty(params.saveMatrix),  removeImages = true; 
+else                            removeImages = false; end
+
+
 % make/load stimulus
 stimulus = retLoadStimulus(params);
 
@@ -39,7 +43,7 @@ try
     Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     % Store the images in textures
-    stimulus = createTextures(params.display,stimulus);
+    stimulus = createTextures(params.display,stimulus, removeImages);
     
     % If necessary, flip the screen LR or UD  to account for mirrors
     % We now do a single screen flip before the experiment starts (instead
