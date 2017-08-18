@@ -86,12 +86,12 @@ switch(lower(params.display.fixType))
      case {'4 color dot'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
-        params.display.fixSizePixels = 3;
+        params.display.fixSizePixels = 8;
         params.display.fixColorRgb  = ...
-            [255 0 0 255;
-            255 0 0 192;
-            0 255 0 255;
-            0 255 0 192;
+            [145 0 0 255;
+            145 0 0 128;
+            0 145 0 255;
+            0 145 0 128;
             ];
         
     case {'disk','double disk'}
