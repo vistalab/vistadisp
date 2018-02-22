@@ -1,5 +1,5 @@
-function stimulus = createTextures(display, stimulus, removeImages);
-%stimulus = createTextures(display, stimulus, [removeImages=1]);
+function stimulus = createTextures(display, stimulus, removeImages)
+%stimulus = createTextures(display, stimulus, [removeImages=1])
 %
 %Replace images within stimulus (stimulus.image) with textures
 %(stimulus.textures).
@@ -24,8 +24,7 @@ try
 	c = display.backColorIndex;
 catch
 	c = display.backColorRgb;
-end;
-
+end
 for stimNum = 1:length(stimulus)
 
 	% if stored as cell?!
@@ -61,16 +60,10 @@ for stimNum = 1:length(stimulus)
     
 	% make textures
 	for imgNum = 1:nImages,
-        %jw: flip for back bore inverted display
-%         if (isfield(display, 'flipLR') && display.flipLR),
-%             stimulus(stimNum).images(:,:,imgNum) = fliplr(stimulus(stimNum).images(:,:,imgNum));
-%         end
-%         if (isfield(display, 'flipUD') &&display.flipUD),
-%             stimulus(stimNum).images(:,:,imgNum) = flipud(stimulus(stimNum).images(:,:,imgNum));
-%         end
         
         stimulus(stimNum).textures(imgNum) = ...
 			Screen('MakeTexture',display.windowPtr, ...
+
 			double(squeeze(stimulus(stimNum).images(:,:,imgNum,:))));  % fwc:	changed display.screenNumber into display.windowPtr
 	end;
 
@@ -80,7 +73,7 @@ for stimNum = 1:length(stimulus)
 	end
 end;
 
-% call/load 'DrawTexture' prior to actual use (clears overhead)
+%% call/load 'DrawTexture' prior to actual use (clears overhead)
 Screen('DrawTexture', display.windowPtr, stimulus(1).textures(1), ...
 	stimulus(1).srcRect, stimulus(1).destRect);
 

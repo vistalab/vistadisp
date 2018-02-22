@@ -13,6 +13,12 @@ function doRetinotopyScan(params)
 
 % defaults
 if ~exist('params', 'var'), error('No parameters specified!'); end
+if ~isfield(params, 'skipSyncTests'), skipSyncTests = true;
+else                                  skipSyncTests = params.skipSyncTests; end
+
+if isempty(params.saveMatrix),  removeImages = true; 
+else                            removeImages = false; end
+
 
 % make/load stimulus
 stimulus = retLoadStimulus(params);
@@ -27,7 +33,7 @@ try
     AssertOpenGL;
     
     % to skip annoying warning message on display (but not terminal)
-    Screen('Preference','SkipSyncTests', 1);
+    Screen('Preference','SkipSyncTests', skipSyncTests);
     
     % Open the screen
     params.display                = openScreen(params.display);
@@ -37,19 +43,14 @@ try
     Screen('BlendFunction', params.display.windowPtr, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     % Store the images in textures
-    stimulus = createTextures(params.display,stimulus);
+    stimulus = createTextures(params.display,stimulus, removeImages);
     
     % If necessary, flip the screen LR or UD  to account for mirrors
     % We now do a single screen flip before the experiment starts (instead
     % of flipping each image). This ensures that everything, including
     % fixation, stimulus, countdown text, etc, all get flipped.
     retScreenReverse(params, stimulus);
-    
-    % If we are doing ECoG, then add photodiode flash to every other frame
-    % of stimulus. This can be used later for syncing stimulus to electrode
-    % outputs.
-    stimulus = retECOGtrigger(params, stimulus);
-    
+            
     for n = 1:params.repetitions,
         % set priority
         Priority(params.runPriority);
@@ -62,22 +63,16 @@ try
         pressKey2Begin(params.display, onlyWaitKb, [], [], params.triggerKey);
 
 
-        % If we are doing eCOG, then signal to photodiode that expt is
-        % starting by giving a patterned flash
-        retECOGdiode(params);
+        % If we are doing ECoG/MEG/EEG, then initialize the experiment with
+        % a patterned flash to the photodiode
+        stimulus.flashTimes = retInitDiode(params);
         
         % countdown + get start time (time0)
         [time0] = countDown(params.display,params.countdown,params.startScan, params.trigger);
         time0   = time0 + params.startScan; % we know we should be behind by that amount
-        
-        
-        % go
-        if isfield(params, 'modality') && strcmpi(params.modality, 'ecog')
-            timeFromT0 = false;
-        else timeFromT0 = true;
-        end
-        [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0, timeFromT0); %#ok<ASGLU>
-        
+                        
+        [response, timing, quitProg] = showScanStimulus(params.display,stimulus,time0); %#ok<ASGLU>
+                
         % reset priority
         Priority(0);
         
@@ -102,8 +97,10 @@ try
 
 catch ME
     % clean up if error occurred
-    Screen('CloseAll'); setGamma(0); Priority(0); ShowCursor;
-    warning(ME.identifier, ME.message);
+    Screen('CloseAll'); 
+    setGamma(0); Priority(0); ShowCursor;
+    %warning(ME.identifier, ME.message);
+    rethrow(ME)
 end;
 
 

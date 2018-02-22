@@ -183,6 +183,9 @@ try
 
     % Set a default background- users will probably want to over ride this.
     displayID.backColorRgb = [repmat(round(displayID.maxRgbValue/2),1,3) displayID.maxRgbValue];
+    %-----HACK START-----
+    displayID.backColorRgb = [128 128 128 displayID.maxRgbValue];
+    %-----HACK END-----
     displayID.textColorRgb = repmat(displayID.maxRgbValue,1,4);
     displayID.fixType = 'disk';
     displayID.fixSizePixels = 3;

@@ -14,14 +14,14 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                             with the correct function name):
 %                               [trial, data] = trialGenFuncName(display, stimParams, data)
 %                             Use 'data' for whatever you would like to be preserved from
-%                             trial to trial (pre-computed images, colormaps, etc.). Note 
+%                             trial to trial (pre-computed images, colormaps, etc.). Note
 %                             that 'data' will be independent across interleaved staircases
 %                             unless stairParams.useGlobalData==true, in which case all
 %                             interleaved staircases will share the same data structure.
 %                             If stairParams.useGlobalData==true, the field 'stairNum' will
 %                             be automatically appended to the shared data struct so that
 %                             trialGenFuncName can tell which staircase is currently running.
-%                             
+%
 %
 % priority:          (int)    optional- specifies run priority (0-7, 0 is default)
 %
@@ -140,18 +140,18 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %       Inter-trial interval, in seconds. (defaults to 0)
 %
 %   stairParams.useGlobalData = false;
-%       Flag to determine whether staircase 'data' will be independent across 
-%       interleaved staircases or shared by all staircases. If true, the field 
+%       Flag to determine whether staircase 'data' will be independent across
+%       interleaved staircases or shared by all staircases. If true, the field
 %       'stairNum' will be automatically appended to the shared data struct so
 %       trialGenFuncName can tell which staircase is currently running.
 %       (Defaults to false; form mor einfo, see trialGenFuncName above.)
-%       
+%
 %   stairParams.saveDataVars = {'string var 1', 's'; 'digit var 2', 'd'};
 %       Flag variables that you would like saved from the data structure on
 %       a trial by trial basis.  Column one of the cell array should
 %       contain the variable names as a string, and column two should
 %       indicate, for each respective row, whether the data contained in it
-%       is a string or a number (digits). 
+%       is a string or a number (digits).
 %
 %   stairParams.customInstructions = 'command to be run';
 %       Write in the command you'd like to run instead of the default.  For
@@ -177,14 +177,15 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %   stimParams.inputDevice = 5;
 %       Set the input device index for cases in which you're using an
 %       external controller.
-%   
+%
 % 98/10/08 coded by Bob Dougherty (aka RFD)
 % 98/10/14 got into a working form by Bob Dougherty (lots of advice from WAP and BTB)
 % 98/10/20 RFD: added varargin option flags to precompute trials.  Modified 'data' to be
 %				a cell array so that each interleaved staircases can have their own
 %				data.  Also, added reversalStimLevel to dataSum.
 % 98/10/26 RFD: added history field to dataSum (keeps a history of the adjustableVarValue
-%				presented on each trial).  Also added "save('dataSumTemp', 'dataSum');"
+%				presented on each trial).  Also added "save('dataSumTemp',
+%				'dataSum');"
 %				so that the summary data are not lost in the event of an error or crash.
 % 98/10/26 RFD: added stairParams.conditionName.
 % 98/11/02 RFD: fixed precomputeFurstTrial so that it sets the first adjustableVarValue
@@ -209,7 +210,7 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                   for each trial (default is to show timing). Flag can be set
 %                   in stairParams.showTiming.
 % 2009.01.20 RFD:   added code to allow multiple response keys per alternative.
-% 2009.02.04 RFD:   cleaned up some formatting and added the option to share staircase 
+% 2009.02.04 RFD:   cleaned up some formatting and added the option to share staircase
 %                   data across all interleaved staircases (useGlobalData flag).
 % 2009.07.01 RFB:   Added option to change instructions screen
 %                   (stairParams.customInstructions), add a custom input
@@ -217,7 +218,7 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                   (stimParams.quitKey), or save variables within the data
 %                   structure on a trial by trial basis
 %                   (stairParams.saveDataVars).
-%                   
+%
 %                   I also changed the function of ITI - it now begins the
 %                   timer after the trial has actually completed.  Thus,
 %                   you can set a space between otherwise rapid trials to
@@ -232,7 +233,7 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                   depending on the experiment.  Subsequent runs through
 %                   should be then set to 0 to indicate you've already
 %                   initialized the file, and to simply load your progress.
-%                   
+%
 %                   Set to 2 to indicate you want to keep track of trials
 %                   across staircases, but don't want to save out a temp
 %                   file since you're only calling doStaircase once.  In a
@@ -242,11 +243,12 @@ function [dataSum] = doStaircase(display, stairParams, stimParams, trialGenFuncN
 %                   experimental sessions.  In any case, it will be
 %                   written over by the next initialization.
 % 2009.09.18 RFB:   Be careful using the internal keyboard with numbers for
-%                   responses, for some reason KbQueueCheck has a bit of a hissy fit with
+%                   responses, for some reason KbQueueCheck has a bit of a
+%                   hissy fit with
 %                   this and doesn't register them accurately (as far as I
 %                   can tell).
-% 2010.07.08 JW:    Added optional input arg 'plotEachTrialFlag' to plot 
-%                   results after every trial, if requested. Useful for debugging. 
+% 2010.07.08 JW:    Added optional input arg 'plotEachTrialFlag' to plot
+%                   results after every trial, if requested. Useful for debugging.
 
 % Seed random number generator
 ClockRandSeed;
@@ -282,6 +284,8 @@ if isfield(stimParams,'quitKey')
 else
     quitKey = 'q';
 end
+
+nonStairCaseKey = 'z';
 % Allow different start points for inter-trial interval
 if isfield(stairParams,'prFlag')
     prFlag = stairParams.prFlag;
@@ -315,7 +319,6 @@ if isfield(stairParams,'saveDataVars')
     end
 end
 % Get keyboard input device (see help file for specifics)
-device = getBestDevice(display);
 % Generate keyList for checking responses after the trial
 keyList = zeros(1,256);
 includeKeys = [];
@@ -330,7 +333,8 @@ for i=1:size(stairParams.responseSet,2)
 end
 includeKeys = [includeKeys KbName(quitKey)];
 includeKeys = unique(includeKeys);
-keyList(includeKeys) = 1; 
+% keyList(includeKeys) = 1; % Let's do all possible keys
+keyList(:) = 1;
 % Set some more defaults
 if ~isfield(stairParams, 'numIncorrectBeforeStep')
     stairParams.numIncorrectBeforeStep = 1;
@@ -398,7 +402,7 @@ else
 end
 
 % Initialize structure to keep track of staircase parameters
-stairHistory.numTrials = zeros(1,numStairs); % Number of trials run at 
+stairHistory.numTrials = zeros(1,numStairs); % Number of trials run at
 stairHistory.numConsecCorrect = zeros(1,numStairs);
 stairHistory.numConsecIncorrect = zeros(1,numStairs);
 stairHistory.runDirection = ones(1,numStairs);
@@ -530,7 +534,7 @@ eval(instructions);
 
 % Main staircase loop
 while (~all(stairHistory.done) && ~abort) % While there are trials to be completed, and user hasn't aborted
-    if exist('trialArray', 'var') % Can't figure this out - the variable isn't defined anywhere else 
+    if exist('trialArray', 'var') % Can't figure this out - the variable isn't defined anywhere else
         % Clear the keyboard queue
         % FlushEvents('keyDown');
         preTrialSecs = 0;
@@ -543,10 +547,10 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         adjustValue = stairParams.adjustableVarValues(min(curStair,numLevelVectors), ...
             stairHistory.curAdjustIndex(curStair));
         
-        % 
+        %
         correctStepIndex = min(length(stairParams.correctStepSize), stairHistory.numReversals(curStair)+1);
         incorrectStepIndex =  min(length(stairParams.incorrectStepSize), stairHistory.numReversals(curStair)+1);
-
+        
         % Set the adjustable variable value
         stimParams.(stairParams.adjustableVarName) = adjustValue;
         % Set the random variable values in the appropriate stimParams fields
@@ -559,12 +563,12 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             curStairVal(i) = stairParams.curStairVars{i,2}(min(curStair,length(stairParams.curStairVars{i,2})));
             stimParams.(stairParams.curStairVars{i,1}) = curStairVal(i);
         end
-
+        
         % Randomly choose and then set the alternative variable
         altIndex = round(rand*(numAlternatives-1))+1;
         altValue = stairParams.alternativeVarValues(altIndex);
         stimParams.(stairParams.alternativeVarName) = altValue;
-
+        
         % build the trial
         if(stairParams.useGlobalData)
             [trial, data] = eval(trialGenFuncName);
@@ -576,22 +580,23 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         % FlushEvents('keyDown');
         preTrialSecs = GetSecs-preTrialSecs;
         % run the trial
-        response = doTrial(display, trial, priority, showTimingFlag);
+        response = doTrial(display, trial, priority, showTimingFlag, stimParams);
         if stairParams.etFlag
             etData = etCheckEyes(stimParams.duration);
-        end     
+        end
     end
     postTrialSecs = GetSecs;
-
+    
     if isfield(stairParams, 'responseSet')
         % If we already have a keyLabel, process it into a respCode;
         if ~isempty(response.keyLabel)
             if(~isempty(strfind(lower(response.keyLabel),quitKey))) % Set custom quit key
                 respCode = -1;
                 abort = 1;
+            elseif(~isempty(strfind(lower(response.keyLabel),nonStairCaseKey)))
             else
-            % 2009.01.20 RFD: added the following conditional to allow
-            % multiple response keys per alternative.
+                % 2009.01.20 RFD: added the following conditional to allow
+                % multiple response keys per alternative.
                 if(iscell(stairParams.responseSet))
                     respCode = find(~cellfun('isempty',strfind(stairParams.responseSet,response.keyLabel)));
                 else
@@ -604,14 +609,19 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         
         if isempty(respCode) % If respCode is still empty at this point, get one
             % Wait for the response
+            if isfield(stimParams, 'inputDevice'), 
+                device = stimParams.inputDevice; 
+            else
+                device = [];
+            end
             
-            KbQueueCreate(device,keyList);
+            KbQueueCreate(device);
             KbQueueStart();
             [k.pressed k.firstPress k.firstRelease k.lastPress k.lastRelease] = KbQueueWaitCheck();
             response.secs = min(k.firstPress(k.firstPress~=0));
             response.keyCode = find(k.firstPress==response.secs);
             response = getKeyLabel(response);
-
+            
             % Process the keyCode into a respCode
             if(~isempty(strfind(lower(response.keyLabel),quitKey))) % Check for quit key
                 respCode = -1;
@@ -630,6 +640,13 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
     correct = (respCode == altIndex);
     postRespSecs = GetSecs; % changed the position of postTrialSecs
     % update dataSum with relevant trial and response information
+    
+    % hack: change this experiment specific code (probe_side) to something
+    % more general, like 'dummy_trial', which can be specified somewhere in
+    % the function that makes the trial. also, we should then check to see
+    % if the field exists before checking its value so that we don't get a
+    % crash if the field is not defined.
+
     if ~abort
         trialCounts = trialCounts + 1;
         stairHistory.numTrials(curStair) = 	stairHistory.numTrials(curStair) + 1;
@@ -648,7 +665,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         if isfield(response,'secsStart')
             dataSum(curStair).responseTime(stairHistory.numTrials(curStair)) = response.secs - response.secsStart;
         end
-        
+
         % If user indicates the need to save stuff out from the actual
         % trials themselves, do so with the eval function.
         if exist('saveData','var')
@@ -656,7 +673,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
                 eval(saveData{i,2});
             end
         end
-        
+
         i = find(dataSum(curStair).stimLevels == adjustValue);
         if isempty(i)
             error('doStaircase: missing stimLevel in dataSum- data may not be valid!');
@@ -692,7 +709,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
 
     % if requested, update plot on each trial. useful for debugging.
     if exist('plotEachTrialFlag', 'var'), plotStaircase(stairParams, dataSum, 1); end
-    
+
     % adjust the adjustable
     if correct
         stairHistory.numConsecCorrect(curStair) = stairHistory.numConsecCorrect(curStair) + 1;
@@ -725,7 +742,7 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
             end
         end
     end
-	
+
     % ensure adjustable isn't out of range
     % Note that if we have gone out of range, then we should (and do) count this as a
     % reversal because it means the observer has hit one of the boundaries.  If we don't
@@ -765,6 +782,13 @@ while (~all(stairHistory.done) && ~abort) % While there are trials to be complet
         waitTill(stairParams.iti-interval);
     end
     
+    % if requested, pause for a break
+    if isfield(stairParams, 'pause_between_blocks')
+        counter = mod(stairHistory.numTrials(curStair), stairParams.pause_between_blocks);
+        if counter == 0, KbQueueFlush();  KbQueueStop(); eval(instructions); end
+    end
+
+    
     %if(~all(stairHistory.done) && ~abort && preTrialSecs+postTrialSecs<stairParams.iti)
     %    waitTill(stairParams.iti-preTrialSecs+postTrialSecs);
     %end
@@ -773,6 +797,8 @@ end
 if stairParams.initTrialCount==1 || stairParams.initTrialCount==0
     save(tcName,'trialCounts');
 end
-    
+
+
+
 %ListenChar(false);
 return;

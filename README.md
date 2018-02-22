@@ -1,7 +1,7 @@
 ##VISTA Experimental control and display toolbox##
 
 This toolbox consists of a set of Matlab routines for controlling the experiment display, calibrating displays for vision experiments and managing the interface with the MR scanner. 
-The toolbox is also useful for straight psychophysics. 
+The toolbox is also useful for straight psychophysics.   
 
 
 #### Requirements ####
@@ -9,3 +9,5 @@ The toolbox is also useful for straight psychophysics.
 - PsychToolBox
 
 &copy; Stanford Vista Lab 2013
+
+

@@ -10,7 +10,7 @@ stairParams.alternativeVarName      = 'MatchFirstOrSecond';
 stairParams.alternativeVarValues    = ['1' '2'];
 
 % decision keys
-stairParams.responseSet             = 'al';
+stairParams.responseSet             = 'as';
 
 % variable that is adjusted by staircase
 stairParams.adjustableVarName       = 'edgeAmplitdue';

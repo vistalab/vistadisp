@@ -1,7 +1,7 @@
-function [displayName ok] = selectDisplay(commandLine);
+function [displayName, ok] = selectDisplay(commandLine)
 % Present the user a menu to select a calibrated display.
 %
-%  [displayName ok] = selectDisplay([commandLine=0]);
+%  [displayName, ok] = selectDisplay([commandLine=0])
 %
 % This function provides a dialog to the user with a list of the saved
 % displays. (The displays are stored in the VISTADISP repository, in the

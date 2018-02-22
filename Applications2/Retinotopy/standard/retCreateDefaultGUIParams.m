@@ -36,12 +36,14 @@ params.interleaves     = NaN;
 params.tr              = 1.5;%seconds
 params.loadMatrix      = 'None';
 params.saveMatrix      = 'None';
-params.calibration     = 'None';
+params.calibration     = 'Demo';
 params.stimSize        = 'max';
 params.countdown       = 0;
 params.startScan       = 0;
 params.trigger         = 'Scanner triggers computer';
 params.triggerKey      = '5';
+params.skipSyncTests   = true; % tell PTB to skip sync tests
+
 % If we input params, then use this for all defined fields
 if ~isempty(curdata)
     s = fieldnames(params);

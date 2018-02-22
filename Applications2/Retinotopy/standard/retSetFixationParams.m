@@ -28,8 +28,10 @@ function params = retSetFixationParams(params, expName)
 % except for last switch statement on bottom, which would need to be moved)
 
 fixString  = {...
+                'digits'...
                 'disk'...
                 'dot'...
+                '4 color dot' ...                
                 'dot with grid'...
                 'double disk'...
                 'large cross'...
@@ -63,16 +65,34 @@ sz    = params.display.fixSizePixels;
 params.display.fixColorRgb  = [255 0 0 255; 0 255 0 255]; %R/G by default
 params.display.fixDuration  = 2; % maximum duration between fixation change
 switch(lower(params.display.fixType))
+    case {'digits'}
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 15;
+        % for digits between 0 to 9
+        params.display.fixColorRgb    = [repmat([255 255 255 255], 10, 1); repmat([0 0 0 255], 10, 1)]; %B/W by default
+       
     case {'dot' 'smalldot'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
-        params.display.fixSizePixels = 3;
+        params.display.fixSizePixels = 2;
         
     case {'dot with grid' 'grid'}
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
         params.display.fixSizePixels = 3;
         params.display.fixGrid = 1;
+
+     case {'4 color dot'}
+        params.display.fixX = round(dim.x./2);
+        params.display.fixY = round(dim.y./2);
+        params.display.fixSizePixels = 8;
+        params.display.fixColorRgb  = ...
+            [220 0 0 192;
+            220 0 0 64;
+            0 145 0 192;
+            0 145 0 64;
+            ];
         
     case {'disk','double disk'}
 %        params.display.fixColorRgb  = [255 255 255 255;...
@@ -167,12 +187,11 @@ switch(lower(params.display.fixType))
     case 'lower'
         params.display.fixX = round(dim.x./2);
         params.display.fixY = dim.y - round(max(.5*(dim.y - dim.x),sz));
-
+        
     case 'emoji'
         params.display.fixX = round(dim.x./2);
         params.display.fixY = round(dim.y./2);
         params.display.fixSizePixels = 120;
-       
         
     otherwise,
         error('Unknown fixationType!');

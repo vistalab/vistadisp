@@ -17,7 +17,7 @@ Priority(P.scan.runPriority);
 
 % wait for go signal
 onlyWaitKb = false; 
-pressKey2Begin(P.scan.display, onlyWaitKb, [], P.scan.instructions);
+pressKey2Begin(P.scan.display, onlyWaitKb, [], P.scan.instructions, P.scan.triggerKey);
 
 % If we are doing eCOG, then signal to photodiode that expt is
 % starting by giving a patterned flash
@@ -80,9 +80,9 @@ for blockNum = 1:P.stim.numBlocks
     WaitSecs('UntilTime',(startBlockTime+P.stim.fixLength(blockNum)));
     
     % Show the block's stimuli    
-    [P.responses{blockNum}, timing, quitProg] = showScanBlock_noTrialStruct(P.scan.display,P.blockInfo{blockNum}); %#ok<ASGLU>    
-    
-    
+    [P.responses{blockNum}, timing, quitProg] = ...
+        showScanBlock_noTrialStruct(P.scan.display,P.blockInfo{blockNum}, [], P.scan.triggerKey); %#ok<ASGLU>    
+      
     % If we are doing eCOG, then signal to photodiode to be black
     if isfield(P, 'modality') && strcmpi(P.modality, 'ecog')
         P.display = P.scan.display;

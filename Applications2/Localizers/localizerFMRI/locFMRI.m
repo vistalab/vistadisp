@@ -78,7 +78,7 @@ P = locMakeParFile(P);
 % assign stimuli (file names of images) to blocks
 P = locAssignImages(P);
 
-% load and show experiment blocks
+% load and show experiment blocks (THIS IS THE EXPERIMENT)
 P = locShowBlocks(P);
 
 % get fixation performance for all blocks
@@ -88,7 +88,9 @@ P = locFixationPerformance(P);
 P = locSaveData(P);
 
 % Reset priority and screen
-Screen('Close'); Screen('CloseAll'); Priority(0); ShowCursor;
+% Close the one on-screen and many off-screen windows
+Screen('Close');  Screen('Close', P.scan.display.windowPtr);
+Priority(0); ShowCursor;
 
 return
 

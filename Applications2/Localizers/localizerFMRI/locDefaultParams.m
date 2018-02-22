@@ -11,6 +11,7 @@ params.scan.instructions        = 'Please press button when fixation dot changes
 params.scan.dispName            = 'cni_lcd'; % name of calibration file (without extension)
 params.scan.countdownsecs       = 0;        % seconds
 params.scan.triggerType         = 'computer triggers scanner';
+params.scan.triggerKey          = 'any';
 
 % stimulus parameters
 params.stim.blockLength      = 12;    % seconds

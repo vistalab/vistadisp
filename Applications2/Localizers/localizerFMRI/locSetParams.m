@@ -30,6 +30,8 @@ function params = locSetParams(varargin)
 %                           default = []
 %   blockOrder          vector of indices to block types, not including
 %                       fixation. For example [1 2 3 3 2 1].
+%   triggerKey          character to trigger experiment start. 
+%                           [default = any key]
 %
 % Scan (params.scan.X)
 %   instructions        str; 
@@ -97,9 +99,8 @@ if ~isempty(varargin)
             case {'modality'}
                 params.modality                  = varargin{ii+1}; 
             case {'triggerkey'}
+                params.scan.triggerKey           = varargin{ii+1};
                 params.triggerKey                = varargin{ii+1}; 
-
-                % ******
             otherwise
                 error('Unknown input variable %s', varargin{ii})
         end

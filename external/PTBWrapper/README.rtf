@@ -1,0 +1,89 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\ftech\fcharset77 Symbol;\f2\fmodern\fcharset0 CourierNewPSMT;
+}
+{\colortbl;\red255\green255\blue255;\red34\green139\blue34;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid2\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li1440\lin1440 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+{\info
+{\author NYU}
+{\*\company NYU}}\margl1440\margr1440\vieww12240\viewh15840\viewkind1
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 * Testing\
+\
+To use the toolbox, you have to first run SetupPsychtoolbox on your computer from inside the Psychtoolbox/toolbox folder.\
+\
+Then, remember to restart matlab\
+\
+Then, make sure that PTB is in the path, because the Setup function will delete it.\
+\
+Finally, you have to restart matlab.\
+\
+If you get a Java error, try 'PsychJavaTrouble'.\
+	[You should really make sure the classpath.txt file is writable, then run setup again, and restart matlab]\
+\
+You can check to see if sound is working by trying to run BasicSoundOutputDemo\
+	* If a library fails to load, try copying it to the directories specified and then making sure they have loose enough permissions (i.e. in a terminal type: 'sudo chmod -R 777 
+\i directory
+\i0 ')\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0\ql\qnatural
+\cf0 Some random notes, for now:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\fi-360\ri0\ql\qnatural
+\ls1\ilvl0
+\f1 \cf0 \'a5	
+\f0 Try \'91help PTB____\'92 to see how a function works.\
+\ls1\ilvl0
+\f1 \'a5	
+\f0 If you get a Sync error before the program starts, try restarting\
+\pard\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li1440\fi-360\ri0\ql\qnatural
+\ls1\ilvl1
+\f2 \cf0 o	
+\f0 If that doesn\'92t work, add Screen(\'91Preference\'92,\'92SkipSyncTests\'92,1) to your code.\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\li720\fi-360\ri0\ql\qnatural
+\ls1\ilvl1
+\f1 \cf0 \'a5	
+\f0 Using absolute timing seems to be better than relative (i.e. get the start of the experiment or block and time everything from that (See Sample_Video)\
+\ls1\ilvl1
+\f1 \'a5	
+\f0 Always use the PTBSetDebugging function until you\'92re pretty sure your program won\'92t crash. This will allow you to switch back to matlab easily. \
+\ls1\ilvl1
+\f1 \'a5	
+\f0 If the program has crashed and the screen is still up, try PTBCleanupExperiment\
+\ls1\ilvl1
+\f1 \'a5	
+\f0 There is an option to set an arbitrary escape key. The will allow you to exit the program whenever you want and any response point.\
+\ls1\ilvl1
+\f1 \'a5	
+\f0 Use PTBSetLogAppend to write conditions, item numbers, etc. to the log file.\
+\pard\pardeftab720\ri0\ql\qnatural
+
+\fs28 \cf2 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\ri0\ql\qnatural
+
+\fs24 \cf0 \
+ Check the comments for PTBSetupExperiment for relevant global variables to use.\
+\
+Basic structure of PTB:\
+\
+* The main idea is to do all the setup while a display is being shown. \
+\
+\
+Top-level functions are PTBDisplay_______\
+	- These take arguments specific to the type of object being displayed\
+	- They they use Screen Draw commands to write the appropriate objects to the scree buffer\
+	- Also, they take a duration argument\
+	- After the buffer has been draw, they all call PTBDisplayScreen\
+\
+PTBDisplayScreen\
+	- This function actually displays the new screen through the Screen Flip command\
+	- This will wait until PTBNextDisplayTime is reached or, if PTBWaitForKey is set, will wait for a key press\
+	- It will then return PTBLastDisplayTime as the estimate of when the screen was displayed\
+	- The duration is then set through PTBSetDuration\
+\
+PTBSetDuration\
+	- Can take a key name, 'any' [for all keys], an absolute time stamp or a relative time stamp\
+	- Will set either the PTBWaitingForKey flag or PTBNextDisplayTime, or both\
+\
+}

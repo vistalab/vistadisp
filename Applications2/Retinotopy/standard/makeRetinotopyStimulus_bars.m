@@ -21,8 +21,8 @@ function stimulus = makeRetinotopyStimulus_bars(params)
 
 % various time measurements:
 duration.stimframe          = 1./params.temporal.frequency./params.temporal.motionSteps;
-duration.scan.seconds       = params.ncycles*params.period;
-duration.scan.stimframes    = params.ncycles*params.period./duration.stimframe;
+duration.scan.seconds       = params.numCycles*params.period;
+duration.scan.stimframes    = params.numCycles*params.period./duration.stimframe;
 duration.cycle.seconds      = params.period;
 duration.cycle.stimframes   = params.period./duration.stimframe;
 duration.prescan.seconds    = params.prescanDuration;
@@ -294,10 +294,10 @@ if params.insertBlanks.do,
             completeCycle;...
             completeCycle(1:round(end/2))];
     else
-        sequence = repmat(sequence,params.ncycles,1);
+        sequence = repmat(sequence,params.numCycles,1);
     end;
 else
-    sequence = repmat(sequence,params.ncycles,1);
+    sequence = repmat(sequence,params.numCycles,1);
 end;
 
 % we make only half so we need to flip the rest
