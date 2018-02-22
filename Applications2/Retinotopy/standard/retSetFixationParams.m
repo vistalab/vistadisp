@@ -88,10 +88,10 @@ switch(lower(params.display.fixType))
         params.display.fixY = round(dim.y./2);
         params.display.fixSizePixels = 8;
         params.display.fixColorRgb  = ...
-            [145 0 0 255;
-            145 0 0 128;
-            0 145 0 255;
-            0 145 0 128;
+            [220 0 0 192;
+            220 0 0 64;
+            0 145 0 192;
+            0 145 0 64;
             ];
         
     case {'disk','double disk'}
